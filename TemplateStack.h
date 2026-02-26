@@ -8,6 +8,7 @@
 #define Stack(T) struct _templatestack_##T
 #define newStack(T) _templatestack_newStack_##T
 #define stackPush(T) _templatestack_stackPush_##T
+#define stackPop(T) _templatestack_stackPop_##T
 
 /* ---- Implementation macros ---- */
 #define _templatestack_Stack(T) \
@@ -42,6 +43,22 @@
         stack->buffer[stack->index++] = node; \
         stack->size++; \
         return 0; \
+    } \
+
+#define _templatestack_stackPop_proto(T) \
+    T \
+    stackPop(T)(Stack(T) *stack); \
+
+#define _templatestack_stackPop_impl(T) \
+    T \
+    stackPop(T)(stack(T) *stack) { \
+        T empty = {0}; \
+        T result; \
+        if (stack->index == 0) return empty; \
+        result = stack->buffer[index]; \
+        stack->buffer[index] = empty; \
+        index--; \
+        return result; \
     } \
 
 /* ---- Template Stack Prototype (for header) ---- */
