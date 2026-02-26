@@ -1,0 +1,13 @@
+# Apps Data
+.vscode/
+.DS_Store/
+
+# Builds
+build/
+*.o
+*.a
+*.so
+*.elf
+
+# Other
+.ignore/
