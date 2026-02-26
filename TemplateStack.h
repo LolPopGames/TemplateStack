@@ -11,6 +11,7 @@
 #define stackPop(T) _templatestack_stackPop_##T
 #define stackPeek(T) _templatestack_stackPeek_##T
 #define stackIsEmpty(T) _templatestack_stackIsEmpty_##T
+#define stackSize(T) _templatestack_stackSize##T
 
 /* ---- Implementation macros ---- */
 #define _templatestack_Stack(T) \
@@ -82,7 +83,17 @@
 #define _templatestack_stackIsEmpty_impl(T) \
     int \
     stackIsEmpty(T)(Stack(T) *stack) { \
-        return !(stack->index == 0);
+        return !(stack->index == 0); \
+    } \
+
+#define _templatestack_stackSize_proto(T) \
+    size_t \
+    stackSize(T)(Stack(T) *stack); \
+
+#define _templatestack_stackSize_impl(T) \
+    size_t \
+    stackSize(T)(Stack(T) *stack) { \
+        return stack->index; \
     } \
 
 /* ---- Template Stack Prototype (for header) ---- */
