@@ -166,7 +166,16 @@
     _templatestack_stackRealloc_proto(T) \
 
 /* ---- Template Stack Implementation (for source file) ---- */
-#define TemplateStack_impl(T)
+#define TemplateStack_impl(T) \
+    _templatestack_newStack_impl(T) \
+    _templatestack_stackIsEmpty_impl(T) \
+    _templatestack_stackSize_impl(T) \
+    _templatestack_stackPush_impl(T) \
+    _templatestack_stackPop_impl(T) \
+    _templatestack_stackPeek_impl(T) \
+    _templatestack_deleteStack_impl(T) \
+    _templatestack_stackDup_impl(T) \
+    _templatestack_stackRealloc_impl(T) \
 
 /* ---- Template Stack Inline (all in one) ---- */
 #define TemplateStack_inline(T)
