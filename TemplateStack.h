@@ -4,9 +4,12 @@
 /* ---- Includes ---- */
 #include <stddef.h>
 
+/* ---- API functions ---- */
+#define Stack(T) struct _templatestack_##T
+
 /* ---- Implementation macros ---- */
-#define _templatestack_struct(T) \
-    struct _templatestack_##T { \
+#define _templatestack_Stack(T) \
+    Stack(T) { \
         T *buffer; \
         size_t index; \
         size_t size; \
