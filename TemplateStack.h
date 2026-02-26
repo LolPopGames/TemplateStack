@@ -9,7 +9,8 @@
 #define newStack(T) _templatestack_newStack_##T
 #define stackPush(T) _templatestack_stackPush_##T
 #define stackPop(T) _templatestack_stackPop_##T
-#define stackPeek(T) _templatestack_stackPop_##T
+#define stackPeek(T) _templatestack_stackPeek_##T
+#define stackIsEmpty(T) _templatestack_stackIsEmpty_##T
 
 /* ---- Implementation macros ---- */
 #define _templatestack_Stack(T) \
@@ -55,7 +56,7 @@
     stackPop(T)(stack(T) *stack) { \
         T empty = {0}; \
         T result; \
-        if (stack->index == 0) return empty; \
+        if (StackIsEmpty(T)(stack)) return empty; \
         result = stack->buffer[stack->index]; \
         stack->buffer[stack->index] = empty; \
         stack->index--; \
@@ -70,8 +71,18 @@
     T \
     stackPeek(T)(Stack(T) *stack) { \
         T empty = {0}; \
-        if (stack->index == 0) return empty; \
-        return stack->buffer[stack->index];
+        if (StackIsEmpty(T)(stack)) return empty; \
+        return stack->buffer[stack->index]; \
+    } \
+
+#define _templatestack_stackIsEmpty_proto(T) \
+    int \
+    stackIsEmpty(T)(Stack(T) *stack); \
+
+#define _templatestack_stackIsEmpty_impl(T) \
+    int \
+    stackIsEmpty(T)(Stack(T) *stack) { \
+        return !(stack->index == 0);
     } \
 
 /* ---- Template Stack Prototype (for header) ---- */
