@@ -6,6 +6,7 @@
 
 /* ---- API functions ---- */
 #define Stack(T) struct _templatestack_##T
+#define newStack(T) _templatestack_newStack_##T
 
 /* ---- Implementation macros ---- */
 #define _templatestack_Stack(T) \
@@ -13,7 +14,21 @@
         T *buffer; \
         size_t index; \
         size_t size; \
-    }; \
+    } \
+
+#define _templatestack_newStack_proto(T) \
+    Stack(T) \
+    newStack(T)(size_t size); \
+
+#define _templatestack_newStack_impl(T) \
+    Stack(T) \
+    newStack(T)(size_t size) { \
+        Stack(T) stack = {0}; \
+        stack.buffer = calloc(sizeof(T), size); \
+        if (stack.buffer == NULL) return stack; \
+        stack.size = size; \
+        return stack; \
+    } \
 
 /* ---- Template Stack Prototype (for header) ---- */
 #define TemplateStack_proto(T)
