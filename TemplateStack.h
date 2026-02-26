@@ -14,6 +14,7 @@
 #define stackSize(T) _templatestack_stackSize_##T
 #define deleteStack(T) _templatestack_deleteStack_##T
 #define stackDup(T) _templatestack_stackDup_##T
+#define stackRealloc(T) _templatestack_stackRealloc_##T
 
 /* ---- Implementation macros ---- */
 #define _templatestack_Stack(T) \
@@ -114,13 +115,30 @@
 
 #define _templatestack_stackDup_proto(T) \
     Stack(T) \
+    stackDup(T)(Stack(T) stack); \
+
+#define _templatestack_stackDup_impl(T) \
+    Stack(T) \
     stackDup(T)(Stack(T) stack) { \
         Stack(T) dup = stack; \
         Stack(T) empty = {0}; \
-        dup->buffer = malloc(stack->size * sizeof(Stack(T)); \
+        stack->buffer = malloc(stack->size * sizeof(Stack(T))); \
         if (dup->buffer == NULL) return empty; \
         memcpy(dup->buffer, stack->buffer, dup->size); \
         return dup; \
+    } \
+
+#define _templatestack_stackRealloc_proto(T) \
+    Stack(T) \
+    stackRealloc(T)(Stack(T) stack); \
+
+#define _templatestack_stackRealloc_impl(T) \
+    Stack(T) \
+    stackRealloc(T)(Stack(T) stack) { \
+        Stack(T) empty = {0}; \
+        stack->buffer = realloc(stack->size * sizeof(Stack(T))); \
+        if (stack->buffer == NULL) return empty; \
+        return stack;
     } \
 
 /* ---- Template Stack Prototype (for header) ---- */
