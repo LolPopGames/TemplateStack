@@ -11,8 +11,9 @@
 #define stackPop(T) _templatestack_stackPop_##T
 #define stackPeek(T) _templatestack_stackPeek_##T
 #define stackIsEmpty(T) _templatestack_stackIsEmpty_##T
-#define stackSize(T) _templatestack_stackSize##T
+#define stackSize(T) _templatestack_stackSize_##T
 #define deleteStack(T) _templatestack_deleteStack_##T
+#define stackDup(T) _templatestack_stackDup_##T
 
 /* ---- Implementation macros ---- */
 #define _templatestack_Stack(T) \
@@ -109,6 +110,17 @@
         if (stack->buffer == NULL) return 1; \
         free(stack->buffer); \
         return 0; \
+    } \
+
+#define _templatestack_stackDup_proto(T) \
+    Stack(T) \
+    stackDup(T)(Stack(T) stack) { \
+        Stack(T) dup = stack; \
+        Stack(T) empty = {0}; \
+        dup->buffer = malloc(stack->size * sizeof(Stack(T)); \
+        if (dup->buffer == NULL) return empty; \
+        memcpy(dup->buffer, stack->buffer, dup->size); \
+        return dup; \
     } \
 
 /* ---- Template Stack Prototype (for header) ---- */
