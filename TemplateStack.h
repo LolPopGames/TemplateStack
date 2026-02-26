@@ -9,6 +9,7 @@
 #define newStack(T) _templatestack_newStack_##T
 #define stackPush(T) _templatestack_stackPush_##T
 #define stackPop(T) _templatestack_stackPop_##T
+#define stackPeek(T) _templatestack_stackPop_##T
 
 /* ---- Implementation macros ---- */
 #define _templatestack_Stack(T) \
@@ -55,10 +56,22 @@
         T empty = {0}; \
         T result; \
         if (stack->index == 0) return empty; \
-        result = stack->buffer[index]; \
-        stack->buffer[index] = empty; \
-        index--; \
+        result = stack->buffer[stack->index]; \
+        stack->buffer[stack->index] = empty; \
+        stack->index--; \
         return result; \
+    } \
+
+#define _templatestack_stackPeek_proto(T) \
+    T \
+    stackPeek(T)(Stack(T) *stack); \
+
+#define _templatestack_stackPeek_impl(T) \
+    T \
+    stackPeek(T)(Stack(T) *stack) { \
+        T empty = {0}; \
+        if (stack->index == 0) return empty; \
+        return stack->buffer[stack->index];
     } \
 
 /* ---- Template Stack Prototype (for header) ---- */
