@@ -7,6 +7,7 @@
 /* ---- API functions ---- */
 #define Stack(T) struct _templatestack_##T
 #define newStack(T) _templatestack_newStack_##T
+#define stackPush(T) _templatestack_stackPush_##T
 
 /* ---- Implementation macros ---- */
 #define _templatestack_Stack(T) \
@@ -28,6 +29,19 @@
         if (stack.buffer == NULL) return stack; \
         stack.size = size; \
         return stack; \
+    } \
+
+#define _templatestack_stackPush_proto(T) \
+    int \
+    stackPush(T)(Stack(T) *stack, T node);
+
+#define _templatestack_stackPush_impl(T) \
+    int \
+    stackPush(T)(Stack(T) *stack, T node) { \
+        if (stack->index >= stack->size) return 1; \
+        stack->buffer[stack->index++] = node; \
+        stack->size++; \
+        return 0; \
     } \
 
 /* ---- Template Stack Prototype (for header) ---- */
