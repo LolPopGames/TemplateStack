@@ -178,9 +178,8 @@
     _templatestack_stackRealloc_impl(T) \
 
 /* ---- Template Stack Inline (all in one) ---- */
-#define TemplateStack_inline(T)
-
-/* ---- Template Stack Static (all functions are static) ---- */
-#define TemplateStack_static(T)
+#define TemplateStack_inline(T) \
+    TemplateStack_proto(T) \
+    TemplateStack_impl(T) \
 
 #endif /* _TEMPLATE_STACK_H_ */
