@@ -11,6 +11,7 @@
 #define newStack(T) _templatestack_newStack_##T
 #define stackIsEmpty(T) _templatestack_stackIsEmpty_##T
 #define stackIsFull(T) _templatestack_stackIsFull_##T
+#define stackBufferIsNull(T) _templatestack_stackBufferIsNull_##T
 #define stackSize(T) _templatestack_stackSize_##T
 #define stackBufferSize(T) _templatestack_stackBufferSize_##T
 #define stackPush(T) _templatestack_stackPush_##T
@@ -64,6 +65,17 @@
     int \
     stackIsFull(T)(Stack(T) stack) { \
         return (stack.index >= stack.size) ? 1 : 0; \
+    }
+
+/* --- stackBufferIsNull() --- */
+#define _templatestack_stackBufferIsNull_proto(T) \
+    int \
+    stackBufferIsNull(T)(Stack(T) stack);
+
+#define _templatestack_stackBufferIsNull_impl(T) \
+    int \
+    stackBufferIsNull(T)(Stack(T) stack) { \
+        return (stack.buffer == NULL) ? 1 : 0; \
     }
 
 /* --- stackSize() --- */
@@ -138,7 +150,7 @@
 #define _templatestack_deleteStack_impl(T) \
     int \
     deleteStack(T)(Stack(T) stack) { \
-        if (stack.buffer == NULL) return 1; \
+        if (stackBufferIsNull(T)(stack)) return 1; \
         free(stack.buffer); \
         return 0; \
     }
@@ -173,7 +185,7 @@
             return empty; \
         } \
         stack.buffer = realloc(stack.buffer, size * sizeof(Stack(T))); \
-        if (stack.buffer == NULL) return empty; \
+        if (stackBufferIsNull(stack)) return empty; \
         stack.size = size; \
         if (stack.index >= size) \
             stack.index = size; \
@@ -186,6 +198,7 @@
     _templatestack_newStack_proto(T) \
     _templatestack_stackIsEmpty_proto(T) \
     _templatestack_stackIsFull_proto(T) \
+    _templatestack_stackBufferIsNull_proto(T) \
     _templatestack_stackSize_proto(T) \
     _templatestack_stackBufferSize_proto(T) \
     _templatestack_stackPush_proto(T) \
@@ -200,6 +213,7 @@
     _templatestack_newStack_impl(T) \
     _templatestack_stackIsEmpty_impl(T) \
     _templatestack_stackIsFull_impl(T) \
+    _templatestack_stackBufferIsNull_impl(T) \
     _templatestack_stackSize_impl(T) \
     _templatestack_stackBufferSize_impl(T) \
     _templatestack_stackPush_impl(T) \
