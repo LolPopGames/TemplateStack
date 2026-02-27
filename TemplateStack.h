@@ -12,6 +12,7 @@
 #define stackIsEmpty(T) _templatestack_stackIsEmpty_##T
 #define stackIsFull(T) _templatestack_stackIsFull_##T
 #define stackSize(T) _templatestack_stackSize_##T
+#define stackBufferSize(T) _templatestack_stackBufferSize_##T
 #define stackPush(T) _templatestack_stackPush_##T
 #define stackPop(T) _templatestack_stackPop_##T
 #define stackPeek(T) _templatestack_stackPeek_##T
@@ -74,6 +75,17 @@
     size_t \
     stackSize(T)(Stack(T) stack) { \
         return stack.index; \
+    }
+
+/* --- stackBufferSize() --- */
+#define _templatestack_stackBufferSize_proto(T) \
+    size_t \
+    stackBufferSize(T)(Stack(T) stack);
+
+#define _templatestack_stackBufferSize_impl(T) \
+    size_t \
+    stackBufferSize(T)(Stack(T) stack) { \
+        return stack.size; \
     }
 
 /* --- stackPush() --- */
@@ -175,6 +187,7 @@
     _templatestack_stackIsEmpty_proto(T) \
     _templatestack_stackIsFull_proto(T) \
     _templatestack_stackSize_proto(T) \
+    _templatestack_stackBufferSize_proto(T) \
     _templatestack_stackPush_proto(T) \
     _templatestack_stackPop_proto(T) \
     _templatestack_stackPeek_proto(T) \
@@ -188,6 +201,7 @@
     _templatestack_stackIsEmpty_impl(T) \
     _templatestack_stackIsFull_impl(T) \
     _templatestack_stackSize_impl(T) \
+    _templatestack_stackBufferSize_impl(T) \
     _templatestack_stackPush_impl(T) \
     _templatestack_stackPop_impl(T) \
     _templatestack_stackPeek_impl(T) \
