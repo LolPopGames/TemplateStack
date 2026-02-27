@@ -8,7 +8,6 @@
 
 /* ---- API functions ---- */
 #define Stack(T) struct _templatestack_##T
-#define newStack(T) _templatestack_newStack_##T
 #define stackIsEmpty(T) _templatestack_stackIsEmpty_##T
 #define stackIsFull(T) _templatestack_stackIsFull_##T
 #define stackNull(T) _templatestack_stackNull_##T
@@ -17,6 +16,7 @@
 #define stackPush(T) _templatestack_stackPush_##T
 #define stackPop(T) _templatestack_stackPop_##T
 #define stackPeek(T) _templatestack_stackPeek_##T
+#define newStack(T) _templatestack_newStack_##T
 #define deleteStack(T) _templatestack_deleteStack_##T
 #define stackDup(T) _templatestack_stackDup_##T
 #define stackRealloc(T) _templatestack_stackRealloc_##T
@@ -29,21 +29,6 @@
         size_t index; \
         size_t size; \
     };
-
-/* --- newStack() --- */
-#define _templatestack_newStack_proto(T) \
-    Stack(T) \
-    newStack(T)(size_t size);
-
-#define _templatestack_newStack_impl(T) \
-    Stack(T) \
-    newStack(T)(size_t size) { \
-        Stack(T) stack = {0}; \
-        stack.buffer = calloc(size, sizeof(T)); \
-        if (stack.buffer == NULL) return stack; \
-        stack.size = size; \
-        return stack; \
-    }
 
 /* --- stackIsEmpty() --- */
 #define _templatestack_stackIsEmpty_proto(T) \
@@ -142,6 +127,21 @@
         return stack.buffer[stack.index-1]; \
     }
 
+/* --- newStack() --- */
+#define _templatestack_newStack_proto(T) \
+    Stack(T) \
+    newStack(T)(size_t size);
+
+#define _templatestack_newStack_impl(T) \
+    Stack(T) \
+    newStack(T)(size_t size) { \
+        Stack(T) stack = {0}; \
+        stack.buffer = calloc(size, sizeof(T)); \
+        if (stackNull(T)(stack)) return stack; \
+        stack.size = size; \
+        return stack; \
+    }
+
 /* --- deleteStack() --- */
 #define _templatestack_deleteStack_proto(T) \
     int \
@@ -166,7 +166,7 @@
         Stack(T) dup = stack; \
         Stack(T) empty = {0}; \
         dup.buffer = malloc(dup.size * sizeof(T)); \
-        if (dup.buffer == NULL) return empty; \
+        if (stackNull(T)(dup)) return empty; \
         memcpy(dup.buffer, stack.buffer, stack.size * sizeof(T)); \
         return dup; \
     }
@@ -195,7 +195,6 @@
 /* ---- Template Stack Prototype (for header) ---- */
 #define TemplateStack_proto(T) \
     _templatestack_Stack(T) \
-    _templatestack_newStack_proto(T) \
     _templatestack_stackIsEmpty_proto(T) \
     _templatestack_stackIsFull_proto(T) \
     _templatestack_stackNull_proto(T) \
@@ -204,13 +203,13 @@
     _templatestack_stackPush_proto(T) \
     _templatestack_stackPop_proto(T) \
     _templatestack_stackPeek_proto(T) \
+    _templatestack_newStack_proto(T) \
     _templatestack_deleteStack_proto(T) \
     _templatestack_stackDup_proto(T) \
     _templatestack_stackRealloc_proto(T)
 
 /* ---- Template Stack Implementation (for source file) ---- */
 #define TemplateStack_impl(T) \
-    _templatestack_newStack_impl(T) \
     _templatestack_stackIsEmpty_impl(T) \
     _templatestack_stackIsFull_impl(T) \
     _templatestack_stackNull_impl(T) \
@@ -219,6 +218,7 @@
     _templatestack_stackPush_impl(T) \
     _templatestack_stackPop_impl(T) \
     _templatestack_stackPeek_impl(T) \
+    _templatestack_newStack_impl(T) \
     _templatestack_deleteStack_impl(T) \
     _templatestack_stackDup_impl(T) \
     _templatestack_stackRealloc_impl(T)
