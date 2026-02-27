@@ -17,7 +17,6 @@
 #define deleteStack(T) _templatestack_deleteStack_##T
 #define stackDup(T) _templatestack_stackDup_##T
 #define stackRealloc(T) _templatestack_stackRealloc_##T
-
 /* ---- Implementation macros ---- */
 
 /* --- struct Stack --- */
@@ -75,7 +74,6 @@
     stackPush(T)(Stack(T) *stack, T node) { \
         if (stack->index >= stack->size) return 1; \
         stack->buffer[stack->index++] = node; \
-        stack->size++; \
         return 0; \
     }
 
@@ -131,23 +129,30 @@
     stackDup(T)(Stack(T) stack) { \
         Stack(T) dup = stack; \
         Stack(T) empty = {0}; \
-        stack.buffer = malloc(stack.size * sizeof(Stack(T))); \
+        dup.buffer = malloc(dup.size * sizeof(T)); \
         if (dup.buffer == NULL) return empty; \
-        memcpy(dup.buffer, stack.buffer, dup.size); \
+        memcpy(dup.buffer, stack.buffer, stack.size * sizeof(T)); \
         return dup; \
     }
 
 /* --- stackRealloc() --- */
 #define _templatestack_stackRealloc_proto(T) \
     Stack(T) \
-    stackRealloc(T)(Stack(T) stack);
+    stackRealloc(T)(Stack(T) stack, size_t size);
 
 #define _templatestack_stackRealloc_impl(T) \
     Stack(T) \
-    stackRealloc(T)(Stack(T) stack) { \
+    stackRealloc(T)(Stack(T) stack, size_t size) { \
         Stack(T) empty = {0}; \
-        stack.buffer = realloc(stack.buffer, stack.size * sizeof(Stack(T))); \
+        if (size == 0) { \
+            free(stack.buffer); \
+            return empty; \
+        } \
+        stack.buffer = realloc(stack.buffer, size * sizeof(Stack(T))); \
         if (stack.buffer == NULL) return empty; \
+        stack.size = size; \
+        if (stack.index >= size) \
+            stack.index = size; \
         return stack; \
     }
 
