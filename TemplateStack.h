@@ -10,6 +10,7 @@
 #define Stack(T) struct _templatestack_##T
 #define newStack(T) _templatestack_newStack_##T
 #define stackIsEmpty(T) _templatestack_stackIsEmpty_##T
+#define stackIsFull(T) _templatestack_stackIsFull_##T
 #define stackSize(T) _templatestack_stackSize_##T
 #define stackPush(T) _templatestack_stackPush_##T
 #define stackPop(T) _templatestack_stackPop_##T
@@ -53,6 +54,17 @@
         return (stack.index == 0) ? 1 : 0; \
     }
 
+/* --- stackIsFull() --- */
+#define _templatestack_stackIsFull_proto(T) \
+    int \
+    stackIsFull(T)(Stack(T) stack);
+
+#define _templatestack_stackIsFull_impl(T) \
+    int \
+    stackIsFull(T)(Stack(T) stack) { \
+        return (stack.index >= stack.size) ? 1 : 0; \
+    }
+
 /* --- stackSize() --- */
 #define _templatestack_stackSize_proto(T) \
     size_t \
@@ -72,7 +84,7 @@
 #define _templatestack_stackPush_impl(T) \
     int \
     stackPush(T)(Stack(T) *stack, T node) { \
-        if (stack->index >= stack->size) return 1; \
+        if (stackIsFull(T)(*stack)) return 1; \
         stack->buffer[stack->index++] = node; \
         return 0; \
     }
@@ -161,6 +173,7 @@
     _templatestack_Stack(T) \
     _templatestack_newStack_proto(T) \
     _templatestack_stackIsEmpty_proto(T) \
+    _templatestack_stackIsFull_proto(T) \
     _templatestack_stackSize_proto(T) \
     _templatestack_stackPush_proto(T) \
     _templatestack_stackPop_proto(T) \
@@ -173,6 +186,7 @@
 #define TemplateStack_impl(T) \
     _templatestack_newStack_impl(T) \
     _templatestack_stackIsEmpty_impl(T) \
+    _templatestack_stackIsFull_impl(T) \
     _templatestack_stackSize_impl(T) \
     _templatestack_stackPush_impl(T) \
     _templatestack_stackPop_impl(T) \
