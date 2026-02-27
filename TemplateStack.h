@@ -167,7 +167,7 @@
         Stack(T) empty = {0}; \
         dup.buffer = malloc(dup.size * sizeof(T)); \
         if (stackNull(T)(dup)) return empty; \
-        memcpy(dup.buffer, stack.buffer, stack.size * sizeof(T)); \
+        memcpy(dup.buffer, stack.buffer, stack.index * sizeof(T)); \
         return dup; \
     }
 
@@ -184,8 +184,8 @@
             free(stack.buffer); \
             return empty; \
         } \
-        stack.buffer = realloc(stack.buffer, size * sizeof(Stack(T))); \
-        if (stackNull(stack)) return empty; \
+        stack.buffer = realloc(stack.buffer, size * sizeof(T)); \
+        if (stackNull(T)(stack)) return empty; \
         stack.size = size; \
         if (stack.index >= size) \
             stack.index = size; \
