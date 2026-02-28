@@ -1,6 +1,12 @@
 #ifndef _TEMPLATE_STACK_H_
 #define _TEMPLATE_STACK_H_
 
+/* ---- Macros ---- */
+/* --- Version --- */
+#define TEMPLATE_STACK_MAJOR 0
+#define TEMPLATE_STACK_MINOR 1
+#define TEMPLATE_STACK_PATCH 0
+
 /* ---- Includes ---- */
 #include <stddef.h>
 #include <stdlib.h>
