@@ -5,8 +5,20 @@
 #include <stdio.h>
 #include <string.h>
 
+/* Disabling unused function warning */
+#if defined(__GNUC__) && /* gcc version >=4.2 */ \
+    ((__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2))
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wunused-function"
+#endif
+
 /* Templating Stack for int */
 TemplateStack_inline(int)
+
+#if defined(__GNUC__) && /* gcc version >=4.2 */ \
+    ((__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2))
+#   pragma GCC diagnostic pop
+#endif
 
 int
 main(void)
@@ -24,7 +36,7 @@ main(void)
         "--> "
     );
     fflush(stdout);
-    scanf("%zu", &start_size);
+    scanf("%lu", &start_size);
 
     /* Initializing Stack */
     if (start_size == 0)
@@ -113,13 +125,13 @@ main(void)
 
         if (strncmp(buffer, "size", 4) == 0)
         {
-            printf("%zu\n", stackSize(int)(stack));
+            printf("%lu\n", stackSize(int)(stack));
             continue;
         }
 
         if (strncmp(buffer, "bufsize", 7) == 0)
         {
-            printf("%zu\n", stackBufferSize(int)(stack));
+            printf("%lu\n", stackBufferSize(int)(stack));
             continue;
         }
 
