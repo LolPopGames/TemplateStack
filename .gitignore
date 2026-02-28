@@ -1,13 +1,17 @@
 # Apps Data
 .vscode/
+.cache/
 .DS_Store/
 
 # Builds
 build/
+bin/
+builddir/
 *.o
 *.a
 *.so
 *.elf
+example
 
 # Other
 .ignore/
