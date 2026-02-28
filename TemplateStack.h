@@ -2,6 +2,12 @@
 #define _TEMPLATE_STACK_H_
 
 /* ---- Macros ---- */
+
+/* extern if C++ */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* --- Version --- */
 #define TEMPLATE_STACK_MAJOR 0
 #define TEMPLATE_STACK_MINOR 1
@@ -280,5 +286,10 @@
 #define TemplateStack_inline(T) \
     TemplateStack_static_proto(T) \
     TemplateStack_static_impl(T)
+
+/* ---- Closing extern if C++ --- */
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _TEMPLATE_STACK_H_ */
