@@ -20,10 +20,6 @@ extern "C" {
 
 /* ---- API functions ---- */
 /* NOTE:
- * Type T must be zero-initializable.
- * Function pointers are not supported.
- *
- * NOTE:
  * Type T must be a single preprocessing token (no spaces or special characters).
  * For pointers or struct/union/enum types, use a typedef first
  * (e.g. typedef struct some some_t; typedef char * cstr;).
@@ -131,14 +127,14 @@ extern "C" {
 #define _templatestack_stackPop_impl(T) \
     T \
     stackPop(T)(Stack(T) *stack) { \
-        T empty = {0}; \
+        static const T empty[1] = {0}; \
         T result; \
         \
-        if (stack == NULL) return empty; \
-        if (stackIsEmpty(T)(stack)) return empty; \
+        if (stack == NULL) return empty[0]; \
+        if (stackIsEmpty(T)(stack)) return empty[0]; \
         \
         result = stack->buffer[--(stack->index)]; \
-        stack->buffer[stack->index] = empty; \
+        stack->buffer[stack->index] = empty[0]; \
         \
         return result; \
     }
@@ -151,10 +147,10 @@ extern "C" {
 #define _templatestack_stackPeek_impl(T) \
     T \
     stackPeek(T)(const Stack(T) *stack) { \
-        T empty = {0}; \
+        static const T empty[1] = {0}; \
         \
-        if (stack == NULL) return empty; \
-        if (stackIsEmpty(T)(stack)) return empty; \
+        if (stack == NULL) return empty[0]; \
+        if (stackIsEmpty(T)(stack)) return empty[0]; \
         \
         return stack->buffer[stack->index-1]; \
     }
@@ -168,8 +164,12 @@ extern "C" {
     Stack(T) \
     newStack(T)(size_t size) { \
         Stack(T) stack = {0}; \
+        \
+        if (size == 0) return stack; \
+        \
         stack.buffer = calloc(size, sizeof(T)); \
         if (stackBufferIsNull(T)(&stack)) return stack; \
+        \
         stack.size = size; \
         return stack; \
     }
@@ -184,7 +184,9 @@ extern "C" {
     deleteStack(T)(Stack(T) *stack) { \
         if (stack == NULL) return 1; \
         if (stackBufferIsNull(T)(stack)) return 1; \
+        \
         free(stack->buffer); \
+        \
         stack->buffer = NULL; \
         stack->size = 0; \
         stack->index = 0; \
