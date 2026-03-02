@@ -229,6 +229,15 @@ extern "C" {
         new_stack.buffer = realloc(stack->buffer, size * sizeof(T)); \
         if (stackBufferIsNull(T)(&new_stack)) return empty; \
         \
+        /* Setting 0 to all new elements (if new size is bigger) */ \
+        if (size > stack->size) \
+        { \
+            memset( \
+                new_stack.buffer + stack->size, \
+                0, (size - stack->size) * sizeof(T) \
+            ); \
+        } \
+        \
         new_stack.size = size; \
         if (stack->index >= size) \
         { \
