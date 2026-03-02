@@ -201,8 +201,8 @@ extern "C" {
 #define _templatestack_stackDup_impl(T) \
     Stack(T) \
     stackDup(T)(const Stack(T) *stack) { \
+        static const Stack(T) empty = {0}; \
         Stack(T) dup = *stack; \
-        Stack(T) empty = {0}; \
         \
         dup.buffer = malloc(dup.size * sizeof(T)); \
         if (stackBufferIsNull(T)(&dup)) return empty; \
@@ -220,19 +220,28 @@ extern "C" {
 #define _templatestack_stackRealloc_impl(T) \
     Stack(T) \
     stackRealloc(T)(Stack(T) *stack, size_t size) { \
-        Stack(T) empty = {0}; \
+        static const Stack(T) empty = {0}; \
+        Stack(T) new_stack = {0}; \
         \
         if (size == 0) { \
             return empty; \
         } \
-        stack->buffer = realloc(stack->buffer, size * sizeof(T)); \
-        if (stackBufferIsNull(T)(stack)) return empty; \
+        new_stack.buffer = realloc(stack->buffer, size * sizeof(T)); \
+        if (stackBufferIsNull(T)(&new_stack)) return empty; \
         \
-        stack->size = size; \
+        new_stack.size = size; \
         if (stack->index >= size) \
-            stack->index = size; \
+        { \
+            new_stack.index = size; \
+        } \
+        else \
+        { \
+            new_stack.index = stack->index; \
+        } \
         \
-        return *stack; \
+        *stack = empty; \
+        \
+        return new_stack; \
     }
 
 /* ---- Template Stack Prototype (for header) ---- */
