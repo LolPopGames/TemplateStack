@@ -127,14 +127,14 @@ extern "C" {
 #define _templatestack_stackPop_impl(T) \
     T \
     stackPop(T)(Stack(T) *stack) { \
-        static const T empty[1] = {0}; \
+        static const T empty = {0}; \
         T result; \
         \
-        if (stack == NULL) return empty[0]; \
-        if (stackIsEmpty(T)(stack)) return empty[0]; \
+        if (stack == NULL) return empty; \
+        if (stackIsEmpty(T)(stack)) return empty; \
         \
         result = stack->buffer[--(stack->index)]; \
-        stack->buffer[stack->index] = empty[0]; \
+        stack->buffer[stack->index] = empty; \
         \
         return result; \
     }
@@ -147,10 +147,10 @@ extern "C" {
 #define _templatestack_stackPeek_impl(T) \
     T \
     stackPeek(T)(const Stack(T) *stack) { \
-        static const T empty[1] = {0}; \
+        static const T empty = {0}; \
         \
-        if (stack == NULL) return empty[0]; \
-        if (stackIsEmpty(T)(stack)) return empty[0]; \
+        if (stack == NULL) return empty; \
+        if (stackIsEmpty(T)(stack)) return empty; \
         \
         return stack->buffer[stack->index-1]; \
     }
