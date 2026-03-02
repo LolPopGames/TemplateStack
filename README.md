@@ -1,7 +1,7 @@
 # Template Stack
 
-[![version 0.1.0](https://img.shields.io/badge/version-0.1.0-green)](https://img.shields.io/badge/version-0.1.0-green)
-[![license MIT](https://img.shields.io/badge/license-MIT-orange)](https://img.shields.io/badge/license-MIT-orange)
+[![version 0.1.0](https://img.shields.io/badge/version-0.1.0-green)](#version)
+[![license MIT](https://img.shields.io/badge/license-MIT-orange)](LICENSE.md)
 
 ## Description
 
