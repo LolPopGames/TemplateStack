@@ -10,9 +10,9 @@ Table Of Contents:
     + [Installation](#installation)
     + [Usage](#usage)
         + [Including](#including)
-        + [Adding a type](#adding-a-type)
-        + [Version information](#version-information)
-        + [How to use API](#how-to-use-api)
+        + [Adding A Type](#adding-a-type)
+        + [Version Information](#version-information)
+        + [How To Use API](#how-to-use-api)
         + [`Stack(T)`](#stackt)
         + [`Stack(T) newStack(T)(size_t size)`](#stackt-newstacktsize_t-size)
         + [`int deleteStack(T)(Stack(T) *stack)`](#int-deletestacktstackt-stack)
@@ -62,7 +62,7 @@ include the header either in another header or in a source file:
 #include <TemplateStack.h>
 ```
 
-### Adding a type
+### Adding A Type
 
 Initially, there are **no types, functions, or objects defined**
 
@@ -124,7 +124,7 @@ TemplateStack_inline(size_t)
 >
 > Always use this defined type in stack API functions
 
-### Version information
+### Version Information
 
 The version is stored in the following 3 macros:
 
@@ -151,7 +151,7 @@ Or use `TEMPLATE_STACK_ATLEAST` to check the version more conveniently:
 #endif
 ```
 
-### How to use API
+### How To Use API
 
 Use the stack type and functions by replacing `T` with your own type
 
