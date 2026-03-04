@@ -127,20 +127,18 @@ Or use `TEMPLATE_STACK_ATLEAST` to check the version more conveniently:
 
 ### How to use API
 
-Use the stack type and functions by replacing `T` with your type
+Use the stack type and functions by replacing `T` with your own type
 
 The syntax is similar to C++ templates, but uses `()` instead of `<>`
 and it always requires to add your `T` type
 
 All functions that take a stack as a parameter require a _pointer_ to the stack.
 
+Every function provides a code-block example after it's explanation
+
 ### `Stack(T)`
 
 Stack type
-
----
-
-Example:
 
 ```C
 Stack(int) st;
@@ -150,14 +148,10 @@ Stack(int) st;
 
 Creates a new stack with the specified count of elements
 
-Don't forget to delete this stack with `deleteStack(T)`
+Don't forget to delete this stack with [`deleteStack(T)`](#int-deletestacktstackt-stack)
 
 Returns a stack with `NULL` buffer if allocation failed,
-check this with `stackBufferIsNull(T)`
-
----
-
-Example:
+check this with [`stackBufferIsNull(T)`](#int-stackbufferisnulltconst-stackt-stack)
 
 ```C
 /* A stack with 10 int elements */
@@ -173,10 +167,6 @@ Returns exit code
 e.g. if you delete a stack twice,
 or if stack buffer is `NULL`)
 
----
-
-Example:
-
 ```C
 deleteStack(int)(&st);
 ```
@@ -190,10 +180,6 @@ Returns exit code
 e.g. if stack is full
 or if stack buffer is `NULL`)
 
----
-
-Example:
-
 ```C
 stackPush(int)(&st, 107);
 ```
@@ -206,12 +192,8 @@ Returns zero-value if the stack is empty,
 or if stack buffer is `NULL`
 
 It is recommended to check
-for empty stack (with `stackIsEmpty(T)`) first,
+for empty stack (with [`stackIsEmpty(T)`](#int-stackisemptytconst-stackt-stack)) first,
 because a zero-value element cannot be distinguished from an empty stack
-
----
-
-Example:
 
 ```C
 int val = stackPop(int)(&st);
@@ -225,12 +207,8 @@ Returns zero-value if the stack is empty,
 or if stack buffer is `NULL`
 
 It is recommended to check
-for empty stack (with `stackIsEmpty(T)`) first,
+for empty stack (with [`stackIsEmpty(T)`](#int-stackisemptytconst-stackt-stack)) first,
 because a zero-value element cannot be distinguished from an empty stack
-
----
-
-Example:
 
 ```C
 int val = stackPeek(int)(&st);
@@ -241,10 +219,6 @@ int val = stackPeek(int)(&st);
 Checks if the stack is empty (no elements are now in the stack)
 
 Returns a boolean value `0` (`false`) or `1` (`true`)
-
----
-
-Example:
 
 ```C
 if (stackIsEmpty(int)(&st))
@@ -258,10 +232,6 @@ if (stackIsEmpty(int)(&st))
 Checks if the stack is full
 
 Returns a boolean value `0` (`false`) or `1` (`true`)
-
----
-
-Example:
 
 ```C
 if (stackIsFull(int)(&st))
@@ -277,10 +247,6 @@ Checks if the stack buffer is null
 
 Returns a boolean value `0` (`false`) or `1` (`true`)
 
----
-
-Example:
-
 ```C
 if (stackBufferIsNull(int)(&st))
 {
@@ -292,10 +258,6 @@ if (stackBufferIsNull(int)(&st))
 
 Returns number of elements currently in the stack
 
----
-
-Example:
-
 ```C
 printf("Stack contains %lu elements right now\n", stackSize(int)(&st));
 ```
@@ -304,10 +266,6 @@ printf("Stack contains %lu elements right now\n", stackSize(int)(&st));
 
 Returns stack buffer size (count of allocated `T` elements, capacity)
 
----
-
-Example:
-
 ```C
 printf("Program allocated %lu elements", stackBufferSize(int)(&st));
 ```
@@ -315,10 +273,6 @@ printf("Program allocated %lu elements", stackBufferSize(int)(&st));
 ### `Stack(T) stackDup(T)(const Stack(T) *stack)`
 
 Returns a copy of the stack, or `NULL` buffer if allocation failed
-
----
-
-Example:
 
 ```C
 Stack(int) st_copy = stackDup(int)(&st);
@@ -333,10 +287,6 @@ with the contents copied (or sliced if new size is smaller)
 
 If reallocation fails, returns a stack with `NULL` buffer
 and **does not free the original stack**
-
----
-
-Example:
 
 ```C
 Stack(int) st_new = stackRealloc(int)(&st, 20);
