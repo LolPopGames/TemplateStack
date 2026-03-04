@@ -98,6 +98,33 @@ TemplateStack_inline(size_t)
 >
 > Always use this defined type in stack API functions
 
+### Version information
+
+The version is stored in the following 3 macros:
+
++ `TEMPLATE_STACK_MAJOR` (X.0.0)
++ `TEMPLATE_STACK_MINOR` (0.X.0)
++ `TEMPLATE_STACK_PATCH` (0.0.X)
+
+You can check the version like this:
+
+```C
+/* >=0.1.0 */
+#if (TEMPLATE_STACK_MAJOR > 0) || \
+    (TEMPLATE_STACK_MAJOR == 0 && TEMPLATE_STACK_MINOR >= 1)
+/* code ... */
+#endif
+```
+
+Or use `TEMPLATE_STACK_ATLEAST` to check the version more conveniently:
+
+```C
+/* Insert numbers separated by commas */
+#if TEMPLATE_STACK_ATLEAST(0,1,0) /* At least 0.1.0 */
+/* code ... */
+#endif
+```
+
 ### How to use API
 
 Use the stack type and functions by replacing `T` with your type
