@@ -38,7 +38,7 @@ extern "C" {
 /* --- Version --- */
 #define TEMPLATE_STACK_MAJOR 0
 #define TEMPLATE_STACK_MINOR 1
-#define TEMPLATE_STACK_PATCH 0
+#define TEMPLATE_STACK_PATCH 1
 
 /* ---- Includes ---- */
 #include <stddef.h>
