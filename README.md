@@ -3,6 +3,31 @@
 [![version 0.1.1-dev](https://img.shields.io/badge/version-0.1.0--dev-red)](#version)
 [![license MIT](https://img.shields.io/badge/license-MIT-orange)](LICENSE.md)
 
+Table Of Contents:
++ [Template Stack](#template-stack)
+    + [Description](#description)
+    + [Requirements](#requirements)
+    + [Installation](#installation)
+    + [Usage](#usage)
+        + [Including](#including)
+        + [Adding a type](#adding-a-type)
+        + [Version information](#version-information)
+        + [How to use API](#how-to-use-api)
+        + [`Stack(T)`](#stackt)
+        + [`Stack(T) newStack(T)(size_t size)`](#stackt-newstacktsize_t-size)
+        + [`int deleteStack(T)(Stack(T) *stack)`](#int-deletestacktstackt-stack)
+        + [`int stackPush(T)(Stack(T) *stack, T value)`](#int-stackpushtstackt-stack-t-value)
+        + [`T stackPop(T)(Stack(T) *stack)`](#t-stackpoptstackt-stack)
+        + [`T stackPeek(T)(const Stack(T) *stack)`](#t-stackpeektconst-stackt-stack)
+        + [`int stackIsEmpty(T)(const Stack(T) *stack)`](#int-stackisemptytconst-stackt-stack)
+        + [`int stackIsFull(T)(const Stack(T) *stack)`](#int-stackisfulltconst-stackt-stack)
+        + [`int stackBufferIsNull(T)(const Stack(T) *stack)`](#int-stackbufferisnulltconst-stackt-stack)
+        + [`size_t stackSize(T)(const Stack(T) *stack)`](#size_t-stacksizetconst-stackt-stack)
+        + [`size_t stackBufferSize(T)(const Stack(T) *stack)`](#size_t-stackbuffersizetconst-stackt-stack)
+        + [`Stack(T) stackDup(T)(const Stack(T) *stack)`](#stackt-stackduptconst-stackt-stack)
+        + [`Stack(T) stackRealloc(T)(const Stack(T) *stack, size_t size)`](#stackt-stackrealloctconst-stackt-stack-size_t-size)
+    + [Version](#version)
+
 ## Description
 
 **Template Stack** is a **single-header C library**
