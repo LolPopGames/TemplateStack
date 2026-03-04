@@ -26,6 +26,7 @@ Table Of Contents:
         + [`size_t stackBufferSize(T)(const Stack(T) *stack)`](#size_t-stackbuffersizetconst-stackt-stack)
         + [`Stack(T) stackDup(T)(const Stack(T) *stack)`](#stackt-stackduptconst-stackt-stack)
         + [`Stack(T) stackRealloc(T)(const Stack(T) *stack, size_t size)`](#stackt-stackrealloctconst-stackt-stack-size_t-size)
+    + [License](#license)
     + [Version](#version)
 
 ## Description
@@ -316,6 +317,10 @@ and **does not free the original stack**
 ```C
 Stack(int) st_new = stackRealloc(int)(&st, 20);
 ```
+
+## License
+
+The library is distributed under [the MIT license](LICENSE.md)
 
 ## Version
 
