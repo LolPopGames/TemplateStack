@@ -39,6 +39,22 @@ extern "C" {
 #define TEMPLATE_STACK_MAJOR 0
 #define TEMPLATE_STACK_MINOR 1
 #define TEMPLATE_STACK_PATCH 1
+#define TEMPLATE_STACK_ATLEAST(major,minor,patch) ( \
+    (TEMPLATE_STACK_MAJOR > (major)) || \
+    \
+    ( \
+        TEMPLATE_STACK_MAJOR == (major) && \
+        \
+        ( \
+            (TEMPLATE_STACK_MINOR > (minor)) || \
+            \
+            ( \
+                TEMPLATE_STACK_MINOR == (minor) && \
+                TEMPLATE_STACK_PATCH >= (patch) \
+            ) \
+        ) \
+    ) \
+)
 
 /* ---- Includes ---- */
 #include <stddef.h>
