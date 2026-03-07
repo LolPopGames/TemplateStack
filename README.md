@@ -28,6 +28,7 @@ Table Of Contents:
         + [`size_t stackBufferSize(T)(const Stack(T) *stack)`](#size_t-stackbuffersizetconst-stackt-stack)
         + [`Stack(T) stackDup(T)(const Stack(T) *stack)`](#stackt-stackduptconst-stackt-stack)
         + [`Stack(T) stackRealloc(T)(const Stack(T) *stack, size_t size)`](#stackt-stackrealloctconst-stackt-stack-size_t-size)
+    + [Example](#example)
     + [License](#license)
     + [Version](#version)
 
@@ -318,6 +319,43 @@ and **does not free the original stack**
 
 ```C
 Stack(int) st_new = stackRealloc(int)(&st, 20);
+```
+
+## Example
+
+If you need an example of how to use **Template Stack**,
+see `example.c`, which implements a command-line interface for a stack
+
+There are two ways to compile it:
+
+### Manually
+
+To compile, use this command (e.g. with `gcc`):
+
+```bash
+$ gcc -o example example.c
+```
+
+Then run it with:
+
+```bash
+$ ./example
+```
+
+### Using Meson
+
+If you have **Meson** and **Ninja** installed, you can do this:
+
+```bash
+$ meson setup build
+$ cd build
+$ meson compile
+```
+
+Then run it with:
+
+```bash
+$ ./example
 ```
 
 ## License
