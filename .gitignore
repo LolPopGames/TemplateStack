@@ -13,8 +13,5 @@ builddir/
 *.elf
 example
 
-# Unignoring assets
-!assets/icons/build
-
 # Other
 .ignore/
