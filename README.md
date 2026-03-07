@@ -1,6 +1,8 @@
 # Template Stack
 
-[![version 0.1.1-dev](https://img.shields.io/badge/version-0.1.0--dev-red)](#version)
+![Template Stack](assets/icons/build/logo-white@1.5.png)
+
+[![version 0.1.1-dev](https://img.shields.io/badge/version-0.1.1--dev-red)](#version)
 [![license MIT](https://img.shields.io/badge/license-MIT-orange)](LICENSE.md)
 
 Table Of Contents:
