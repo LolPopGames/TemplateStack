@@ -37,8 +37,24 @@ extern "C" {
 
 /* --- Version --- */
 #define TEMPLATE_STACK_MAJOR 0
-#define TEMPLATE_STACK_MINOR 1
+#define TEMPLATE_STACK_MINOR 2
 #define TEMPLATE_STACK_PATCH 0
+#define TEMPLATE_STACK_ATLEAST(major,minor,patch) ( \
+    (TEMPLATE_STACK_MAJOR > (major)) || \
+    \
+    ( \
+        TEMPLATE_STACK_MAJOR == (major) && \
+        \
+        ( \
+            (TEMPLATE_STACK_MINOR > (minor)) || \
+            \
+            ( \
+                TEMPLATE_STACK_MINOR == (minor) && \
+                TEMPLATE_STACK_PATCH >= (patch) \
+            ) \
+        ) \
+    ) \
+)
 
 /* ---- Includes ---- */
 #include <stddef.h>
@@ -83,6 +99,7 @@ extern "C" {
 #define _templatestack_stackIsEmpty_impl(T) \
     int \
     stackIsEmpty(T)(const Stack(T) *stack) { \
+        if (stack == NULL) return 0; \
         return (stack->index == 0) ? 1 : 0; \
     }
 
@@ -94,6 +111,7 @@ extern "C" {
 #define _templatestack_stackIsFull_impl(T) \
     int \
     stackIsFull(T)(const Stack(T) *stack) { \
+        if (stack == NULL) return 0; \
         return (stack->index >= stack->size) ? 1 : 0; \
     }
 
@@ -105,6 +123,7 @@ extern "C" {
 #define _templatestack_stackBufferIsNull_impl(T) \
     int \
     stackBufferIsNull(T)(const Stack(T) *stack) { \
+        if (stack == NULL) return 0; \
         return (stack->buffer == NULL) ? 1 : 0; \
     }
 
@@ -116,6 +135,7 @@ extern "C" {
 #define _templatestack_stackSize_impl(T) \
     size_t \
     stackSize(T)(const Stack(T) *stack) { \
+        if (stack == NULL) return 0; \
         return stack->index; \
     }
 
@@ -127,6 +147,7 @@ extern "C" {
 #define _templatestack_stackBufferSize_impl(T) \
     size_t \
     stackBufferSize(T)(const Stack(T) *stack) { \
+        if (stack == NULL) return 0; \
         return stack->size; \
     }
 
@@ -229,7 +250,11 @@ extern "C" {
     Stack(T) \
     stackDup(T)(const Stack(T) *stack) { \
         static const Stack(T) empty = {0}; \
-        Stack(T) dup = *stack; \
+        Stack(T) dup; \
+        \
+        if (stack == NULL) return empty; \
+        \
+        dup = *stack; \
         \
         dup.buffer = malloc(dup.size * sizeof(T)); \
         if (stackBufferIsNull(T)(&dup)) return empty; \
@@ -249,6 +274,8 @@ extern "C" {
     stackRealloc(T)(Stack(T) *stack, size_t size) { \
         static const Stack(T) empty = {0}; \
         Stack(T) new_stack = {0}; \
+        \
+        if (stack == NULL) return empty; \
         \
         if (size == 0) { \
             return empty; \
