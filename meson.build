@@ -1,3 +1,3 @@
-project('Template Stack Example', 'c', version : '0.1.1-dev')
+project('Template Stack Example', 'c', version : '0.2.0')
 
 executable('example', 'example.c', c_args : ['-std=c89', '-pedantic'])
