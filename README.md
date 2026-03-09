@@ -324,7 +324,7 @@ Stack(int) st_new = stackRealloc(int)(&st, 20);
 ## Example
 
 If you need an example of how to use **Template Stack**,
-see `example.c`, which implements a command-line interface for a stack
+see [`example.c`](example.c), which implements a command-line interface for a stack
 
 There are two ways to compile it:
 
