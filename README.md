@@ -57,7 +57,7 @@ Simply copy it into your project
 To use Template Stack,
 include the header either in another header or in a source file:
 
-```C
+```c
 /* If the file is in the same directory as the current */
 #include "TemplateStack.h"
 
@@ -73,7 +73,7 @@ You create (template) the stack for your type by using the macros
 
 Add one of these lines outside of any function:
 
-```C
+```c
 /* Insert instead of T type you need (e.g. `int`) */
 
 /* Creates stack type and function prototypes *
@@ -95,7 +95,7 @@ TemplateStack_inline(T)
 
 You can create stacks for multiple types:
 
-```C
+```c
 /* Templates stack for `int`, `long`, `size_t` */
 TemplateStack_inline(int)
 TemplateStack_inline(long)
@@ -109,7 +109,7 @@ TemplateStack_inline(size_t)
 >
 > For example:
 >
-> ```C
+> ```c
 > struct data
 > {
 >     uint8_t *buffer;
@@ -137,7 +137,7 @@ The version is stored in the following 3 macros:
 
 You can check the version like this:
 
-```C
+```c
 /* >=0.1.0 */
 #if (TEMPLATE_STACK_MAJOR > 0) || \
     (TEMPLATE_STACK_MAJOR == 0 && TEMPLATE_STACK_MINOR >= 1)
@@ -147,7 +147,7 @@ You can check the version like this:
 
 Or use `TEMPLATE_STACK_ATLEAST` to check the version more conveniently:
 
-```C
+```c
 /* Insert numbers separated by commas */
 #if TEMPLATE_STACK_ATLEAST(0,1,0) /* At least 0.1.0 */
 /* code ... */
@@ -169,7 +169,7 @@ Every function provides a code-block example after it's explanation
 
 Stack type
 
-```C
+```c
 Stack(int) st;
 ```
 
@@ -182,7 +182,7 @@ Don't forget to delete this stack with [`deleteStack(T)`](#int-deletestacktstack
 Returns a stack with `NULL` buffer if allocation failed,
 check this with [`stackBufferIsNull(T)`](#int-stackbufferisnulltconst-stackt-stack)
 
-```C
+```c
 /* A stack with 10 int elements */
 Stack(int) st = newStack(int)(10);
 ```
@@ -196,7 +196,7 @@ Returns exit code
 e.g. if you delete a stack twice,
 or if stack buffer is `NULL`)
 
-```C
+```c
 deleteStack(int)(&st);
 ```
 
@@ -209,7 +209,7 @@ Returns exit code
 e.g. if stack is full
 or if stack buffer is `NULL`)
 
-```C
+```c
 stackPush(int)(&st, 107);
 ```
 
@@ -224,7 +224,7 @@ It is recommended to check
 for empty stack (with [`stackIsEmpty(T)`](#int-stackisemptytconst-stackt-stack)) first,
 because a zero-value element cannot be distinguished from an empty stack
 
-```C
+```c
 int val = stackPop(int)(&st);
 ```
 
@@ -239,7 +239,7 @@ It is recommended to check
 for empty stack (with [`stackIsEmpty(T)`](#int-stackisemptytconst-stackt-stack)) first,
 because a zero-value element cannot be distinguished from an empty stack
 
-```C
+```c
 int val = stackPeek(int)(&st);
 ```
 
@@ -249,7 +249,7 @@ Checks if the stack is empty (no elements are now in the stack)
 
 Returns a boolean value `0` (`false`) or `1` (`true`)
 
-```C
+```c
 if (stackIsEmpty(int)(&st))
 {
     printf("Stack is empty\n");
@@ -262,7 +262,7 @@ Checks if the stack is full
 
 Returns a boolean value `0` (`false`) or `1` (`true`)
 
-```C
+```c
 if (stackIsFull(int)(&st))
 {
     printf("Stack is full\n");
@@ -276,7 +276,7 @@ Checks if the stack buffer is null
 
 Returns a boolean value `0` (`false`) or `1` (`true`)
 
-```C
+```c
 if (stackBufferIsNull(int)(&st))
 {
     printf("Stack is invalid\n");
@@ -287,7 +287,7 @@ if (stackBufferIsNull(int)(&st))
 
 Returns number of elements currently in the stack
 
-```C
+```c
 printf("Stack contains %lu elements right now\n", stackSize(int)(&st));
 ```
 
@@ -295,7 +295,7 @@ printf("Stack contains %lu elements right now\n", stackSize(int)(&st));
 
 Returns stack buffer size (count of allocated `T` elements, capacity)
 
-```C
+```c
 printf("Program allocated %lu elements", stackBufferSize(int)(&st));
 ```
 
@@ -303,7 +303,7 @@ printf("Program allocated %lu elements", stackBufferSize(int)(&st));
 
 Returns a copy of the stack, or `NULL` buffer if allocation failed
 
-```C
+```c
 Stack(int) st_copy = stackDup(int)(&st);
 ```
 
@@ -317,7 +317,7 @@ with the contents copied (or sliced if new size is smaller)
 If reallocation fails, returns a stack with `NULL` buffer
 and **does not free the original stack**
 
-```C
+```c
 Stack(int) st_new = stackRealloc(int)(&st, 20);
 ```
 
