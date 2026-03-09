@@ -39,7 +39,7 @@ main(void)
     scanf("%lu", &start_size);
 
     /* Initializing Stack */
-    if (start_size == 0)
+    if (start_size <= 0)
     {
         printf("Invalid stack size, exiting program...\n");
         return 0;
@@ -106,6 +106,7 @@ main(void)
         if (strncmp(buffer, "resize", 6) == 0)
         {
             int size = atoi(buffer+6);
+            Stack(int) new_stack;
 
             if (size <= 0)
             {
@@ -113,12 +114,18 @@ main(void)
                 continue;
             }
 
-            stack = stackRealloc(int)(&stack, size);
-            if (stackBufferIsNull(int)(&stack))
+            new_stack = stackRealloc(int)(&stack, size);
+            if (stackBufferIsNull(int)(&new_stack))
             {
                 printf("Failed memory allocation, exiting program...\n");
+
+                /* deleting original stack, because if realloction failed, *
+                 * the original stack will not be freed                    */
+                deleteStack(int)(&stack);
                 return 0;
             }
+
+            stack = new_stack;
 
             continue;
         }
