@@ -1,7 +1,36 @@
 # Template Stack
 
-[![version 0.1.0](https://img.shields.io/badge/version-0.1.0-green)](#version)
+![Template Stack](assets/icons/build/logo-white@1.5.png)
+
+[![version 0.2.0](https://img.shields.io/badge/version-0.2.0-green)](#version)
 [![license MIT](https://img.shields.io/badge/license-MIT-orange)](LICENSE.md)
+
+Table Of Contents:
++ [Template Stack](#template-stack)
+    + [Description](#description)
+    + [Requirements](#requirements)
+    + [Installation](#installation)
+    + [Usage](#usage)
+        + [Including](#including)
+        + [Adding A Type](#adding-a-type)
+        + [Version Information](#version-information)
+        + [How To Use API](#how-to-use-api)
+        + [`Stack(T)`](#stackt)
+        + [`Stack(T) newStack(T)(size_t size)`](#stackt-newstacktsize_t-size)
+        + [`int deleteStack(T)(Stack(T) *stack)`](#int-deletestacktstackt-stack)
+        + [`int stackPush(T)(Stack(T) *stack, T value)`](#int-stackpushtstackt-stack-t-value)
+        + [`T stackPop(T)(Stack(T) *stack)`](#t-stackpoptstackt-stack)
+        + [`T stackPeek(T)(const Stack(T) *stack)`](#t-stackpeektconst-stackt-stack)
+        + [`int stackIsEmpty(T)(const Stack(T) *stack)`](#int-stackisemptytconst-stackt-stack)
+        + [`int stackIsFull(T)(const Stack(T) *stack)`](#int-stackisfulltconst-stackt-stack)
+        + [`int stackBufferIsNull(T)(const Stack(T) *stack)`](#int-stackbufferisnulltconst-stackt-stack)
+        + [`size_t stackSize(T)(const Stack(T) *stack)`](#size_t-stacksizetconst-stackt-stack)
+        + [`size_t stackBufferSize(T)(const Stack(T) *stack)`](#size_t-stackbuffersizetconst-stackt-stack)
+        + [`Stack(T) stackDup(T)(const Stack(T) *stack)`](#stackt-stackduptconst-stackt-stack)
+        + [`Stack(T) stackRealloc(T)(const Stack(T) *stack, size_t size)`](#stackt-stackrealloctconst-stackt-stack-size_t-size)
+    + [Example](#example)
+    + [License](#license)
+    + [Version](#version)
 
 ## Description
 
@@ -28,7 +57,7 @@ Simply copy it into your project
 To use Template Stack,
 include the header either in another header or in a source file:
 
-```C
+```c
 /* If the file is in the same directory as the current */
 #include "TemplateStack.h"
 
@@ -36,7 +65,7 @@ include the header either in another header or in a source file:
 #include <TemplateStack.h>
 ```
 
-### Adding a type
+### Adding A Type
 
 Initially, there are **no types, functions, or objects defined**
 
@@ -44,7 +73,7 @@ You create (template) the stack for your type by using the macros
 
 Add one of these lines outside of any function:
 
-```C
+```c
 /* Insert instead of T type you need (e.g. `int`) */
 
 /* Creates stack type and function prototypes *
@@ -66,7 +95,7 @@ TemplateStack_inline(T)
 
 You can create stacks for multiple types:
 
-```C
+```c
 /* Templates stack for `int`, `long`, `size_t` */
 TemplateStack_inline(int)
 TemplateStack_inline(long)
@@ -80,7 +109,7 @@ TemplateStack_inline(size_t)
 >
 > For example:
 >
-> ```C
+> ```c
 > struct data
 > {
 >     uint8_t *buffer;
@@ -98,24 +127,49 @@ TemplateStack_inline(size_t)
 >
 > Always use this defined type in stack API functions
 
-### How to use API
+### Version Information
 
-Use the stack type and functions by replacing `T` with your type
+The version is stored in the following 3 macros:
+
++ `TEMPLATE_STACK_MAJOR` (X.0.0)
++ `TEMPLATE_STACK_MINOR` (0.X.0)
++ `TEMPLATE_STACK_PATCH` (0.0.X)
+
+You can check the version like this:
+
+```c
+/* >=0.1.0 */
+#if (TEMPLATE_STACK_MAJOR > 0) || \
+    (TEMPLATE_STACK_MAJOR == 0 && TEMPLATE_STACK_MINOR >= 1)
+/* code ... */
+#endif
+```
+
+Or use `TEMPLATE_STACK_ATLEAST` to check the version more conveniently:
+
+```c
+/* Insert numbers separated by commas */
+#if TEMPLATE_STACK_ATLEAST(0,1,0) /* At least 0.1.0 */
+/* code ... */
+#endif
+```
+
+### How To Use API
+
+Use the stack type and functions by replacing `T` with your own type
 
 The syntax is similar to C++ templates, but uses `()` instead of `<>`
 and it always requires to add your `T` type
 
 All functions that take a stack as a parameter require a _pointer_ to the stack.
 
+Every function provides a code-block example after it's explanation
+
 ### `Stack(T)`
 
 Stack type
 
----
-
-Example:
-
-```C
+```c
 Stack(int) st;
 ```
 
@@ -123,16 +177,12 @@ Stack(int) st;
 
 Creates a new stack with the specified count of elements
 
-Don't forget to delete this stack with `deleteStack(T)`
+Don't forget to delete this stack with [`deleteStack(T)`](#int-deletestacktstackt-stack)
 
 Returns a stack with `NULL` buffer if allocation failed,
-check this with `stackBufferIsNull(T)`
+check this with [`stackBufferIsNull(T)`](#int-stackbufferisnulltconst-stackt-stack)
 
----
-
-Example:
-
-```C
+```c
 /* A stack with 10 int elements */
 Stack(int) st = newStack(int)(10);
 ```
@@ -146,11 +196,7 @@ Returns exit code
 e.g. if you delete a stack twice,
 or if stack buffer is `NULL`)
 
----
-
-Example:
-
-```C
+```c
 deleteStack(int)(&st);
 ```
 
@@ -163,11 +209,7 @@ Returns exit code
 e.g. if stack is full
 or if stack buffer is `NULL`)
 
----
-
-Example:
-
-```C
+```c
 stackPush(int)(&st, 107);
 ```
 
@@ -179,14 +221,10 @@ Returns zero-value if the stack is empty,
 or if stack buffer is `NULL`
 
 It is recommended to check
-for empty stack (with `stackIsEmpty(T)`) first,
+for empty stack (with [`stackIsEmpty(T)`](#int-stackisemptytconst-stackt-stack)) first,
 because a zero-value element cannot be distinguished from an empty stack
 
----
-
-Example:
-
-```C
+```c
 int val = stackPop(int)(&st);
 ```
 
@@ -198,14 +236,10 @@ Returns zero-value if the stack is empty,
 or if stack buffer is `NULL`
 
 It is recommended to check
-for empty stack (with `stackIsEmpty(T)`) first,
+for empty stack (with [`stackIsEmpty(T)`](#int-stackisemptytconst-stackt-stack)) first,
 because a zero-value element cannot be distinguished from an empty stack
 
----
-
-Example:
-
-```C
+```c
 int val = stackPeek(int)(&st);
 ```
 
@@ -215,11 +249,7 @@ Checks if the stack is empty (no elements are now in the stack)
 
 Returns a boolean value `0` (`false`) or `1` (`true`)
 
----
-
-Example:
-
-```C
+```c
 if (stackIsEmpty(int)(&st))
 {
     printf("Stack is empty\n");
@@ -232,11 +262,7 @@ Checks if the stack is full
 
 Returns a boolean value `0` (`false`) or `1` (`true`)
 
----
-
-Example:
-
-```C
+```c
 if (stackIsFull(int)(&st))
 {
     printf("Stack is full\n");
@@ -250,11 +276,7 @@ Checks if the stack buffer is null
 
 Returns a boolean value `0` (`false`) or `1` (`true`)
 
----
-
-Example:
-
-```C
+```c
 if (stackBufferIsNull(int)(&st))
 {
     printf("Stack is invalid\n");
@@ -265,11 +287,7 @@ if (stackBufferIsNull(int)(&st))
 
 Returns number of elements currently in the stack
 
----
-
-Example:
-
-```C
+```c
 printf("Stack contains %lu elements right now\n", stackSize(int)(&st));
 ```
 
@@ -277,11 +295,7 @@ printf("Stack contains %lu elements right now\n", stackSize(int)(&st));
 
 Returns stack buffer size (count of allocated `T` elements, capacity)
 
----
-
-Example:
-
-```C
+```c
 printf("Program allocated %lu elements", stackBufferSize(int)(&st));
 ```
 
@@ -289,11 +303,7 @@ printf("Program allocated %lu elements", stackBufferSize(int)(&st));
 
 Returns a copy of the stack, or `NULL` buffer if allocation failed
 
----
-
-Example:
-
-```C
+```c
 Stack(int) st_copy = stackDup(int)(&st);
 ```
 
@@ -307,14 +317,51 @@ with the contents copied (or sliced if new size is smaller)
 If reallocation fails, returns a stack with `NULL` buffer
 and **does not free the original stack**
 
----
-
-Example:
-
-```C
+```c
 Stack(int) st_new = stackRealloc(int)(&st, 20);
 ```
 
+## Example
+
+If you need an example of how to use **Template Stack**,
+see [`example.c`](example.c), which implements a command-line interface for a stack
+
+There are two ways to compile it:
+
+### Manually
+
+To compile, use this command (e.g. with `gcc`):
+
+```bash
+$ gcc -o example example.c
+```
+
+Then run it with:
+
+```bash
+$ ./example
+```
+
+### Using Meson
+
+If you have **Meson** and **Ninja** installed, you can do this:
+
+```bash
+$ meson setup build
+$ cd build
+$ meson compile
+```
+
+Then run it with:
+
+```bash
+$ ./example
+```
+
+## License
+
+The library is distributed under [the MIT license](LICENSE.md)
+
 ## Version
 
-0.1.0 stable
+0.2.0 stable
