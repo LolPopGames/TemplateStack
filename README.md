@@ -2,7 +2,7 @@
 
 ![Template Stack](assets/icons/build/logo-white@1.5.png)
 
-[![version 0.1.1-dev](https://img.shields.io/badge/version-0.1.1--dev-red)](#version)
+[![version 0.2.0](https://img.shields.io/badge/version-0.2.0-green)](#version)
 [![license MIT](https://img.shields.io/badge/license-MIT-orange)](LICENSE.md)
 
 Table Of Contents:
@@ -364,4 +364,4 @@ The library is distributed under [the MIT license](LICENSE.md)
 
 ## Version
 
-0.1.1 dev
+0.2.0 stable
