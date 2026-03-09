@@ -13,7 +13,7 @@ Describe the bug
 
 Paste here a minimal code example, that makes a error:
 
-```C
+```c
 /* Paste here */
 ```
 
