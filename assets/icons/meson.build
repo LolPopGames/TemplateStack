@@ -1,6 +1,6 @@
 project('icons')
 inkscape = find_program('inkscape')
-svgo = find_program('svgo', required: false)
+svgo = find_program('svgo', required : false)
 
 inkscape_env = {
   'DBUS_SESSION_BUS_ADDRESS': '',
@@ -19,9 +19,9 @@ raw_svgs = []
 foreach i : range(0, names.length())
   raw_svgs += custom_target(
     'svg-raw-' + names[i],
-    input: sources[i],
-    output: names[i] + '-R.svg',
-    command: [
+    input : sources[i],
+    output : names[i] + '-R.svg',
+    command : [
       inkscape,
       '@INPUT@',
       '--export-type=svg',
@@ -29,7 +29,7 @@ foreach i : range(0, names.length())
       '--actions=select-all;object-to-path;export-do',
       '--export-filename=@OUTPUT@',
     ],
-    build_by_default: true
+    build_by_default : true
   )
 endforeach
 
@@ -40,14 +40,14 @@ if svgo.found()
   foreach i : range(0, names.length())
     svgs_for_pngs += custom_target(
       'svg-optimized-' + names[i],
-      input: raw_svgs[i],
-      output: names[i] + '-O.svg',
-      command: [
+      input : raw_svgs[i],
+      output : names[i] + '-O.svg',
+      command : [
         svgo,
         '-i', '@INPUT@',
         '-o', '@OUTPUT@',
       ],
-      build_by_default: true
+      build_by_default : true
     )
   endforeach
 else
@@ -70,17 +70,17 @@ foreach i : range(0, names.length())
   foreach scale, dpi : scales
     custom_target(
       'png-' + scale + '-' + names[i],
-      input: svgs_for_pngs[i],
-      output: names[i] + '@' + scale + '.png',
-      env: inkscape_env,
-      command: [
+      input : svgs_for_pngs[i],
+      output : names[i] + '@' + scale + '.png',
+      env : inkscape_env,
+      command : [
         inkscape,
         '@INPUT@',
         '--export-type=png',
         '--export-dpi=' + dpi,
         '--export-filename=@OUTPUT@'
       ],
-      build_by_default: true
+      build_by_default : true
     )
   endforeach
 endforeach
