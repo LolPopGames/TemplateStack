@@ -14,4 +14,6 @@ builddir/
 example
 
 # Other
+test.c
+test
 .ignore/
