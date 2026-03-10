@@ -152,6 +152,78 @@ extern "C" {
         return stack->size; \
     }
 
+/* --- stackDup() --- */
+#define _templatestack_stackDup_proto(T) \
+    Stack(T) \
+    stackDup(T)(const Stack(T) *stack);
+
+#define _templatestack_stackDup_impl(T) \
+    Stack(T) \
+    stackDup(T)(const Stack(T) *stack) { \
+        static const Stack(T) empty = {0}; \
+        Stack(T) dup; \
+        \
+        if (stack == NULL) return empty; \
+        \
+        dup = *stack; \
+        \
+        if (!stackBufferIsNull(T)(stack)) \
+        { \
+            dup.buffer = malloc(dup.size * sizeof(T)); \
+            \
+            if (stackBufferIsNull(T)(&dup)) return empty; \
+            \
+            memcpy(dup.buffer, stack->buffer, dup.index * sizeof(T)); \
+        } \
+        \
+        return dup; \
+    }
+
+/* --- stackRealloc() --- */
+#define _templatestack_stackRealloc_proto(T) \
+    Stack(T) \
+    stackRealloc(T)(const Stack(T) *stack, size_t size);
+
+#define _templatestack_stackRealloc_impl(T) \
+    Stack(T) \
+    stackRealloc(T)(Stack(T) *stack, size_t size) { \
+        static const Stack(T) empty = {0}; \
+        Stack(T) new_stack = {0}; \
+        \
+        if (stack == NULL) return empty; \
+        \
+        if (stackBufferIsNull(T)(stack)) return *stack; \
+        \
+        if (size == 0) { \
+            return empty; \
+        } \
+        new_stack.buffer = realloc(stack->buffer, size * sizeof(T)); \
+        if (stackBufferIsNull(T)(&new_stack)) return empty; \
+        \
+        /* Setting 0 to all new elements (if new size is bigger) */ \
+        if (size > stack->size) \
+        { \
+            memset( \
+                new_stack.buffer + stack->size, \
+                0, (size - stack->size) * sizeof(T) \
+            ); \
+        } \
+        \
+        new_stack.size = size; \
+        if (stack->index >= size) \
+        { \
+            new_stack.index = size; \
+        } \
+        else \
+        { \
+            new_stack.index = stack->index; \
+        } \
+        \
+        *stack = empty; \
+        \
+        return new_stack; \
+    }
+
 /* --- stackPush() --- */
 #define _templatestack_stackPush_proto(T) \
     int \
@@ -160,8 +232,11 @@ extern "C" {
 #define _templatestack_stackPush_impl(T) \
     int \
     stackPush(T)(Stack(T) *stack, T value) { \
-        if (stack == NULL) return 1; \
-        if (stackIsFull(T)(stack)) return 1; \
+        if ( \
+            stack == NULL || \
+            stackBufferIsNull(T)(stack) || \
+            stackIsFull(T)(stack) \
+        ) return 1; \
         \
         stack->buffer[stack->index++] = value; \
         \
@@ -176,7 +251,11 @@ extern "C" {
 #define _templatestack_stackPushGrow_impl(T) \
     int \
     stackPushGrow(T)(Stack(T) *stack, T value) { \
-        if (stack == NULL) return 1; \
+        if ( \
+            stack == NULL || \
+            stackBufferIsNull(T)(stack) \
+        ) return 1; \
+        \
         if (stackIsFull(T)(stack)) \
         { \
             Stack(T) new_stack = stackRealloc(T)(stack, stack->size * 2); \
@@ -201,8 +280,11 @@ extern "C" {
         static const T empty = {0}; \
         T result; \
         \
-        if (stack == NULL) return empty; \
-        if (stackIsEmpty(T)(stack)) return empty; \
+        if ( \
+            stack == NULL || \
+            stackBufferIsNull(T)(stack) || \
+            stackIsEmpty(T)(stack) \
+        ) return empty; \
         \
         result = stack->buffer[--(stack->index)]; \
         stack->buffer[stack->index] = empty; \
@@ -220,8 +302,11 @@ extern "C" {
     stackPeek(T)(const Stack(T) *stack) { \
         static const T empty = {0}; \
         \
-        if (stack == NULL) return empty; \
-        if (stackIsEmpty(T)(stack)) return empty; \
+        if ( \
+            stack == NULL || \
+            stackBufferIsNull(T)(stack) || \
+            stackIsEmpty(T)(stack) \
+        ) return empty; \
         \
         return stack->buffer[stack->index-1]; \
     }
@@ -253,8 +338,10 @@ extern "C" {
 #define _templatestack_deleteStack_impl(T) \
     int \
     deleteStack(T)(Stack(T) *stack) { \
-        if (stack == NULL) return 1; \
-        if (stackBufferIsNull(T)(stack)) return 1; \
+        if ( \
+            stack == NULL || \
+            stackBufferIsNull(T)(stack) \
+        ) return 1; \
         \
         free(stack->buffer); \
         \
@@ -262,72 +349,6 @@ extern "C" {
         stack->size = 0; \
         stack->index = 0; \
         return 0; \
-    }
-
-/* --- stackDup() --- */
-#define _templatestack_stackDup_proto(T) \
-    Stack(T) \
-    stackDup(T)(const Stack(T) *stack);
-
-#define _templatestack_stackDup_impl(T) \
-    Stack(T) \
-    stackDup(T)(const Stack(T) *stack) { \
-        static const Stack(T) empty = {0}; \
-        Stack(T) dup; \
-        \
-        if (stack == NULL) return empty; \
-        \
-        dup = *stack; \
-        \
-        dup.buffer = malloc(dup.size * sizeof(T)); \
-        if (stackBufferIsNull(T)(&dup)) return empty; \
-        \
-        memcpy(dup.buffer, stack->buffer, dup.index * sizeof(T)); \
-        \
-        return dup; \
-    }
-
-/* --- stackRealloc() --- */
-#define _templatestack_stackRealloc_proto(T) \
-    Stack(T) \
-    stackRealloc(T)(const Stack(T) *stack, size_t size);
-
-#define _templatestack_stackRealloc_impl(T) \
-    Stack(T) \
-    stackRealloc(T)(Stack(T) *stack, size_t size) { \
-        static const Stack(T) empty = {0}; \
-        Stack(T) new_stack = {0}; \
-        \
-        if (stack == NULL) return empty; \
-        \
-        if (size == 0) { \
-            return empty; \
-        } \
-        new_stack.buffer = realloc(stack->buffer, size * sizeof(T)); \
-        if (stackBufferIsNull(T)(&new_stack)) return empty; \
-        \
-        /* Setting 0 to all new elements (if new size is bigger) */ \
-        if (size > stack->size) \
-        { \
-            memset( \
-                new_stack.buffer + stack->size, \
-                0, (size - stack->size) * sizeof(T) \
-            ); \
-        } \
-        \
-        new_stack.size = size; \
-        if (stack->index >= size) \
-        { \
-            new_stack.index = size; \
-        } \
-        else \
-        { \
-            new_stack.index = stack->index; \
-        } \
-        \
-        *stack = empty; \
-        \
-        return new_stack; \
     }
 
 /* ---- Template Stack Prototype (for header) ---- */
