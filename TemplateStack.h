@@ -76,6 +76,7 @@ extern "C" {
 #define stackDup(T) _templatestack_stackDup_##T
 #define stackRealloc(T) _templatestack_stackRealloc_##T
 #define stackClear(T) _templatestack_stackClear_##T
+#define stackReverse(T) _templatestack_stackReverse_##T
 #define stackPush(T) _templatestack_stackPush_##T
 #define stackPushGrow(T) _templatestack_stackPushGrow_##T
 #define stackPop(T) _templatestack_stackPop_##T
@@ -252,6 +253,32 @@ extern "C" {
         return 0; \
     }
 
+/* --- stackReverse() --- */
+#define _templatestack_stackReverse_proto(T) \
+    int \
+    stackReverse(T)(Stack(T) *stack);
+
+#define _templatestack_stackReverse_impl(T) \
+    int \
+    stackReverse(T)(Stack(T) *stack) \
+    { \
+        int i; \
+        \
+        if ( \
+            stack == NULL || \
+            stackBufferIsNull(T)(stack) \
+        ) return 1; \
+        \
+        for (i=0; i < (stack->index / 2); i++) \
+        { \
+            T temp = stack->buffer[i]; \
+            stack->buffer[i] = stack->buffer[ stack->index -i -1 ]; \
+            stack->buffer[ stack->index -i -1 ] = temp; \
+        } \
+        \
+        return 0; \
+    }
+
 /* --- stackPush() --- */
 #define _templatestack_stackPush_proto(T) \
     int \
@@ -272,7 +299,7 @@ extern "C" {
         return 0; \
     }
 
-/* --- pushGrow() --- */
+/* --- stackPushGrow() --- */
 #define _templatestack_stackPushGrow_proto(T) \
     int \
     stackPushGrow(T)(Stack(T) *stack, T value);
@@ -396,6 +423,7 @@ extern "C" {
     _templatestack_stackDup_proto(T) \
     _templatestack_stackRealloc_proto(T) \
     _templatestack_stackClear_proto(T) \
+    _templatestack_stackReverse_proto(T) \
     _templatestack_stackPush_proto(T) \
     _templatestack_stackPushGrow_proto(T) \
     _templatestack_stackPop_proto(T) \
@@ -414,6 +442,7 @@ extern "C" {
     static _templatestack_stackDup_proto(T) \
     static _templatestack_stackRealloc_proto(T) \
     static _templatestack_stackClear_proto(T) \
+    static _templatestack_stackReverse_proto(T) \
     static _templatestack_stackPush_proto(T) \
     static _templatestack_stackPushGrow_proto(T) \
     static _templatestack_stackPop_proto(T) \
@@ -431,6 +460,7 @@ extern "C" {
     _templatestack_stackDup_impl(T) \
     _templatestack_stackRealloc_impl(T) \
     _templatestack_stackClear_impl(T) \
+    _templatestack_stackReverse_impl(T) \
     _templatestack_stackPush_impl(T) \
     _templatestack_stackPushGrow_impl(T) \
     _templatestack_stackPop_impl(T) \
@@ -448,6 +478,7 @@ extern "C" {
     static _templatestack_stackDup_impl(T) \
     static _templatestack_stackRealloc_impl(T) \
     static _templatestack_stackClear_impl(T) \
+    static _templatestack_stackReverse_impl(T) \
     static _templatestack_stackPush_impl(T) \
     static _templatestack_stackPushGrow_impl(T) \
     static _templatestack_stackPop_impl(T) \
