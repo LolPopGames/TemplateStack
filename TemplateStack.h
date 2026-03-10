@@ -37,7 +37,7 @@ extern "C" {
 
 /* --- Version --- */
 #define TEMPLATE_STACK_MAJOR 0
-#define TEMPLATE_STACK_MINOR 2
+#define TEMPLATE_STACK_MINOR 3
 #define TEMPLATE_STACK_PATCH 0
 #define TEMPLATE_STACK_ATLEAST(major,minor,patch) ( \
     (TEMPLATE_STACK_MAJOR > (major)) || \
@@ -74,6 +74,7 @@ extern "C" {
 #define stackSize(T) _templatestack_stackSize_##T
 #define stackBufferSize(T) _templatestack_stackBufferSize_##T
 #define stackPush(T) _templatestack_stackPush_##T
+#define stackPushGrow(T) _templatestack_stackPushGrow_##T
 #define stackPop(T) _templatestack_stackPop_##T
 #define stackPeek(T) _templatestack_stackPeek_##T
 #define newStack(T) _templatestack_newStack_##T
@@ -161,6 +162,28 @@ extern "C" {
     stackPush(T)(Stack(T) *stack, T value) { \
         if (stack == NULL) return 1; \
         if (stackIsFull(T)(stack)) return 1; \
+        \
+        stack->buffer[stack->index++] = value; \
+        \
+        return 0; \
+    }
+
+/* --- pushGrow() --- */
+#define _templatestack_stackPushGrow_proto(T) \
+    int \
+    stackPushGrow(T)(Stack(T) *stack, T value);
+
+#define _templatestack_stackPushGrow_impl(T) \
+    int \
+    stackPushGrow(T)(Stack(T) *stack, T value) { \
+        if (stack == NULL) return 1; \
+        if (stackIsFull(T)(stack)) \
+        { \
+            Stack(T) new_stack = stackRealloc(T)(stack, stack->size * 2); \
+            if (stackBufferIsNull(T)(&new_stack)) return 1; \
+            \
+            *stack = new_stack; \
+        } \
         \
         stack->buffer[stack->index++] = value; \
         \
@@ -315,13 +338,14 @@ extern "C" {
     _templatestack_stackBufferIsNull_proto(T) \
     _templatestack_stackSize_proto(T) \
     _templatestack_stackBufferSize_proto(T) \
+    _templatestack_stackDup_proto(T) \
+    _templatestack_stackRealloc_proto(T) \
     _templatestack_stackPush_proto(T) \
+    _templatestack_stackPushGrow_proto(T) \
     _templatestack_stackPop_proto(T) \
     _templatestack_stackPeek_proto(T) \
     _templatestack_newStack_proto(T) \
-    _templatestack_deleteStack_proto(T) \
-    _templatestack_stackDup_proto(T) \
-    _templatestack_stackRealloc_proto(T)
+    _templatestack_deleteStack_proto(T)
 
 /* ---- Static Template Stack Prototype (for header inline part) ---- */
 #define TemplateStack_static_proto(T) \
@@ -331,13 +355,14 @@ extern "C" {
     static _templatestack_stackBufferIsNull_proto(T) \
     static _templatestack_stackSize_proto(T) \
     static _templatestack_stackBufferSize_proto(T) \
+    static _templatestack_stackDup_proto(T) \
+    static _templatestack_stackRealloc_proto(T) \
     static _templatestack_stackPush_proto(T) \
+    static _templatestack_stackPushGrow_proto(T) \
     static _templatestack_stackPop_proto(T) \
     static _templatestack_stackPeek_proto(T) \
     static _templatestack_newStack_proto(T) \
-    static _templatestack_deleteStack_proto(T) \
-    static _templatestack_stackDup_proto(T) \
-    static _templatestack_stackRealloc_proto(T)
+    static _templatestack_deleteStack_proto(T)
 
 /* ---- Template Stack Implementation (for source file) ---- */
 #define TemplateStack_impl(T) \
@@ -346,13 +371,14 @@ extern "C" {
     _templatestack_stackBufferIsNull_impl(T) \
     _templatestack_stackSize_impl(T) \
     _templatestack_stackBufferSize_impl(T) \
+    _templatestack_stackDup_impl(T) \
+    _templatestack_stackRealloc_impl(T) \
     _templatestack_stackPush_impl(T) \
+    _templatestack_stackPushGrow_impl(T) \
     _templatestack_stackPop_impl(T) \
     _templatestack_stackPeek_impl(T) \
     _templatestack_newStack_impl(T) \
-    _templatestack_deleteStack_impl(T) \
-    _templatestack_stackDup_impl(T) \
-    _templatestack_stackRealloc_impl(T)
+    _templatestack_deleteStack_impl(T)
 
 /* ---- Static Template Stack Implementation (for source inline part) ---- */
 #define TemplateStack_static_impl(T) \
@@ -361,13 +387,14 @@ extern "C" {
     static _templatestack_stackBufferIsNull_impl(T) \
     static _templatestack_stackSize_impl(T) \
     static _templatestack_stackBufferSize_impl(T) \
+    static _templatestack_stackDup_impl(T) \
+    static _templatestack_stackRealloc_impl(T) \
     static _templatestack_stackPush_impl(T) \
+    static _templatestack_stackPushGrow_impl(T) \
     static _templatestack_stackPop_impl(T) \
     static _templatestack_stackPeek_impl(T) \
     static _templatestack_newStack_impl(T) \
-    static _templatestack_deleteStack_impl(T) \
-    static _templatestack_stackDup_impl(T) \
-    static _templatestack_stackRealloc_impl(T)
+    static _templatestack_deleteStack_impl(T)
 
 /* ---- Template Stack Inline (all in one) ---- */
 #define TemplateStack_inline(T) \
