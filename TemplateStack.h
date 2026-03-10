@@ -81,6 +81,7 @@ extern "C" {
 #define stackPushGrow(T) _templatestack_stackPushGrow_##T
 #define stackPop(T) _templatestack_stackPop_##T
 #define stackPeek(T) _templatestack_stackPeek_##T
+#define stackPeekAt(T) _templatestack_stackPeekAt_##T
 #define newStack(T) _templatestack_newStack_##T
 #define deleteStack(T) _templatestack_deleteStack_##T
 
@@ -370,6 +371,27 @@ extern "C" {
         return stack->buffer[stack->index-1]; \
     }
 
+/* --- stackPeekAt() --- */
+#define _templatestack_stackPeekAt_proto(T) \
+    T \
+    stackPeekAt(T)(const Stack(T) *stack, size_t index);
+
+#define _templatestack_stackPeekAt_impl(T) \
+    T \
+    stackPeekAt(T)(const Stack(T) *stack, size_t index) \
+    { \
+        static const T empty = {0}; \
+        \
+        if ( \
+            stack == NULL || \
+            stackBufferIsNull(T)(stack) || \
+            stackIsEmpty(T)(stack) || \
+            stack->index < index \
+        ) return empty; \
+        \
+        return stack->buffer[stack->index -index -1]; \
+    }
+
 /* --- newStack() --- */
 #define _templatestack_newStack_proto(T) \
     Stack(T) \
@@ -428,6 +450,7 @@ extern "C" {
     _templatestack_stackPushGrow_proto(T) \
     _templatestack_stackPop_proto(T) \
     _templatestack_stackPeek_proto(T) \
+    _templatestack_stackPeekAt_proto(T) \
     _templatestack_newStack_proto(T) \
     _templatestack_deleteStack_proto(T)
 
@@ -447,6 +470,7 @@ extern "C" {
     static _templatestack_stackPushGrow_proto(T) \
     static _templatestack_stackPop_proto(T) \
     static _templatestack_stackPeek_proto(T) \
+    static _templatestack_stackPeekAt_proto(T) \
     static _templatestack_newStack_proto(T) \
     static _templatestack_deleteStack_proto(T)
 
@@ -465,6 +489,7 @@ extern "C" {
     _templatestack_stackPushGrow_impl(T) \
     _templatestack_stackPop_impl(T) \
     _templatestack_stackPeek_impl(T) \
+    _templatestack_stackPeekAt_impl(T) \
     _templatestack_newStack_impl(T) \
     _templatestack_deleteStack_impl(T)
 
@@ -483,6 +508,7 @@ extern "C" {
     static _templatestack_stackPushGrow_impl(T) \
     static _templatestack_stackPop_impl(T) \
     static _templatestack_stackPeek_impl(T) \
+    static _templatestack_stackPeekAt_impl(T) \
     static _templatestack_newStack_impl(T) \
     static _templatestack_deleteStack_impl(T)
 
