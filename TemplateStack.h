@@ -386,7 +386,7 @@ extern "C" {
             stack == NULL || \
             stackBufferIsNull(T)(stack) || \
             stackIsEmpty(T)(stack) || \
-            stack->index < index \
+            stack->index >= index \
         ) return empty; \
         \
         return stack->buffer[stack->index -index -1]; \
