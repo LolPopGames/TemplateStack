@@ -197,10 +197,11 @@ Stack(int) st = newStack(int)(10);
 
 Deletes specified stack
 
-Returns exit code
-(0 if success, other codes if fail,
-e.g. if you delete a stack twice,
-or if stack buffer is `NULL`)
+Returns exit code:
++ `0` if success
++ non-zero if fail:
+    + if deleting a stack twice
+    + if stack buffer is `NULL`
 
 ```c
 deleteStack(int)(&st);
@@ -224,10 +225,11 @@ stackPush(int)(&st, 107);
 Pushes an element to stack with doubling buffer size (capacity),
 if the stack is full
 
-Returns exit code
-(0 if success, other code if fail,
-e.g. if reallocation failed
-or if stack buffer is `NULL`)
+Returns exit code:
++ `0` if success
++ non-zero if fail:
+    + if reallocation failed
+    + if stack buffer is `NULL`
 
 ```c
 int i;
@@ -244,8 +246,9 @@ printf("Buffer size is %lu\n", stackBufferSize(int)(&st));
 
 Pops top element from stack and returns it
 
-Returns zero-value if the stack is empty,
-or if stack buffer is `NULL`
+Returns zero-value if:
++ the stack is empty,
++ stack buffer is `NULL`
 
 It is recommended to check
 for empty stack (with [`stackIsEmpty(T)`](#int-stackisemptytconst-stackt-stack)) first,
@@ -259,8 +262,9 @@ int val = stackPop(int)(&st);
 
 Gives top element from the stack (without removing it)
 
-Returns zero-value if the stack is empty,
-or if stack buffer is `NULL`
+Returns zero-value if:
++ the stack is empty,
++ stack buffer is `NULL`
 
 It is recommended to check
 for empty stack (with [`stackIsEmpty(T)`](#int-stackisemptytconst-stackt-stack)) first,
@@ -298,9 +302,11 @@ int val = stackPeekAt(int)(&st, 1);
 
 Removes all elements from the stack without freeing its buffer
 
-Returns exit code
-(0 if success, other code if fail,
-e.g. if stack buffer is `NULL`)
+Returns exit code:
++ `0` if success
++ non-zero if fail:
+    + if stack buffer is `NULL`
+    + other
 
 ```c
 stackPush(int)(&st, 10);
@@ -314,9 +320,10 @@ stackClear(int)(&st);
 
 Reverses the stack upside down
 
-Returns exit code
-(0 if success, other code if fail,
-e.g. if stack buffer is `NULL`)
+Returns exit code:
++ `0` if success
++ non-zero if fail:
+    + if stack buffer is `NULL`
 
 ```c
 stackPush(int)(&st, 10);
