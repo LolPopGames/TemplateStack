@@ -2,7 +2,7 @@
 
 ![Template Stack](assets/icons/build/logo-white@1.5.png)
 
-[![version 0.2.0](https://img.shields.io/badge/version-0.2.0-green)](#version)
+[![version 0.3.0](https://img.shields.io/badge/version-0.3.0--dev-red)](#version)
 [![license MIT](https://img.shields.io/badge/license-MIT-orange)](LICENSE.md)
 
 Table Of Contents:
@@ -19,6 +19,7 @@ Table Of Contents:
         + [`Stack(T) newStack(T)(size_t size)`](#stackt-newstacktsize_t-size)
         + [`int deleteStack(T)(Stack(T) *stack)`](#int-deletestacktstackt-stack)
         + [`int stackPush(T)(Stack(T) *stack, T value)`](#int-stackpushtstackt-stack-t-value)
+        + [`int stackPushGrow(T)(Stack(T) *stack, T value)`](#int-stackpushgrowtstackt-stack-t-value)
         + [`T stackPop(T)(Stack(T) *stack)`](#t-stackpoptstackt-stack)
         + [`T stackPeek(T)(const Stack(T) *stack)`](#t-stackpeektconst-stackt-stack)
         + [`int stackIsEmpty(T)(const Stack(T) *stack)`](#int-stackisemptytconst-stackt-stack)
@@ -213,6 +214,27 @@ or if stack buffer is `NULL`)
 stackPush(int)(&st, 107);
 ```
 
+### `int stackPushGrow(T)(Stack(T) *stack, T value)`
+
+Pushes an element to stack with doubling buffer size (capacity),
+if the stack is full
+
+Returns exit code
+(0 if success, other code if fail,
+e.g. if reallocation failed
+or if stack buffer is `NULL`)
+
+```c
+int i;
+
+for (i = 0; i < 100; i++)
+{
+    stackPushGrow(int)(&st, i+100);
+}
+
+printf("Buffer size is %lu\n", stackBufferSize(int)(&st));
+```
+
 ### `T stackPop(T)(Stack(T) *stack)`
 
 Pops top element from stack and returns it
@@ -364,4 +386,4 @@ The library is distributed under [the MIT license](LICENSE.md)
 
 ## Version
 
-0.2.0 stable
+0.3.0 dev
