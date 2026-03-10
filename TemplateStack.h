@@ -248,7 +248,7 @@ extern "C" {
             stackBufferIsNull(T)(stack) \
         ) return 1; \
         \
-        memset(stack, 0, stack->index * sizeof(T)); \
+        memset(stack->buffer, 0, stack->index * sizeof(T)); \
         stack->index = 0; \
         \
         return 0; \
