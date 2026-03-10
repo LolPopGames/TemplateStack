@@ -2,7 +2,7 @@
 
 ![Template Stack](assets/icons/build/logo-white@1.5.png)
 
-[![version 0.2.0](https://img.shields.io/badge/version-0.2.0-green)](#version)
+[![version 0.3.0](https://img.shields.io/badge/version-0.3.0-green)](#version)
 [![license MIT](https://img.shields.io/badge/license-MIT-orange)](LICENSE.md)
 
 Table Of Contents:
@@ -19,8 +19,12 @@ Table Of Contents:
         + [`Stack(T) newStack(T)(size_t size)`](#stackt-newstacktsize_t-size)
         + [`int deleteStack(T)(Stack(T) *stack)`](#int-deletestacktstackt-stack)
         + [`int stackPush(T)(Stack(T) *stack, T value)`](#int-stackpushtstackt-stack-t-value)
+        + [`int stackPushGrow(T)(Stack(T) *stack, T value)`](#int-stackpushgrowtstackt-stack-t-value)
         + [`T stackPop(T)(Stack(T) *stack)`](#t-stackpoptstackt-stack)
         + [`T stackPeek(T)(const Stack(T) *stack)`](#t-stackpeektconst-stackt-stack)
+        + [`T stackPeekAt(T)(const Stack(T) *stack, size_t index)`](#t-stackpeekattconst-stackt-stack-size_t-index)
+        + [`int stackClear(T)(Stack(T) *stack)`](#int-stackcleartstackt-stack)
+        + [`int stackReverse(T)(Stack(T) *stack)`](#int-stackreversetstackt-stack)
         + [`int stackIsEmpty(T)(const Stack(T) *stack)`](#int-stackisemptytconst-stackt-stack)
         + [`int stackIsFull(T)(const Stack(T) *stack)`](#int-stackisfulltconst-stackt-stack)
         + [`int stackBufferIsNull(T)(const Stack(T) *stack)`](#int-stackbufferisnulltconst-stackt-stack)
@@ -29,6 +33,9 @@ Table Of Contents:
         + [`Stack(T) stackDup(T)(const Stack(T) *stack)`](#stackt-stackduptconst-stackt-stack)
         + [`Stack(T) stackRealloc(T)(const Stack(T) *stack, size_t size)`](#stackt-stackrealloctconst-stackt-stack-size_t-size)
     + [Example](#example)
+        + [Compiling](#compiling)
+            + [Manually](#manually)
+            + [Using Meson](#using-meson)
     + [License](#license)
     + [Version](#version)
 
@@ -61,8 +68,8 @@ include the header either in another header or in a source file:
 /* If the file is in the same directory as the current */
 #include "TemplateStack.h"
 
-/* If the file is in an include path (-I) */
 #include <TemplateStack.h>
+/* If the file is in an include path (-I) */
 ```
 
 ### Adding A Type
@@ -191,10 +198,11 @@ Stack(int) st = newStack(int)(10);
 
 Deletes specified stack
 
-Returns exit code
-(0 if success, other codes if fail,
-e.g. if you delete a stack twice,
-or if stack buffer is `NULL`)
+Returns exit code:
++ `0` if success
++ non-zero if fail:
+    + if deleting a stack twice
+    + if stack buffer is `NULL`
 
 ```c
 deleteStack(int)(&st);
@@ -213,12 +221,35 @@ or if stack buffer is `NULL`)
 stackPush(int)(&st, 107);
 ```
 
+### `int stackPushGrow(T)(Stack(T) *stack, T value)`
+
+Pushes an element to stack with doubling buffer size (capacity),
+if the stack is full
+
+Returns exit code:
++ `0` if success
++ non-zero if fail:
+    + if reallocation failed
+    + if stack buffer is `NULL`
+
+```c
+int i;
+
+for (i = 0; i < 100; i++)
+{
+    stackPushGrow(int)(&st, i+100);
+}
+
+printf("Buffer size is %lu\n", stackBufferSize(int)(&st));
+```
+
 ### `T stackPop(T)(Stack(T) *stack)`
 
 Pops top element from stack and returns it
 
-Returns zero-value if the stack is empty,
-or if stack buffer is `NULL`
+Returns zero-value if:
++ the stack is empty,
++ stack buffer is `NULL`
 
 It is recommended to check
 for empty stack (with [`stackIsEmpty(T)`](#int-stackisemptytconst-stackt-stack)) first,
@@ -232,8 +263,9 @@ int val = stackPop(int)(&st);
 
 Gives top element from the stack (without removing it)
 
-Returns zero-value if the stack is empty,
-or if stack buffer is `NULL`
+Returns zero-value if:
++ the stack is empty,
++ stack buffer is `NULL`
 
 It is recommended to check
 for empty stack (with [`stackIsEmpty(T)`](#int-stackisemptytconst-stackt-stack)) first,
@@ -241,6 +273,75 @@ because a zero-value element cannot be distinguished from an empty stack
 
 ```c
 int val = stackPeek(int)(&st);
+```
+
+### `T stackPeekAt(T)(const Stack(T) *stack, size_t index)`
+
+Returns the element `index` positions from the top of the stack
+without removing it
+
+`index` is zero-based:
++ `0` – top element
++ `1` – next element
++ etc.
+
+Returns zero-value if:
++ the stack is empty
++ the stack buffer is `NULL`
++ `index` is out of range
+
+It is recommended to check for enough elements (using
+`index` ≥ [`stackSize(T)`](#size_t-stacksizetconst-stackt-stack))
+first, because a zero-value element cannot be distinguished from an error
+
+```c
+/* pre-top element */
+int val = stackPeekAt(int)(&st, 1);
+```
+
+### `int stackClear(T)(Stack(T) *stack)`
+
+Removes all elements from the stack without freeing its buffer
+
+Returns exit code:
++ `0` if success
++ non-zero if fail:
+    + if stack buffer is `NULL`
+    + other
+
+```c
+stackPush(int)(&st, 10);
+stackPush(int)(&st, 20);
+stackClear(int)(&st);
+
+/* the stack is empty now */
+```
+
+### `int stackReverse(T)(Stack(T) *stack)`
+
+Reverses the stack upside down
+
+Returns exit code:
++ `0` if success
++ non-zero if fail:
+    + if stack buffer is `NULL`
+
+```c
+stackPush(int)(&st, 10);
+stackPush(int)(&st, 20);
+stackPush(int)(&st, 30);
+
+stackReverse(int)(&st);
+
+/* the stack looks now as:
+ * [30]  [20]  [10]
+ *             ^^^^
+ */
+
+/* 10, 20, 30 */
+printf("%d, ", stackPop(int)(&st));
+printf("%d, ", stackPop(int)(&st));
+printf("%d",   stackPop(int)(&st));
 ```
 
 ### `int stackIsEmpty(T)(const Stack(T) *stack)`
@@ -326,9 +427,11 @@ Stack(int) st_new = stackRealloc(int)(&st, 20);
 If you need an example of how to use **Template Stack**,
 see [`example.c`](example.c), which implements a command-line interface for a stack
 
+### Compiling
+
 There are two ways to compile it:
 
-### Manually
+#### Manually
 
 To compile, use this command (e.g. with `gcc`):
 
@@ -342,7 +445,7 @@ Then run it with:
 $ ./example
 ```
 
-### Using Meson
+#### Using Meson
 
 If you have **Meson** and **Ninja** installed, you can do this:
 
@@ -364,4 +467,4 @@ The library is distributed under [the MIT license](LICENSE.md)
 
 ## Version
 
-0.2.0 stable
+0.3.0 stable
