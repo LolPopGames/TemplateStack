@@ -33,8 +33,9 @@ Table Of Contents:
         + [`Stack(T) stackDup(T)(const Stack(T) *stack)`](#stackt-stackduptconst-stackt-stack)
         + [`Stack(T) stackRealloc(T)(const Stack(T) *stack, size_t size)`](#stackt-stackrealloctconst-stackt-stack-size_t-size)
     + [Example](#example)
-        + [Manually](#manually)
-        + [Using Meson](#using-meson)
+        + [Compiling](#compiling)
+            + [Manually](#manually)
+            + [Using Meson](#using-meson)
     + [License](#license)
     + [Version](#version)
 
@@ -426,9 +427,11 @@ Stack(int) st_new = stackRealloc(int)(&st, 20);
 If you need an example of how to use **Template Stack**,
 see [`example.c`](example.c), which implements a command-line interface for a stack
 
+### Compiling
+
 There are two ways to compile it:
 
-### Manually
+#### Manually
 
 To compile, use this command (e.g. with `gcc`):
 
@@ -442,7 +445,7 @@ Then run it with:
 $ ./example
 ```
 
-### Using Meson
+#### Using Meson
 
 If you have **Meson** and **Ninja** installed, you can do this:
 
