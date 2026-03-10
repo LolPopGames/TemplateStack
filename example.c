@@ -62,6 +62,19 @@ main(void)
         fgets(buffer, sizeof(buffer), stdin);
 
         /* --- Searching Command --- */
+        /* push with doubling the size if the stack is full */
+        if (strncmp(buffer, "pushgrow", 8) == 0)
+        {
+            int value = atoi(buffer+8);
+
+            /* 0 - success, other codes - fail */
+            if (stackPushGrow(int)(&stack, value) != 0)
+            {
+                printf("Push failed\n");
+            }
+            continue;
+        }
+
         if (strncmp(buffer, "push", 4) == 0)
         {
             int value = atoi(buffer+4);
@@ -130,6 +143,18 @@ main(void)
             continue;
         }
 
+        if (strncmp(buffer, "clear", 5) == 0)
+        {
+            stackClear(int)(&stack);
+            continue;
+        }
+
+        if (strncmp(buffer, "reverse", 7) == 0)
+        {
+            stackReverse(int)(&stack);
+            continue;
+        }
+
         if (strncmp(buffer, "size", 4) == 0)
         {
             printf("%lu\n", stackSize(int)(&stack));
@@ -147,10 +172,13 @@ main(void)
             printf(
                 "help - print help\n"
                 "push NUM - push to stack\n"
+                "pushgrow NUM - push with doubling the size if needed\n"
                 "pop - pop from stack\n"
                 "peek - get top element\n"
                 "top - same as peek\n"
                 "resize NUM - resize stack buffer\n"
+                "clear - removes all elements from the stack\n"
+                "reverse - reverses stack upside down\n"
                 "size - get how many elements are now in stack\n"
                 "bufsize - size of the stack buffer\n"
                 "exit - exit the program\n"
