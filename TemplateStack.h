@@ -99,7 +99,8 @@ extern "C" {
 
 #define _templatestack_stackIsEmpty_impl(T) \
     int \
-    stackIsEmpty(T)(const Stack(T) *stack) { \
+    stackIsEmpty(T)(const Stack(T) *stack) \
+    { \
         if (stack == NULL) return 0; \
         return (stack->index == 0) ? 1 : 0; \
     }
@@ -111,7 +112,8 @@ extern "C" {
 
 #define _templatestack_stackIsFull_impl(T) \
     int \
-    stackIsFull(T)(const Stack(T) *stack) { \
+    stackIsFull(T)(const Stack(T) *stack) \
+    { \
         if (stack == NULL) return 0; \
         return (stack->index >= stack->size) ? 1 : 0; \
     }
@@ -123,7 +125,8 @@ extern "C" {
 
 #define _templatestack_stackBufferIsNull_impl(T) \
     int \
-    stackBufferIsNull(T)(const Stack(T) *stack) { \
+    stackBufferIsNull(T)(const Stack(T) *stack) \
+    { \
         if (stack == NULL) return 0; \
         return (stack->buffer == NULL) ? 1 : 0; \
     }
@@ -135,7 +138,8 @@ extern "C" {
 
 #define _templatestack_stackSize_impl(T) \
     size_t \
-    stackSize(T)(const Stack(T) *stack) { \
+    stackSize(T)(const Stack(T) *stack) \
+    { \
         if (stack == NULL) return 0; \
         return stack->index; \
     }
@@ -147,7 +151,8 @@ extern "C" {
 
 #define _templatestack_stackBufferSize_impl(T) \
     size_t \
-    stackBufferSize(T)(const Stack(T) *stack) { \
+    stackBufferSize(T)(const Stack(T) *stack) \
+    { \
         if (stack == NULL) return 0; \
         return stack->size; \
     }
@@ -159,7 +164,8 @@ extern "C" {
 
 #define _templatestack_stackDup_impl(T) \
     Stack(T) \
-    stackDup(T)(const Stack(T) *stack) { \
+    stackDup(T)(const Stack(T) *stack) \
+    { \
         static const Stack(T) empty = {0}; \
         Stack(T) dup; \
         \
@@ -186,7 +192,8 @@ extern "C" {
 
 #define _templatestack_stackRealloc_impl(T) \
     Stack(T) \
-    stackRealloc(T)(Stack(T) *stack, size_t size) { \
+    stackRealloc(T)(Stack(T) *stack, size_t size) \
+    { \
         static const Stack(T) empty = {0}; \
         Stack(T) new_stack = {0}; \
         \
@@ -231,7 +238,8 @@ extern "C" {
 
 #define _templatestack_stackPush_impl(T) \
     int \
-    stackPush(T)(Stack(T) *stack, T value) { \
+    stackPush(T)(Stack(T) *stack, T value) \
+    { \
         if ( \
             stack == NULL || \
             stackBufferIsNull(T)(stack) || \
@@ -250,7 +258,8 @@ extern "C" {
 
 #define _templatestack_stackPushGrow_impl(T) \
     int \
-    stackPushGrow(T)(Stack(T) *stack, T value) { \
+    stackPushGrow(T)(Stack(T) *stack, T value) \
+    { \
         if ( \
             stack == NULL || \
             stackBufferIsNull(T)(stack) \
@@ -276,7 +285,8 @@ extern "C" {
 
 #define _templatestack_stackPop_impl(T) \
     T \
-    stackPop(T)(Stack(T) *stack) { \
+    stackPop(T)(Stack(T) *stack) \
+    { \
         static const T empty = {0}; \
         T result; \
         \
@@ -299,7 +309,8 @@ extern "C" {
 
 #define _templatestack_stackPeek_impl(T) \
     T \
-    stackPeek(T)(const Stack(T) *stack) { \
+    stackPeek(T)(const Stack(T) *stack) \
+    { \
         static const T empty = {0}; \
         \
         if ( \
@@ -318,7 +329,8 @@ extern "C" {
 
 #define _templatestack_newStack_impl(T) \
     Stack(T) \
-    newStack(T)(size_t size) { \
+    newStack(T)(size_t size) \
+    { \
         Stack(T) stack = {0}; \
         \
         if (size == 0) return stack; \
@@ -337,7 +349,8 @@ extern "C" {
 
 #define _templatestack_deleteStack_impl(T) \
     int \
-    deleteStack(T)(Stack(T) *stack) { \
+    deleteStack(T)(Stack(T) *stack) \
+    { \
         if ( \
             stack == NULL || \
             stackBufferIsNull(T)(stack) \
