@@ -22,6 +22,9 @@ Table Of Contents:
         + [`int stackPushGrow(T)(Stack(T) *stack, T value)`](#int-stackpushgrowtstackt-stack-t-value)
         + [`T stackPop(T)(Stack(T) *stack)`](#t-stackpoptstackt-stack)
         + [`T stackPeek(T)(const Stack(T) *stack)`](#t-stackpeektconst-stackt-stack)
+        + [`T stackPeekAt(T)(const Stack(T) *stack, size_t index)`](#t-stackpeekattconst-stackt-stack-size_t-index)
+        + [`int stackClear(T)(Stack(T) *stack)`](#int-stackcleartstackt-stack)
+        + [`int stackReverse(T)(Stack(T) *stack)`](#int-stackreversetstackt-stack)
         + [`int stackIsEmpty(T)(const Stack(T) *stack)`](#int-stackisemptytconst-stackt-stack)
         + [`int stackIsFull(T)(const Stack(T) *stack)`](#int-stackisfulltconst-stackt-stack)
         + [`int stackBufferIsNull(T)(const Stack(T) *stack)`](#int-stackbufferisnulltconst-stackt-stack)
@@ -30,6 +33,8 @@ Table Of Contents:
         + [`Stack(T) stackDup(T)(const Stack(T) *stack)`](#stackt-stackduptconst-stackt-stack)
         + [`Stack(T) stackRealloc(T)(const Stack(T) *stack, size_t size)`](#stackt-stackrealloctconst-stackt-stack-size_t-size)
     + [Example](#example)
+        + [Manually](#manually)
+        + [Using Meson](#using-meson)
     + [License](#license)
     + [Version](#version)
 
@@ -62,8 +67,8 @@ include the header either in another header or in a source file:
 /* If the file is in the same directory as the current */
 #include "TemplateStack.h"
 
-/* If the file is in an include path (-I) */
 #include <TemplateStack.h>
+/* If the file is in an include path (-I) */
 ```
 
 ### Adding A Type
@@ -263,6 +268,72 @@ because a zero-value element cannot be distinguished from an empty stack
 
 ```c
 int val = stackPeek(int)(&st);
+```
+
+### `T stackPeekAt(T)(const Stack(T) *stack, size_t index)`
+
+Returns the element `index` positions from the top of the stack
+without removing it
+
+`index` is zero-based:
++ `0` – top element
++ `1` – next element
++ etc.
+
+Returns zero-value if:
++ the stack is empty
++ the stack buffer is `NULL`
++ `index` is out of range
+
+It is recommended to check for enough elements (using
+`index` ≥ [`stackSize(T)`](#size_t-stacksizetconst-stackt-stack))
+first, because a zero-value element cannot be distinguished from an error
+
+```c
+/* pre-top element */
+int val = stackPeekAt(int)(&st, 1);
+```
+
+### `int stackClear(T)(Stack(T) *stack)`
+
+Removes all elements from the stack without freeing its buffer
+
+Returns exit code
+(0 if success, other code if fail,
+e.g. if stack buffer is `NULL`)
+
+```c
+stackPush(int)(&st, 10);
+stackPush(int)(&st, 20);
+stackClear(int)(&st);
+
+/* the stack is empty now */
+```
+
+### `int stackReverse(T)(Stack(T) *stack)`
+
+Reverses the stack upside down
+
+Returns exit code
+(0 if success, other code if fail,
+e.g. if stack buffer is `NULL`)
+
+```c
+stackPush(int)(&st, 10);
+stackPush(int)(&st, 20);
+stackPush(int)(&st, 30);
+
+stackReverse(int)(&st);
+
+/* the stack looks now as:
+ * [30]  [20]  [10]
+ *             ^^^^
+ */
+
+/* 10, 20, 30 */
+printf("%d, ", stackPop(int)(&st));
+printf("%d, ", stackPop(int)(&st));
+printf("%d",   stackPop(int)(&st));
 ```
 
 ### `int stackIsEmpty(T)(const Stack(T) *stack)`

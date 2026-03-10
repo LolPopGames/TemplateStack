@@ -73,14 +73,17 @@ extern "C" {
 #define stackBufferIsNull(T) _templatestack_stackBufferIsNull_##T
 #define stackSize(T) _templatestack_stackSize_##T
 #define stackBufferSize(T) _templatestack_stackBufferSize_##T
+#define stackDup(T) _templatestack_stackDup_##T
+#define stackRealloc(T) _templatestack_stackRealloc_##T
+#define stackClear(T) _templatestack_stackClear_##T
+#define stackReverse(T) _templatestack_stackReverse_##T
 #define stackPush(T) _templatestack_stackPush_##T
 #define stackPushGrow(T) _templatestack_stackPushGrow_##T
 #define stackPop(T) _templatestack_stackPop_##T
 #define stackPeek(T) _templatestack_stackPeek_##T
+#define stackPeekAt(T) _templatestack_stackPeekAt_##T
 #define newStack(T) _templatestack_newStack_##T
 #define deleteStack(T) _templatestack_deleteStack_##T
-#define stackDup(T) _templatestack_stackDup_##T
-#define stackRealloc(T) _templatestack_stackRealloc_##T
 
 /* ---- Implementation Macros ---- */
 
@@ -231,6 +234,52 @@ extern "C" {
         return new_stack; \
     }
 
+/* --- stackClear() --- */
+#define _templatestack_stackClear_proto(T) \
+    int \
+    stackClear(T)(Stack(T) *stack);
+
+#define _templatestack_stackClear_impl(T) \
+    int \
+    stackClear(T)(Stack(T) *stack) \
+    { \
+        if ( \
+            stack == NULL || \
+            stackBufferIsNull(T)(stack) \
+        ) return 1; \
+        \
+        memset(stack, 0, stack->index * sizeof(T)); \
+        stack->index = 0; \
+        \
+        return 0; \
+    }
+
+/* --- stackReverse() --- */
+#define _templatestack_stackReverse_proto(T) \
+    int \
+    stackReverse(T)(Stack(T) *stack);
+
+#define _templatestack_stackReverse_impl(T) \
+    int \
+    stackReverse(T)(Stack(T) *stack) \
+    { \
+        int i; \
+        \
+        if ( \
+            stack == NULL || \
+            stackBufferIsNull(T)(stack) \
+        ) return 1; \
+        \
+        for (i=0; i < (stack->index / 2); i++) \
+        { \
+            T temp = stack->buffer[i]; \
+            stack->buffer[i] = stack->buffer[ stack->index -i -1 ]; \
+            stack->buffer[ stack->index -i -1 ] = temp; \
+        } \
+        \
+        return 0; \
+    }
+
 /* --- stackPush() --- */
 #define _templatestack_stackPush_proto(T) \
     int \
@@ -251,7 +300,7 @@ extern "C" {
         return 0; \
     }
 
-/* --- pushGrow() --- */
+/* --- stackPushGrow() --- */
 #define _templatestack_stackPushGrow_proto(T) \
     int \
     stackPushGrow(T)(Stack(T) *stack, T value);
@@ -322,6 +371,27 @@ extern "C" {
         return stack->buffer[stack->index-1]; \
     }
 
+/* --- stackPeekAt() --- */
+#define _templatestack_stackPeekAt_proto(T) \
+    T \
+    stackPeekAt(T)(const Stack(T) *stack, size_t index);
+
+#define _templatestack_stackPeekAt_impl(T) \
+    T \
+    stackPeekAt(T)(const Stack(T) *stack, size_t index) \
+    { \
+        static const T empty = {0}; \
+        \
+        if ( \
+            stack == NULL || \
+            stackBufferIsNull(T)(stack) || \
+            stackIsEmpty(T)(stack) || \
+            stack->index >= index \
+        ) return empty; \
+        \
+        return stack->buffer[stack->index -index -1]; \
+    }
+
 /* --- newStack() --- */
 #define _templatestack_newStack_proto(T) \
     Stack(T) \
@@ -374,10 +444,13 @@ extern "C" {
     _templatestack_stackBufferSize_proto(T) \
     _templatestack_stackDup_proto(T) \
     _templatestack_stackRealloc_proto(T) \
+    _templatestack_stackClear_proto(T) \
+    _templatestack_stackReverse_proto(T) \
     _templatestack_stackPush_proto(T) \
     _templatestack_stackPushGrow_proto(T) \
     _templatestack_stackPop_proto(T) \
     _templatestack_stackPeek_proto(T) \
+    _templatestack_stackPeekAt_proto(T) \
     _templatestack_newStack_proto(T) \
     _templatestack_deleteStack_proto(T)
 
@@ -391,10 +464,13 @@ extern "C" {
     static _templatestack_stackBufferSize_proto(T) \
     static _templatestack_stackDup_proto(T) \
     static _templatestack_stackRealloc_proto(T) \
+    static _templatestack_stackClear_proto(T) \
+    static _templatestack_stackReverse_proto(T) \
     static _templatestack_stackPush_proto(T) \
     static _templatestack_stackPushGrow_proto(T) \
     static _templatestack_stackPop_proto(T) \
     static _templatestack_stackPeek_proto(T) \
+    static _templatestack_stackPeekAt_proto(T) \
     static _templatestack_newStack_proto(T) \
     static _templatestack_deleteStack_proto(T)
 
@@ -407,10 +483,13 @@ extern "C" {
     _templatestack_stackBufferSize_impl(T) \
     _templatestack_stackDup_impl(T) \
     _templatestack_stackRealloc_impl(T) \
+    _templatestack_stackClear_impl(T) \
+    _templatestack_stackReverse_impl(T) \
     _templatestack_stackPush_impl(T) \
     _templatestack_stackPushGrow_impl(T) \
     _templatestack_stackPop_impl(T) \
     _templatestack_stackPeek_impl(T) \
+    _templatestack_stackPeekAt_impl(T) \
     _templatestack_newStack_impl(T) \
     _templatestack_deleteStack_impl(T)
 
@@ -423,10 +502,13 @@ extern "C" {
     static _templatestack_stackBufferSize_impl(T) \
     static _templatestack_stackDup_impl(T) \
     static _templatestack_stackRealloc_impl(T) \
+    static _templatestack_stackClear_impl(T) \
+    static _templatestack_stackReverse_impl(T) \
     static _templatestack_stackPush_impl(T) \
     static _templatestack_stackPushGrow_impl(T) \
     static _templatestack_stackPop_impl(T) \
     static _templatestack_stackPeek_impl(T) \
+    static _templatestack_stackPeekAt_impl(T) \
     static _templatestack_newStack_impl(T) \
     static _templatestack_deleteStack_impl(T)
 
