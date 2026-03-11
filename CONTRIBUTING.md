@@ -25,15 +25,18 @@ When creating an issue, choose the appropriate template
 
 ## Submitting a Pull Request
 
-The project uses `main` and `dev` branches
-Pull requests should target the `dev` branch
+The project uses `main` and `feature/fix/etc` branches
+
+Pull requests should target the `main` branch
+
+The `main` brach should always be stable
 
 Steps:
 
-1. Fork the repository and create your branch from `dev`
+1. Fork the repository and create your branch from `main`
 2. Make sure your code follows the [project style](#project-code-style)
 3. Test your changes using [example.c](example.c) or your own local tests
-4. Submit a pull request targeting the `dev` branch
+4. Submit a pull request targeting the `main` branch
 
 ## Project Code Style
 
