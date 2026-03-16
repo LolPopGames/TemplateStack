@@ -178,6 +178,15 @@ extern "C" {
         return stack->index; \
     }
 
+/* --- [static] stackSize() --- */
+#define _templatestack_staticstack_stackSize_proto(T) \
+    /* same as in default stack */ \
+    _templatestack_stackSize_proto(T);
+
+#define _templatestack_staticstack_stackSize_impl(T) \
+    /* same as in default stack */ \
+    _templatestack_stackSize_impl(T);
+
 /* --- stackBufferSize() --- */
 #define _templatestack_stackBufferSize_proto(T) \
     size_t \
