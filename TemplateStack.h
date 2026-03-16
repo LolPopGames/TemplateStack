@@ -380,6 +380,25 @@ extern "C" {
         return 0; \
     }
 
+/* --- [static] stackPush() --- */
+#define _templatestack_staticstack_stackPush_proto(T) \
+    int \
+    stackPush(T)(Stack(T) *stack, T value);
+
+#define _templatestack_staticstack_stackPush_impl(T) \
+    int \
+    stackPush(T)(Stack(T) *stack, T value) \
+    { \
+        if ( \
+            stack == NULL || \
+            stackIsFull(T)(stack) \
+        ) return 1; \
+        \
+        stack->buffer[stack->index++] = value; \
+        \
+        return 0; \
+    }
+
 /* --- stackPushGrow() --- */
 #define _templatestack_stackPushGrow_proto(T) \
     int \
