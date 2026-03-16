@@ -450,6 +450,29 @@ extern "C" {
         return result; \
     }
 
+/* --- [static] stackPop() --- */
+#define _templatestack_staticstack_stackPop_proto(T) \
+    T \
+    stackPop(T)(Stack(T) *stack);
+
+#define _templatestack_staticstack_stackPop_impl(T) \
+    T \
+    stackPop(T)(Stack(T) *stack) \
+    { \
+        static const T empty = {0}; \
+        T result; \
+        \
+        if ( \
+            stack == NULL || \
+            stackIsEmpty(T)(stack) \
+        ) return empty; \
+        \
+        result = stack->buffer[--(stack->index)]; \
+        stack->buffer[stack->index] = empty; \
+        \
+        return result; \
+    }
+
 /* --- stackPeek() --- */
 #define _templatestack_stackPeek_proto(T) \
     T \
