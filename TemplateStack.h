@@ -563,7 +563,6 @@ extern "C" {
     _templatestack_staticstack_stackIsEmpty_proto(T) \
     _templatestack_staticstack_stackIsFull_proto(T) \
     _templatestack_staticstack_stackSize_proto(T) \
-    _templatestack_staticstack_stackDup_proto(T) \
     _templatestack_staticstack_stackClear_proto(T) \
     _templatestack_staticstack_stackReverse_proto(T) \
     _templatestack_staticstack_stackPush_proto(T) \
@@ -577,7 +576,6 @@ extern "C" {
     static _templatestack_staticstack_stackIsEmpty_proto(T) \
     static _templatestack_staticstack_stackIsFull_proto(T) \
     static _templatestack_staticstack_stackSize_proto(T) \
-    static _templatestack_staticstack_stackDup_proto(T) \
     static _templatestack_staticstack_stackClear_proto(T) \
     static _templatestack_staticstack_stackReverse_proto(T) \
     static _templatestack_staticstack_stackPush_proto(T) \
@@ -590,7 +588,6 @@ extern "C" {
     _templatestack_staticstack_stackIsEmpty_impl(T) \
     _templatestack_staticstack_stackIsFull_impl(T) \
     _templatestack_staticstack_stackSize_impl(T) \
-    _templatestack_staticstack_stackDup_impl(T) \
     _templatestack_staticstack_stackClear_impl(T) \
     _templatestack_staticstack_stackReverse_impl(T) \
     _templatestack_staticstack_stackPush_impl(T) \
@@ -603,7 +600,6 @@ extern "C" {
     static _templatestack_staticstack_stackIsEmpty_impl(T) \
     static _templatestack_staticstack_stackIsFull_impl(T) \
     static _templatestack_staticstack_stackSize_impl(T) \
-    static _templatestack_staticstack_stackDup_impl(T) \
     static _templatestack_staticstack_stackClear_impl(T) \
     static _templatestack_staticstack_stackReverse_impl(T) \
     static _templatestack_staticstack_stackPush_impl(T) \
