@@ -89,8 +89,18 @@ extern "C" {
 
 /* --- struct Stack --- */
 #define _templatestack_Stack(T) \
-    Stack(T) { \
+    Stack(T) \
+    { \
         T *buffer; \
+        size_t index; \
+        size_t size; \
+    };
+
+/* --- struct Stack (with static memory) --- */
+#define _templatestack_StaticStack(T, size) \
+    Stack(T) \
+    { \
+        T buffer[size]; \
         size_t index; \
         size_t size; \
     };
