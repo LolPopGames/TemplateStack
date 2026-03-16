@@ -32,6 +32,13 @@ Table Of Contents:
         + [`size_t stackBufferSize(T)(const Stack(T) *stack)`](#size_t-stackbuffersizetconst-stackt-stack)
         + [`Stack(T) stackDup(T)(const Stack(T) *stack)`](#stackt-stackduptconst-stackt-stack)
         + [`Stack(T) stackRealloc(T)(const Stack(T) *stack, size_t size)`](#stackt-stackrealloctconst-stackt-stack-size_t-size)
+        + [Static Stack](#static-stack)
+            + [Adding A Type](#adding-a-type-1)
+            + [Functions](#functions)
+                + [Not available:](#not-available)
+            + [Stack Creation](#stack-creation)
+            + [Copying](#copying)
+            + [Supported Functions](#supported-functions)
     + [Example](#example)
         + [Compiling](#compiling)
             + [Manually](#manually)
@@ -91,7 +98,7 @@ TemplateStack_proto(T)
  * (Use in source file)                               */
 TemplateStack_impl(T)
 
-/* Static versions (all functions are `static`) */
+/* Static versions (all functions have `static` keyword) */
 TemplateStack_static_proto(T)
 TemplateStack_static_impl(T)
 
@@ -421,6 +428,100 @@ and **does not free the original stack**
 ```c
 Stack(int) st_new = stackRealloc(int)(&st, 20);
 ```
+
+### Static Stack
+
+**Static Stack** is a stack with a **statically allocated memory buffer**
+
+It provides an API similar to the dynamic stack,
+but with several differences
+
+#### Adding A Type
+
+Unlike [the dynamic stack](#adding-a-type):
++ `StaticStack_*` macros are used instead of `TemplateStack_*`
++ you must provide a **custom name** for the stack type
++ the buffer size must be specified **at compile time**
+
+Both `name` and type `T` must be a **single preprocessing token**
+(no spaces or special characters)
+
+The buffer size must be **a compile-time constant**
+
+Add one of these lines outside of any function:
+
+```c
+/* Replace:
+ *  name - with your stack name (e.g. INT10)
+ *  T    - with your type (e.g. int)
+ *  size - with buffer size (e.g. 10)
+ */
+
+/* Creates stack type and function prototypes *
+ * (Use in header)                            */
+StaticStack_proto(name, T, size)
+
+/* Creates full implementation of all stack functions *
+ * (Use in source file)                               */
+StaticStack_impl(name, T)
+
+/* Static versions (all functions have `static` keyword) */
+StaticStack_static_proto(name, T, size)
+StaticStack_static_impl(name, T)
+
+/* Inline version:                              *
+ * Creates stack type and static implementation */
+TemplateStack_inline(name, T, size)
+```
+
+Use `name` instead of `T` when working with the stack API
+
+#### Functions
+
+The static stack supports almost the same API as the dynamic stack,
+except for functions related to memory allocation
+
+##### Not available:
+
++ [`newStack(T)`](#stackt-newstacktsize_t-size) - no dynamic allocation
++ [`deleteStack(T)`](#int-deletestacktstackt-stack) - no manual deallocation required
++ [`stackDup(T)`](#stackt-stackduptconst-stackt-stack) - can be done via assignment
++ [`stackBufferSize(T)`](#size_t-stackbuffersizetconst-stackt-stack) - known at compile time
++ [`stackBufferIsNull(T)`] - static buffer cannot be `NULL`
++ [`stackRealloc(T)`] - no reallocation
++ [`stackPushGrow(T)`] - no dynamic growth
+
+#### Stack Creation
+
+To create a stack, use standard C initialization:
+
+```c
+Stack(INT10) st = {0};
+```
+
+No deletion is required - memory is managed automatically
+
+#### Copying
+
+There is no [`stackDup(T)`](#stackt-stackduptconst-stackt-stack) function,
+because copying can be done directly:
+
+```c
+Stack(INT10) st_copy = st;
+```
+
+#### Supported Functions
+
+The following functions are available:
++ [`stackPush(T)`](#int-stackpushtstackt-stack-t-value)
++ [`stackPop(T)`](#t-stackpoptstackt-stack)
++ [`stackPeek(T)`](#t-stackpeektconst-stackt-stack)
++ [`stackPeekAt(T)`](#t-stackpeekattconst-stackt-stack-size_t-index)
++ [`stackClear(T)`](#int-stackcleartstackt-stack)
++ [`stackReverse(T)`](#int-stackreversetstackt-stack)
++ [`stackIsEmpty(T)`](#int-stackisemptytconst-stackt-stack)
++ [`stackIsFull(T)`](#int-stackisfulltconst-stackt-stack)
++ [`stackSize(T)`](#size_t-stacksizetconst-stackt-stack)
 
 ## Example
 
