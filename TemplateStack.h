@@ -294,6 +294,23 @@ extern "C" {
         return 0; \
     }
 
+/* --- [static] stackClear() --- */
+#define _templatestack_staticstack_stackClear_proto(T) \
+    int \
+    stackClear(T)(Stack(T) *stack);
+
+#define _templatestack_staticstack_stackClear_impl(T) \
+    int \
+    stackClear(T)(Stack(T) *stack) \
+    { \
+        if (stack == NULL) return 1; \
+        \
+        memset(stack->buffer, 0, stack->index * sizeof(T)); \
+        stack->index = 0; \
+        \
+        return 0; \
+    }
+
 /* --- stackReverse() --- */
 #define _templatestack_stackReverse_proto(T) \
     int \
