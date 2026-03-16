@@ -533,6 +533,26 @@ extern "C" {
         return stack->buffer[stack->index -index -1]; \
     }
 
+/* --- [static] stackPeekAt() --- */
+#define _templatestack_staticstack_stackPeekAt_proto(T) \
+    T \
+    stackPeekAt(T)(const Stack(T) *stack, size_t index);
+
+#define _templatestack_staticstack_stackPeekAt_impl(T) \
+    T \
+    stackPeekAt(T)(const Stack(T) *stack, size_t index) \
+    { \
+        static const T empty = {0}; \
+        \
+        if ( \
+            stack == NULL || \
+            stackIsEmpty(T)(stack) || \
+            stack->index >= index \
+        ) return empty; \
+        \
+        return stack->buffer[stack->index -index -1]; \
+    }
+
 /* --- newStack() --- */
 #define _templatestack_newStack_proto(T) \
     Stack(T) \
