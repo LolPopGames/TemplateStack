@@ -163,7 +163,7 @@ Or use `TEMPLATE_STACK_ATLEAST` to check the version more conveniently:
 
 ```c
 /* Insert numbers separated by commas */
-#if TEMPLATE_STACK_ATLEAST(0,1,0) /* At least 0.1.0 */
+#if TEMPLATE_STACK_ATLEAST(0,3,0) /* At least 0.3.0 */
 /* code ... */
 #endif
 ```
