@@ -337,6 +337,29 @@ extern "C" {
         return 0; \
     }
 
+/* --- [static] stackReverse() --- */
+#define _templatestack_staticstack_stackReverse_proto(T) \
+    int \
+    stackReverse(T)(Stack(T) *stack);
+
+#define _templatestack_staticstack_stackReverse_impl(T) \
+    int \
+    stackReverse(T)(Stack(T) *stack) \
+    { \
+        int i; \
+        \
+        if (stack == NULL) return 1; \
+        \
+        for (i=0; i < (stack->index / 2); i++) \
+        { \
+            T temp = stack->buffer[i]; \
+            stack->buffer[i] = stack->buffer[ stack->index -i -1 ]; \
+            stack->buffer[ stack->index -i -1 ] = temp; \
+        } \
+        \
+        return 0; \
+    }
+
 /* --- stackPush() --- */
 #define _templatestack_stackPush_proto(T) \
     int \
