@@ -96,11 +96,11 @@ extern "C" {
         size_t size; \
     };
 
-/* --- struct Stack (with static memory) --- */
-#define _templatestack_StaticStack(T, size) \
+/* --- [static] struct Stack --- */
+#define _templatestack_staticstack_Stack(T, size) \
     Stack(T) \
     { \
-        T buffer[size]; \
+        T buffer[(size)]; \
         size_t index; \
         size_t size; \
     };
@@ -464,7 +464,7 @@ extern "C" {
     _templatestack_newStack_proto(T) \
     _templatestack_deleteStack_proto(T)
 
-/* ---- Static Template Stack Prototype (for header inline part) ---- */
+/* ---- Template Stack with Static Prototype (for header inline part) ---- */
 #define TemplateStack_static_proto(T) \
     _templatestack_Stack(T) \
     static _templatestack_stackIsEmpty_proto(T) \
@@ -503,7 +503,7 @@ extern "C" {
     _templatestack_newStack_impl(T) \
     _templatestack_deleteStack_impl(T)
 
-/* ---- Static Template Stack Implementation (for source inline part) ---- */
+/* ---- Template Stack with Static Implementation (for source inline part) ---- */
 #define TemplateStack_static_impl(T) \
     static _templatestack_stackIsEmpty_impl(T) \
     static _templatestack_stackIsFull_impl(T) \
@@ -526,6 +526,65 @@ extern "C" {
 #define TemplateStack_inline(T) \
     _templatestack_Stack(T) \
     TemplateStack_static_impl(T)
+
+/* ---- Static Stack Prototype (with static memory, for header) ---- */
+#define StaticStack_proto(T, size) \
+    _templatestack_staticstack_Stack(T, size) \
+    _templatestack_staticstack_stackIsEmpty_proto(T) \
+    _templatestack_staticstack_stackIsFull_proto(T) \
+    _templatestack_staticstack_stackSize_proto(T) \
+    _templatestack_staticstack_stackDup_proto(T) \
+    _templatestack_staticstack_stackClear_proto(T) \
+    _templatestack_staticstack_stackReverse_proto(T) \
+    _templatestack_staticstack_stackPush_proto(T) \
+    _templatestack_staticstack_stackPop_proto(T) \
+    _templatestack_staticstack_stackPeek_proto(T) \
+    _templatestack_staticstack_stackPeekAt_proto(T)
+
+/* ---- Static Stack with Static Prototype (with static memory, for header inline part) ---- */
+#define StaticStack_static_proto(T, size) \
+    _templatestack_staticstack_Stack(T, size) \
+    static _templatestack_staticstack_stackIsEmpty_proto(T) \
+    static _templatestack_staticstack_stackIsFull_proto(T) \
+    static _templatestack_staticstack_stackSize_proto(T) \
+    static _templatestack_staticstack_stackDup_proto(T) \
+    static _templatestack_staticstack_stackClear_proto(T) \
+    static _templatestack_staticstack_stackReverse_proto(T) \
+    static _templatestack_staticstack_stackPush_proto(T) \
+    static _templatestack_staticstack_stackPop_proto(T) \
+    static _templatestack_staticstack_stackPeek_proto(T) \
+    static _templatestack_staticstack_stackPeekAt_proto(T)
+
+/* ---- Static Stack Implementation (with static memory, for source file) ---- */
+#define StaticStack_impl(T) \
+    _templatestack_staticstack_stackIsEmpty_impl(T) \
+    _templatestack_staticstack_stackIsFull_impl(T) \
+    _templatestack_staticstack_stackSize_impl(T) \
+    _templatestack_staticstack_stackDup_impl(T) \
+    _templatestack_staticstack_stackClear_impl(T) \
+    _templatestack_staticstack_stackReverse_impl(T) \
+    _templatestack_staticstack_stackPush_impl(T) \
+    _templatestack_staticstack_stackPop_impl(T) \
+    _templatestack_staticstack_stackPeek_impl(T) \
+    _templatestack_staticstack_stackPeekAt_impl(T)
+
+/* ---- Static Stack with Static Implementation (with static memory, for source inline part) ---- */
+#define StaticStack_static_impl(T) \
+    static _templatestack_staticstack_stackIsEmpty_impl(T) \
+    static _templatestack_staticstack_stackIsFull_impl(T) \
+    static _templatestack_staticstack_stackSize_impl(T) \
+    static _templatestack_staticstack_stackDup_impl(T) \
+    static _templatestack_staticstack_stackClear_impl(T) \
+    static _templatestack_staticstack_stackReverse_impl(T) \
+    static _templatestack_staticstack_stackPush_impl(T) \
+    static _templatestack_staticstack_stackPop_impl(T) \
+    static _templatestack_staticstack_stackPeek_impl(T) \
+    static _templatestack_staticstack_stackPeekAt_impl(T)
+
+/* ---- Static Stack Inline (with static memory, all in one) ---- */
+#define StaticStack_inline(T, size) \
+    _templatestack_staticstack_Stack(T, size) \
+    StaticStack_static_impl(T)
 
 /* ---- Closing extern if C++ --- */
 #ifdef __cplusplus
