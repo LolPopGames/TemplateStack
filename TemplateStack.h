@@ -102,7 +102,6 @@ extern "C" {
     { \
         T buffer[(size)]; \
         size_t index; \
-        size_t size; \
     };
 
 /* --- stackIsEmpty() --- */
@@ -117,6 +116,15 @@ extern "C" {
         if (stack == NULL) return 0; \
         return (stack->index == 0) ? 1 : 0; \
     }
+
+/* --- [static] stackIsEmpty() --- */
+#define _templatestack_staticstack_stackIsEmpty_proto(T) \
+    /* same as in default stack */ \
+    _templatestack_stackIsEmpty_proto(T)
+
+#define _templatestack_staticstack_stackIsEmpty_impl(T) \
+    /* same as in default stack */ \
+    _templatestack_stackIsEmpty_impl(T)
 
 /* --- stackIsFull() --- */
 #define _templatestack_stackIsFull_proto(T) \
