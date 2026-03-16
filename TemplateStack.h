@@ -252,15 +252,6 @@ extern "C" {
         new_stack.buffer = realloc(stack->buffer, size * sizeof(T)); \
         if (stackBufferIsNull(T)(&new_stack)) return empty; \
         \
-        /* Setting 0 to all new elements (if new size is bigger) */ \
-        if (size > stack->size) \
-        { \
-            memset( \
-                new_stack.buffer + stack->size, \
-                0, (size - stack->size) * sizeof(T) \
-            ); \
-        } \
-        \
         new_stack.size = size; \
         if (stack->index >= size) \
         { \
@@ -285,12 +276,8 @@ extern "C" {
     int \
     stackClear(T)(Stack(T) *stack) \
     { \
-        if ( \
-            stack == NULL || \
-            stackBufferIsNull(T)(stack) \
-        ) return 1; \
+        if (stack == NULL) return 1; \
         \
-        memset(stack->buffer, 0, stack->index * sizeof(T)); \
         stack->index = 0; \
         \
         return 0; \
@@ -307,7 +294,6 @@ extern "C" {
     { \
         if (stack == NULL) return 1; \
         \
-        memset(stack->buffer, 0, stack->index * sizeof(T)); \
         stack->index = 0; \
         \
         return 0; \
@@ -447,7 +433,6 @@ extern "C" {
         ) return empty; \
         \
         result = stack->buffer[--(stack->index)]; \
-        stack->buffer[stack->index] = empty; \
         \
         return result; \
     }
@@ -470,7 +455,6 @@ extern "C" {
         ) return empty; \
         \
         result = stack->buffer[--(stack->index)]; \
-        stack->buffer[stack->index] = empty; \
         \
         return result; \
     }
@@ -568,7 +552,7 @@ extern "C" {
         \
         if (size == 0) return stack; \
         \
-        stack.buffer = calloc(size, sizeof(T)); \
+        stack.buffer = malloc(size * sizeof(T)); \
         if (stackBufferIsNull(T)(&stack)) return stack; \
         \
         stack.size = size; \
