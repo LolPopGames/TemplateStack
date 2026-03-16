@@ -139,6 +139,19 @@ extern "C" {
         return (stack->index >= stack->size) ? 1 : 0; \
     }
 
+/* --- [static] stackIsFull() --- */
+#define _templatestack_staticstack_stackIsFull_proto(T) \
+    int \
+    stackIsFull(T)(const Stack(T) *stack);
+
+#define _templatestack_staticstack_stackIsFull_impl(T) \
+    int \
+    stackIsFull(T)(const Stack(T) *stack) \
+    { \
+        if (stack == NULL) return 0; \
+        return (stack->index >= ( sizeof(stack->buffer) / sizeof(stack->buffer[0]) )) ? 1 : 0; \
+    }
+
 /* --- stackBufferIsNull() --- */
 #define _templatestack_stackBufferIsNull_proto(T) \
     int \
