@@ -29,7 +29,7 @@ The project uses `main` and `feature/fix/etc` branches
 
 Pull requests should target the `main` branch
 
-The `main` brach should always be stable
+The `main` branch should always be stable
 
 Steps:
 
