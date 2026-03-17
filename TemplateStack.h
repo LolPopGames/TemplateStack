@@ -513,7 +513,7 @@ extern "C" {
             stack == NULL || \
             stackBufferIsNull(T)(stack) || \
             stackIsEmpty(T)(stack) || \
-            stack->index >= index \
+            index >= stack->index \
         ) return empty; \
         \
         return stack->buffer[stack->index -index -1]; \
@@ -533,7 +533,7 @@ extern "C" {
         if ( \
             stack == NULL || \
             stackIsEmpty(name)(stack) || \
-            stack->index >= index \
+            index >= stack->index \
         ) return empty; \
         \
         return stack->buffer[stack->index -index -1]; \
