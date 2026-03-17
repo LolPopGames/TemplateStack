@@ -487,9 +487,9 @@ except for functions related to memory allocation
 + [`deleteStack(T)`](#int-deletestacktstackt-stack) - no manual deallocation required
 + [`stackDup(T)`](#stackt-stackduptconst-stackt-stack) - can be done via assignment
 + [`stackBufferSize(T)`](#size_t-stackbuffersizetconst-stackt-stack) - known at compile time
-+ [`stackBufferIsNull(T)`] - static buffer cannot be `NULL`
-+ [`stackRealloc(T)`] - no reallocation
-+ [`stackPushGrow(T)`] - no dynamic growth
++ [`stackBufferIsNull(T)`](#int-stackbufferisnulltconst-stackt-stack) - static buffer cannot be `NULL`
++ [`stackRealloc(T)`](#stackt-stackrealloctconst-stackt-stack-size_t-size) - no reallocation
++ [`stackPushGrow(T)`](#int-stackpushgrowtstackt-stack-t-value) - no dynamic growth
 
 #### Stack Creation
 
