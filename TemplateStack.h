@@ -308,7 +308,7 @@ extern "C" {
     int \
     stackReverse(T)(Stack(T) *stack) \
     { \
-        int i; \
+        size_t i; \
         \
         if ( \
             stack == NULL || \
