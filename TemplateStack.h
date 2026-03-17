@@ -113,7 +113,7 @@ extern "C" {
     int \
     stackIsEmpty(T)(const Stack(T) *stack) \
     { \
-        if (stack == NULL) return 0; \
+        if (stack == NULL) return 1; \
         return (stack->index == 0) ? 1 : 0; \
     }
 
@@ -163,7 +163,7 @@ extern "C" {
     int \
     stackBufferIsNull(T)(const Stack(T) *stack) \
     { \
-        if (stack == NULL) return 0; \
+        if (stack == NULL) return 1; \
         return (stack->buffer == NULL) ? 1 : 0; \
     }
 
