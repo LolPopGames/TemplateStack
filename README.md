@@ -2,8 +2,9 @@
 
 ![Template Stack](assets/icons/build/logo-white@1.5.png)
 
-[![version 0.4.2-dev](https://img.shields.io/badge/version-0.4.2--dev-red)](#version)
-[![license MIT](https://img.shields.io/badge/license-MIT-orange)](LICENSE.md)
+[![Release](https://img.shields.io/github/v/release/LolPopGames/TemplateStack?label=Release&color=green)](https://github.com/LolPopGames/TemplateStack/releases/latest)
+[![Commit v0.4.2-dev](https://img.shields.io/badge/Commit-v0.4.2--dev-red)](#version)
+[![License MIT](https://img.shields.io/badge/License-MIT-orange)](LICENSE.md)
 
 Table Of Contents:
 + [Template Stack](#template-stack)
