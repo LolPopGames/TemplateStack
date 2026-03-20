@@ -76,8 +76,8 @@ include the header either in another header or in a source file:
 /* If the file is in the same directory as the current */
 #include "TemplateStack.h"
 
-#include <TemplateStack.h>
 /* If the file is in an include path (-I) */
+#include <TemplateStack.h>
 ```
 
 ### Adding A Type
