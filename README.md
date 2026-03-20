@@ -2,7 +2,7 @@
 
 ![Template Stack](assets/icons/build/logo-white@1.5.png)
 
-[![version 0.4.1](https://img.shields.io/badge/version-0.4.1-green)](#version)
+[![version 0.4.2-dev](https://img.shields.io/badge/version-0.4.2--dev-red)](#version)
 [![license MIT](https://img.shields.io/badge/license-MIT-orange)](LICENSE.md)
 
 Table Of Contents:
