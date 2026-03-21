@@ -569,4 +569,4 @@ The library is distributed under [the MIT license](LICENSE.md)
 
 ## Version
 
-0.4.1 stable
+0.4.2 dev
