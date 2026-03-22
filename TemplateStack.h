@@ -233,7 +233,7 @@ extern "C" {
 /* --- stackRealloc() --- */
 #define _templatestack_stackRealloc_proto(T) \
     Stack(T) \
-    stackRealloc(T)(const Stack(T) *stack, size_t size);
+    stackRealloc(T)(Stack(T) *stack, size_t size);
 
 #define _templatestack_stackRealloc_impl(T) \
     Stack(T) \
