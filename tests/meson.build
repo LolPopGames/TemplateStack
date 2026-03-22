@@ -6,7 +6,8 @@ tests = [
       ['Push-Pop-Peek', 'push-pop-peek'],
       ['Is Empty or Full', 'is-empty-full'],
       ['Size & Buffer Size', 'size'],
-      ['Buffer Managment', 'buffer']
+      ['Buffer Managment', 'buffer'],
+      ['Memory Allocation', 'alloc']
     ]
   }
 ]
