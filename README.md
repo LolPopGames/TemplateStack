@@ -40,6 +40,7 @@ Table Of Contents:
             + [Stack Creation](#stack-creation)
             + [Copying](#copying)
             + [Supported Functions](#supported-functions)
+    + [Tests](#tests)
     + [Example](#example)
         + [Compiling](#compiling)
             + [Manually](#manually)
@@ -523,6 +524,27 @@ The following functions are available:
 + [`stackIsEmpty(T)`](#int-stackisemptytconst-stackt-stack)
 + [`stackIsFull(T)`](#int-stackisfulltconst-stackt-stack)
 + [`stackSize(T)`](#size_t-stacksizetconst-stackt-stack)
+
+## Tests
+
+**Template Stack** has various tests
+
+To compile they, you need **Meson** and **Ninja** Installed
+
+```bash
+$ meson setup build
+$ cd build
+$ meson compile
+```
+
+> [!NOTE]
+> **Meson** will also compile an [example](#example) of how to use library
+
+Then run tests with:
+
+```bash
+$ meson test
+```
 
 ## Example
 

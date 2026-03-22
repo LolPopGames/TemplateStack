@@ -35,8 +35,9 @@ Steps:
 
 1. Fork the repository and create your branch from `main`
 2. Make sure your code follows the [project style](#project-code-style)
-3. Test your changes using [example.c](example.c) or your own local tests
-4. Submit a pull request targeting the `main` branch
+3. Test your changes using [tests](README.md#tests)
+4. Write new tests for new features
+5. Submit a pull request targeting the `main` branch
 
 ## Project Code Style
 
