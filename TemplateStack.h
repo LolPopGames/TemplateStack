@@ -183,11 +183,11 @@ extern "C" {
 /* --- [static] stackSize() --- */
 #define _templatestack_staticstack_stackSize_proto(name, T) \
     /* same as in default stack */ \
-    _templatestack_stackSize_proto(name);
+    _templatestack_stackSize_proto(name)
 
 #define _templatestack_staticstack_stackSize_impl(name, T) \
     /* same as in default stack */ \
-    _templatestack_stackSize_impl(name);
+    _templatestack_stackSize_impl(name)
 
 /* --- stackBufferSize() --- */
 #define _templatestack_stackBufferSize_proto(T) \
