@@ -16,6 +16,13 @@ tests = [
       ['Inserting NULL instead of &stack', 'null'],
       ['Inserting stack with NULL buffer', 'buffer-null']
     ]
+  },
+  {
+    'name': 'types',
+    'cases': [
+      ['Names', 'names'],
+      ['Various Values', 'values']
+    ]
   }
 ]
 
@@ -27,7 +34,7 @@ foreach suite : tests
       executable(
         suite['name'] + '_' + t[1],
         suite['name'] + '/' + t[1] + '.c',
-        c_args : ['-I..', '-Wno-all', '-std=c89']
+        c_args : ['-I..', '-Wno-all', '-std=c89', '-pedantic']
       ),
 
       suite : suite['name']
