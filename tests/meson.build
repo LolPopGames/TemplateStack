@@ -5,7 +5,7 @@ tests = [
       ['Initialization', 'init'],
       ['Push-Pop-Peek', 'push-pop-peek'],
       ['Is Empty or Full', 'is-empty-full'],
-      ['Size & Buffer Size', 'size'],
+      ['Size', 'size'],
       ['Buffer Managment', 'buffer'],
       ['Memory Allocation', 'alloc']
     ]
@@ -29,7 +29,18 @@ tests = [
     'cases': [
       ['Module', 'module']
     ]
-  }
+  },
+  {
+    'name': 'static-stack',
+    'cases': [
+      ['Initialization', 'init'],
+      ['Push-Pop-Peek', 'push-pop-peek'],
+      ['Is Empty or Full', 'is-empty-full'],
+      ['Size & Buffer Size', 'size'],
+      ['Buffer Managment', 'buffer'],
+      ['Different Sizes For One Type', 'diff-sizes']
+    ]
+  },
 ]
 
 foreach suite : tests
