@@ -9,6 +9,13 @@ tests = [
       ['Buffer Managment', 'buffer'],
       ['Memory Allocation', 'alloc']
     ]
+  },
+  {
+    'name': 'fail',
+    'cases': [
+      ['Inserting NULL instead of &stack', 'null'],
+      ['Inserting stack with NULL buffer', 'buffer-null']
+    ]
   }
 ]
 
