@@ -45,6 +45,7 @@ Table Of Contents:
         + [Compiling](#compiling)
             + [Manually](#manually)
             + [Using Meson](#using-meson)
+    + [Contributing](#contributing)
     + [License](#license)
     + [Version](#version)
 
@@ -584,6 +585,11 @@ Then run it with:
 ```bash
 $ ./example
 ```
+
+## Contributing
+
+If you want to contribute to the project,
+please read the [`CONTRIBUTING.md`](CONTRIBUTING.md) file
 
 ## License
 
