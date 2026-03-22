@@ -23,6 +23,12 @@ tests = [
       ['Names', 'names'],
       ['Various Values', 'values']
     ]
+  },
+  {
+    'name': 'module',
+    'cases': [
+      ['Module', 'module']
+    ]
   }
 ]
 
