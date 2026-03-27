@@ -51,7 +51,7 @@ foreach suite : tests
       executable(
         suite['name'] + '_' + t[1],
         suite['name'] + '/' + t[1] + '.c',
-        c_args : ['-I..', '-Wno-all', '-std=c89', '-pedantic']
+        c_args : ['-I..', '-Wno-all']
       ),
 
       suite : suite['name']
