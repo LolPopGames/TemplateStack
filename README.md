@@ -6,6 +6,9 @@
 [![Commit v0.4.3-dev](https://img.shields.io/badge/Commit-v0.4.3--dev-red)](#version)
 [![License MIT](https://img.shields.io/badge/License-MIT-orange)](LICENSE.md)
 
+> [!NOTE]
+> This is a part of [Template Structures](https://github.com/LolPopGames/TemplateStructures) collection
+
 Table Of Contents:
 + [Template Stack](#template-stack)
     + [Description](#description)
