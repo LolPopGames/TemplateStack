@@ -36,6 +36,7 @@ Table Of Contents:
         + [`size_t stackBufferSize(T)(const Stack(T) *stack)`](#size_t-stackbuffersizetconst-stackt-stack)
         + [`Stack(T) stackDup(T)(const Stack(T) *stack)`](#stackt-stackduptconst-stackt-stack)
         + [`Stack(T) stackRealloc(T)(const Stack(T) *stack, size_t size)`](#stackt-stackrealloctconst-stackt-stack-size_t-size)
+        + [Custom Allocators](#custom-allocators)
         + [Static Stack](#static-stack)
             + [Adding A Type](#adding-a-type-1)
             + [Functions](#functions)
@@ -431,9 +432,42 @@ with the contents copied (or sliced if new size is smaller)
 If reallocation fails, returns a stack with `NULL` buffer
 and **does not free the original stack**
 
+> [!NOTE]
+> The behavior **can be changed** by defining [`TEMPLATE_STACK_REALLOC`](#custom-allocators)
+>
+> If a custom reallocator is provided:
+> + **Failure**: the original stack _may be freed or remain allocated_,
+> depending on the implementation of [`TEMPLATE_STACK_REALLOC`](#custom-allocators)
+> + **Success**: the original stack is _always deleted_, and the new stack is returned
+
 ```c
 Stack(int) st_new = stackRealloc(int)(&st, 20);
 ```
+
+### Custom Allocators
+
+If you want, you can use a **custom memory allocator**
+instead of _C standard library_ functions
+
+To change them, define the following macros **before including the header**:
+
+```c
+/* Custom malloc */
+#define TEMPLATE_STACK_MALLOC my_malloc
+
+/* Custom free */
+#define TEMPLATE_STACK_FREE my_free
+
+/* Optional: Custom realloc                                *
+ * The library will still work even if you don't define it */
+#define TEMPLATE_STACK_REALLOC my_realloc
+```
+
+The behavior of [`stackRealloc(T)`](#stackt-stackrealloctconst-stackt-stack-size_t-size)
+can be modified by providing your own
+
+See the [**note**](#stackt-stackrealloctconst-stackt-stack-size_t-size)
+for details
 
 ### Static Stack
 
