@@ -100,8 +100,7 @@ extern "C" {
 #define newStack(T) _templatestack_newStack_##T
 #define deleteStack(T) _templatestack_deleteStack_##T
 
-/* ---- Implementation Macros ---- */
-#define 
+/* ---- Implementation Macros --- */
 
 /* --- struct Stack --- */
 #define _templatestack_Stack(T) \
@@ -236,7 +235,7 @@ extern "C" {
         \
         if (!stackBufferIsNull(T)(stack)) \
         { \
-            dup.buffer = malloc(dup.size * sizeof(T)); \
+            dup.buffer = (TEMPLATE_STACK_MALLOC)(dup.size * sizeof(T)); \
             \
             if (stackBufferIsNull(T)(&dup)) return empty; \
             \
@@ -265,7 +264,7 @@ extern "C" {
         if (size == 0) { \
             return empty; \
         } \
-        new_stack.buffer = realloc(stack->buffer, size * sizeof(T)); \
+        new_stack.buffer = (TEMPLATE_STACK_REALLOC)(stack->buffer, size * sizeof(T)); \
         if (stackBufferIsNull(T)(&new_stack)) return empty; \
         \
         new_stack.size = size; \
@@ -568,7 +567,7 @@ extern "C" {
         \
         if (size == 0) return stack; \
         \
-        stack.buffer = malloc(size * sizeof(T)); \
+        stack.buffer = (TEMPLATE_STACK_MALLOC)(size * sizeof(T)); \
         if (stackBufferIsNull(T)(&stack)) return stack; \
         \
         stack.size = size; \
@@ -589,7 +588,7 @@ extern "C" {
             stackBufferIsNull(T)(stack) \
         ) return 1; \
         \
-        free(stack->buffer); \
+        (TEMPLATE_STACK_FREE)(stack->buffer); \
         \
         stack->buffer = NULL; \
         stack->size = 0; \
