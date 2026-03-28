@@ -56,7 +56,49 @@ extern "C" {
     ) \
 )
 
+/* ---- Configuration ---- */
+
+/* --- Memory Allocators --- */
+
+#if  defined(TEMPLATE_STACK_MALLOC) && !defined(TEMPLATE_STACK_FREE) && \
+     defined(__STDC_VERSION__)      &&  (__STDC_VERSION__ >= 202311L)
+#   warning TEMPLATE_STACK_MALLOC is defined, but TEMPLATE_STACK_FREE is not defined
+#endif
+
+#if !defined(TEMPLATE_STACK_MALLOC) &&  defined(TEMPLATE_STACK_FREE) && \
+     defined(__STDC_VERSION__)      &&  (__STDC_VERSION__ >= 202311L)
+#   warning TEMPLATE_STACK_FREE is defined, but TEMPLATE_STACK_MALLOC is not defined
+#endif
+
+#if  defined(TEMPLATE_STACK_REALLOC) && !defined(TEMPLATE_STACK_MALLOC) && \
+     defined(__STDC_VERSION__)      &&  (__STDC_VERSION__ >= 202311L)
+#   warning TEMPLATE_STACK_REALLOC is defined, but TEMPLATE_STACK_MALLOC is not defined
+#endif
+
+#if  defined(TEMPLATE_STACK_REALLOC) && !defined(TEMPLATE_STACK_FREE) && \
+     defined(__STDC_VERSION__)      &&  (__STDC_VERSION__ >= 202311L)
+#   warning TEMPLATE_STACK_REALLOC is defined, but TEMPLATE_STACK_MALLOC is not defined
+#endif
+
+#if  defined(TEMPLATE_STACK_REALLOC) && \
+    !defined(TEMPLATE_STACK_MALLOC)    && !defined(TEMPLATE_STACK_FREE) && \
+     defined(__STDC_VERSION__)      &&  (__STDC_VERSION__ >= 202311L)
+#   warning TEMPLATE_STACK_REALLOC is defined, but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not defined
+#endif
+
+#ifndef TEMPLATE_STACK_MALLOC
+    #ifndef TEMPLATE_STACK_REALLOC
+        #define TEMPLATE_STACK_REALLOC realloc
+    #endif
+
+    #define TEMPLATE_STACK_MALLOC malloc
+#endif
+#ifndef TEMPLATE_STACK_FREE
+    #define TEMPLATE_STACK_FREE free
+#endif
+
 /* ---- Includes ---- */
+
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
@@ -85,7 +127,7 @@ extern "C" {
 #define newStack(T) _templatestack_newStack_##T
 #define deleteStack(T) _templatestack_deleteStack_##T
 
-/* ---- Implementation Macros ---- */
+/* ---- Implementation Macros --- */
 
 /* --- struct Stack --- */
 #define _templatestack_Stack(T) \
@@ -220,7 +262,7 @@ extern "C" {
         \
         if (!stackBufferIsNull(T)(stack)) \
         { \
-            dup.buffer = malloc(dup.size * sizeof(T)); \
+            dup.buffer = (TEMPLATE_STACK_MALLOC)(dup.size * sizeof(T)); \
             \
             if (stackBufferIsNull(T)(&dup)) return empty; \
             \
@@ -235,37 +277,75 @@ extern "C" {
     Stack(T) \
     stackRealloc(T)(Stack(T) *stack, size_t size);
 
-#define _templatestack_stackRealloc_impl(T) \
-    Stack(T) \
-    stackRealloc(T)(Stack(T) *stack, size_t size) \
-    { \
-        static const Stack(T) empty = {0}; \
-        Stack(T) new_stack = {0}; \
-        \
-        if (stack == NULL) return empty; \
-        \
-        if (stackBufferIsNull(T)(stack)) return *stack; \
-        \
-        if (size == 0) { \
-            return empty; \
-        } \
-        new_stack.buffer = realloc(stack->buffer, size * sizeof(T)); \
-        if (stackBufferIsNull(T)(&new_stack)) return empty; \
-        \
-        new_stack.size = size; \
-        if (stack->index >= size) \
+#ifdef TEMPLATE_STACK_REALLOC
+    #define _templatestack_stackRealloc_impl(T) \
+        Stack(T) \
+        stackRealloc(T)(Stack(T) *stack, size_t size) \
         { \
-            new_stack.index = size; \
-        } \
-        else \
+            static const Stack(T) empty = {0}; \
+            Stack(T) new_stack = {0}; \
+            \
+            if (stack == NULL) return empty; \
+            \
+            if (stackBufferIsNull(T)(stack)) return *stack; \
+            \
+            if (size == 0) { \
+                return empty; \
+            } \
+            new_stack.buffer = (TEMPLATE_STACK_REALLOC)(stack->buffer, size * sizeof(T)); \
+            if (stackBufferIsNull(T)(&new_stack)) return empty; \
+            \
+            new_stack.size = size; \
+            if (stack->index >= size) \
+            { \
+                new_stack.index = size; \
+            } \
+            else \
+            { \
+                new_stack.index = stack->index; \
+            } \
+            \
+            *stack = empty; \
+            \
+            return new_stack; \
+        }
+#else /* TEMPLATE_STACK_REALLOC */
+    #define _templatestack_stackRealloc_impl(T) \
+        Stack(T) \
+        stackRealloc(T)(Stack(T) *stack, size_t size) \
         { \
-            new_stack.index = stack->index; \
-        } \
-        \
-        *stack = empty; \
-        \
-        return new_stack; \
-    }
+            static const Stack(T) empty = {0}; \
+            Stack(T) new_stack = {0}; \
+            \
+            if (stack == NULL) return empty; \
+            \
+            if (stackBufferIsNull(T)(stack)) return *stack; \
+            \
+            if (size == 0) { \
+                return empty; \
+            } \
+            \
+            new_stack.buffer = (TEMPLATE_STACK_MALLOC)(size * sizeof(T)); \
+            if (stackBufferIsNull(T)(&new_stack)) return empty; \
+            \
+            new_stack.size = size; \
+            if (stack->index >= size) \
+            { \
+                memcpy(new_stack.buffer, stack->buffer, size * sizeof(T)); \
+                new_stack.index = size; \
+            } \
+            else \
+            { \
+                memcpy(new_stack.buffer, stack->buffer, stack->index * sizeof(T)); \
+                new_stack.index = stack->index; \
+            } \
+            \
+            (TEMPLATE_STACK_FREE)(stack->buffer); \
+            *stack = empty; \
+            \
+            return new_stack; \
+        }
+#endif /* TEMPLATE_STACK_REALLOC */
 
 /* --- stackClear() --- */
 #define _templatestack_stackClear_proto(T) \
@@ -552,7 +632,7 @@ extern "C" {
         \
         if (size == 0) return stack; \
         \
-        stack.buffer = malloc(size * sizeof(T)); \
+        stack.buffer = (TEMPLATE_STACK_MALLOC)(size * sizeof(T)); \
         if (stackBufferIsNull(T)(&stack)) return stack; \
         \
         stack.size = size; \
@@ -573,7 +653,7 @@ extern "C" {
             stackBufferIsNull(T)(stack) \
         ) return 1; \
         \
-        free(stack->buffer); \
+        (TEMPLATE_STACK_FREE)(stack->buffer); \
         \
         stack->buffer = NULL; \
         stack->size = 0; \
