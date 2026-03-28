@@ -19,7 +19,7 @@ jobs:
         run: |
           sudo apt-get update &&
           sudo apt-get install -y meson ninja-build inkscape npm &&
-          sudo npm install -g svgo
+          npm install -g svgo
 
       - name: Configure
         run: meson setup assets/icons/build assets/icons
