@@ -148,6 +148,24 @@ TemplateStack_inline(size_t)
 >
 > Always use this defined type in stack API functions
 
+> [!NOTE]
+> If type T is structure or union,
+> it also must not contain any `const` data members (recursively)
+>
+> This means that this example will **not** work:
+>
+> ```c
+> struct A
+> {
+>     int x;
+>     /* y is a constant member */
+>     const int y;
+> }
+>
+> typedef struct A A_t;
+> TemplateStack_inline(A_t) /* Error! */
+> ```
+
 ### Version Information
 
 The version is stored in the following 3 macros:
