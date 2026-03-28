@@ -37,8 +37,8 @@ extern "C" {
 
 /* --- Version --- */
 #define TEMPLATE_STACK_MAJOR 0
-#define TEMPLATE_STACK_MINOR 4
-#define TEMPLATE_STACK_PATCH 3
+#define TEMPLATE_STACK_MINOR 5
+#define TEMPLATE_STACK_PATCH 0
 #define TEMPLATE_STACK_ATLEAST(major,minor,patch) ( \
     (TEMPLATE_STACK_MAJOR > (major)) || \
     \
