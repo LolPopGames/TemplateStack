@@ -7,27 +7,27 @@ tests = [
       ['Is Empty or Full', 'is-empty-full'],
       ['Size', 'size'],
       ['Buffer Managment', 'buffer'],
-      ['Memory Allocation', 'alloc']
+      ['Memory Allocation', 'alloc'],
     ]
   },
   {
     'name': 'fail',
     'cases': [
       ['Inserting NULL instead of &stack', 'null'],
-      ['Inserting stack with NULL buffer', 'buffer-null']
+      ['Inserting stack with NULL buffer', 'buffer-null'],
     ]
   },
   {
     'name': 'types',
     'cases': [
       ['Names', 'names'],
-      ['Various Values', 'values']
+      ['Various Values', 'values'],
     ]
   },
   {
     'name': 'module',
     'cases': [
-      ['Module', 'module']
+      ['Module', 'module'],
     ]
   },
   {
@@ -38,7 +38,19 @@ tests = [
       ['Is Empty or Full', 'is-empty-full'],
       ['Size & Buffer Size', 'size'],
       ['Buffer Managment', 'buffer'],
-      ['Different Sizes For One Type', 'diff-sizes']
+      ['Different Sizes For One Type', 'diff-sizes'],
+    ]
+  },
+  {
+    'name': 'custom-alloc',
+    'cases': [
+      ['Malloc Replacement', 'malloc'],
+      ['Free Replacement', 'free'],
+      ['Malloc & Free Replacement', 'malloc-free'],
+      ['Malloc & Realloc Replacement', 'malloc-realloc'],
+      ['Malloc, Realloc & Free Replacement', 'malloc-realloc-free'],
+      ['Custom Malloc & Free Replacement', 'custom-malloc-free'],
+      ['Custom Malloc, Realloc & Free Replacement', 'custom-malloc-realloc-free'],
     ]
   },
 ]
