@@ -56,7 +56,22 @@ extern "C" {
     ) \
 )
 
+/* ---- Configuration ---- */
+
+/* --- Memory Allocators --- */
+#ifndef TEMPLATE_STACK_MALLOC
+    #ifndef TEMPLATE_STACK_REALLOC
+        #define TEMPLATE_STACK_REALLOC realloc
+    #endif
+
+    #define TEMPLATE_STACK_MALLOC malloc
+#endif
+#ifndef TEMPLATE_STACK_FREE
+    #define TEMPLATE_STACK_FREE free
+#endif
+
 /* ---- Includes ---- */
+
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
@@ -86,6 +101,7 @@ extern "C" {
 #define deleteStack(T) _templatestack_deleteStack_##T
 
 /* ---- Implementation Macros ---- */
+#define 
 
 /* --- struct Stack --- */
 #define _templatestack_Stack(T) \
