@@ -59,6 +59,33 @@ extern "C" {
 /* ---- Configuration ---- */
 
 /* --- Memory Allocators --- */
+
+#if  defined(TEMPLATE_STACK_MALLOC) && !defined(TEMPLATE_STACK_FREE) && \
+     defined(__STDC_VERSION__)      &&  (__STDC_VERSION__ >= 202311L)
+#   warning TEMPLATE_STACK_MALLOC is defined, but TEMPLATE_STACK_FREE is not defined
+#endif
+
+#if !defined(TEMPLATE_STACK_MALLOC) &&  defined(TEMPLATE_STACK_FREE) && \
+     defined(__STDC_VERSION__)      &&  (__STDC_VERSION__ >= 202311L)
+#   warning TEMPLATE_STACK_FREE is defined, but TEMPLATE_STACK_MALLOC is not defined
+#endif
+
+#if  defined(TEMPLATE_STACK_REALLOC) && !defined(TEMPLATE_STACK_MALLOC) && \
+     defined(__STDC_VERSION__)      &&  (__STDC_VERSION__ >= 202311L)
+#   warning TEMPLATE_STACK_REALLOC is defined, but TEMPLATE_STACK_MALLOC is not defined
+#endif
+
+#if  defined(TEMPLATE_STACK_REALLOC) && !defined(TEMPLATE_STACK_FREE) && \
+     defined(__STDC_VERSION__)      &&  (__STDC_VERSION__ >= 202311L)
+#   warning TEMPLATE_STACK_REALLOC is defined, but TEMPLATE_STACK_MALLOC is not defined
+#endif
+
+#if  defined(TEMPLATE_STACK_REALLOC) && \
+    !defined(TEMPLATE_STACK_MALLOC)    && !defined(TEMPLATE_STACK_FREE) && \
+     defined(__STDC_VERSION__)      &&  (__STDC_VERSION__ >= 202311L)
+#   warning TEMPLATE_STACK_REALLOC is defined, but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not defined
+#endif
+
 #ifndef TEMPLATE_STACK_MALLOC
     #ifndef TEMPLATE_STACK_REALLOC
         #define TEMPLATE_STACK_REALLOC realloc
