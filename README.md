@@ -142,7 +142,7 @@ TemplateStack_inline(size_t)
 > TemplateStack_inline(data_t);
 >
 > /* defining type also for `char *` */
-> typedef char **cstr;
+> typedef char *cstr;
 > TemplateStack_inline(cstr);
 > ```
 >
