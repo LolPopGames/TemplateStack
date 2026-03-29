@@ -529,7 +529,7 @@ StaticStack_static_impl(name, T)
 
 /* Inline version:                              *
  * Creates stack type and static implementation */
-TemplateStack_inline(name, T, size)
+StaticStack_inline(name, T, size)
 ```
 
 Use `name` instead of `T` when working with the stack API
