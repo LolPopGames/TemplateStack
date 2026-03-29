@@ -1,0 +1,7 @@
+{
+  "name": "icon-ci-tools",
+  "private": true,
+  "devDependencies": {
+    "svgo": "latest"
+  }
+}
