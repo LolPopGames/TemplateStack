@@ -18,11 +18,12 @@ jobs:
       - name: Install Deps
         run: |
           sudo apt-get update &&
-          sudo apt-get install -y meson ninja-build inkscape npm &&
+          sudo apt-get install -y --no-install-recommends \
+            meson ninja-build inkscape npm &&
           npm install -g svgo
 
       - name: Configure
-        run: meson setup assets/icons/build assets/icons
+        run: meson setup --reconfigure assets/icons/build assets/icons
 
       - name: Build
         run: meson compile -C assets/icons/build
