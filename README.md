@@ -245,9 +245,10 @@ deleteStack(int)(&st);
 Pushes an element to stack
 
 Returns exit code
-(0 if success, other codes if fail,
-e.g. if stack is full
-or if stack buffer is `NULL`)
++ `0` if success
++ non-zero if fail
+    + if the stack is full
+    + if stack buffer is `NULL`
 
 ```c
 stackPush(int)(&st, 107);
@@ -313,8 +314,8 @@ Returns the element `index` positions from the top of the stack
 without removing it
 
 `index` is zero-based:
-+ `0` – top element
-+ `1` – next element
++ `0` - top element
++ `1` - next element
 + etc.
 
 Returns zero-value if:
@@ -338,8 +339,7 @@ Removes all elements from the stack without freeing its buffer
 Returns exit code:
 + `0` if success
 + non-zero if fail:
-    + if stack buffer is `NULL`
-    + other
+    + if the stack is `NULL`
 
 ```c
 stackPush(int)(&st, 10);
@@ -366,14 +366,15 @@ stackPush(int)(&st, 30);
 stackReverse(int)(&st);
 
 /* the stack looks now as:
- * [30]  [20]  [10]
- *             ^^^^
+ * >> [10] <<
+ *    [20]
+ *    [30]
  */
 
 /* 10, 20, 30 */
 printf("%d, ", stackPop(int)(&st));
 printf("%d, ", stackPop(int)(&st));
-printf("%d",   stackPop(int)(&st));
+printf("%d\n",   stackPop(int)(&st));
 ```
 
 ### `int stackIsEmpty(T)(const Stack(T) *stack)`
