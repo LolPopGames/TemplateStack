@@ -60,30 +60,76 @@ extern "C" {
 
 /* --- Memory Allocators --- */
 
-#if  defined(TEMPLATE_STACK_MALLOC) && !defined(TEMPLATE_STACK_FREE) && \
-     defined(__STDC_VERSION__)      &&  (__STDC_VERSION__ >= 202311L)
-    #warning TEMPLATE_STACK_MALLOC is defined, but TEMPLATE_STACK_FREE is not defined
+/* MALLOC && !FREE */
+#if     defined(TEMPLATE_STACK_MALLOC)  && !defined(TEMPLATE_STACK_FREE)
+    #if defined(__STDC_VERSION__)       &&  (__STDC_VERSION__ >= 202311L)
+        #warning TEMPLATE_STACK_MALLOC is defined, \
+but TEMPLATE_STACK_FREE is not
+    
+    #elif defined(__GNUC__) && \
+        ((__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3))
+        #pragma GCC warning "TEMPLATE_STACK_MALLOC is defined, \
+but TEMPLATE_STACK_FREE is not"
+
+    #endif
 #endif
 
-#if !defined(TEMPLATE_STACK_MALLOC) &&  defined(TEMPLATE_STACK_FREE) && \
-     defined(__STDC_VERSION__)      &&  (__STDC_VERSION__ >= 202311L)
-   #warning TEMPLATE_STACK_FREE is defined, but TEMPLATE_STACK_MALLOC is not defined
+/* !MALLOC && FREE */
+#if    !defined(TEMPLATE_STACK_MALLOC)  &&  defined(TEMPLATE_STACK_FREE)
+    #if defined(__STDC_VERSION__)       &&  (__STDC_VERSION__ >= 202311L)
+        #warning TEMPLATE_STACK_FREE is defined, \
+but TEMPLATE_STACK_MALLOC is not
+    
+    #elif defined(__GNUC__) && \
+        ((__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3))
+        #pragma GCC warning "TEMPLATE_STACK_FREE is defined, \
+but TEMPLATE_STACK_MALLOC is not"
+
+    #endif
 #endif
 
-#if  defined(TEMPLATE_STACK_REALLOC) && !defined(TEMPLATE_STACK_MALLOC) && \
-     defined(__STDC_VERSION__)      &&  (__STDC_VERSION__ >= 202311L)
-    #warning TEMPLATE_STACK_REALLOC is defined, but TEMPLATE_STACK_MALLOC is not defined
+/* REALLOC && !MALLOC */
+#if     defined(TEMPLATE_STACK_REALLOC) && !defined(TEMPLATE_STACK_MALLOC)
+    #if defined(__STDC_VERSION__)       &&  (__STDC_VERSION__ >= 202311L)
+        #warning TEMPLATE_STACK_REALLOC is defined, \
+but TEMPLATE_STACK_MALLOC is not
+    
+    #elif defined(__GNUC__) && \
+        ((__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3))
+        #pragma GCC warning "TEMPLATE_STACK_REALLOC is defined, \
+but TEMPLATE_STACK_MALLOC is not"
+
+    #endif
 #endif
 
-#if  defined(TEMPLATE_STACK_REALLOC) && !defined(TEMPLATE_STACK_FREE) && \
-     defined(__STDC_VERSION__)      &&  (__STDC_VERSION__ >= 202311L)
-    #warning TEMPLATE_STACK_REALLOC is defined, but TEMPLATE_STACK_MALLOC is not defined
+/* REALLOC && !FREE */
+#if     defined(TEMPLATE_STACK_REALLOC) && !defined(TEMPLATE_STACK_FREE)
+    #if defined(__STDC_VERSION__)       &&  (__STDC_VERSION__ >= 202311L)
+        #warning TEMPLATE_STACK_REALLOC is defined, \
+but TEMPLATE_STACK_FREE is not
+    
+    #elif defined(__GNUC__) && \
+        ((__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3))
+        #pragma GCC warning "TEMPLATE_STACK_REALLOC is defined, \
+but TEMPLATE_STACK_FREE is not"
+
+    #endif
 #endif
 
-#if  defined(TEMPLATE_STACK_REALLOC) && \
-    !defined(TEMPLATE_STACK_MALLOC)    && !defined(TEMPLATE_STACK_FREE) && \
-     defined(__STDC_VERSION__)      &&  (__STDC_VERSION__ >= 202311L)
-    #warning TEMPLATE_STACK_REALLOC is defined, but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not defined
+/* REALLOC && !MALLOC && !FREE */
+#if     defined(TEMPLATE_STACK_REALLOC) && \
+    !defined(TEMPLATE_STACK_MALLOC) && !defined(TEMPLATE_STACK_FREE)
+
+    #if defined(__STDC_VERSION__)       &&  (__STDC_VERSION__ >= 202311L)
+        #warning TEMPLATE_STACK_REALLOC is defined, \
+but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not
+    
+    #elif defined(__GNUC__) && \
+        ((__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3))
+        #pragma GCC warning "TEMPLATE_STACK_REALLOC is defined, \
+but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
+
+    #endif
 #endif
 
 #ifndef TEMPLATE_STACK_MALLOC
@@ -105,9 +151,9 @@ extern "C" {
 
 /* ---- API functions ---- */
 /* NOTE:
- * Type T must be a single preprocessing token (no spaces or special characters).
+ * Type T must be a single preprocessing token (no spaces or special characters)
  * For pointers or struct/union/enum types, use a typedef first
- * (e.g. typedef struct some some_t; typedef char * cstr;).
+ * (e.g. typedef struct some some_t; typedef char * cstr;)
  */
 #define Stack(T) struct _templatestack_##T
 #define stackIsEmpty(T) _templatestack_stackIsEmpty_##T
@@ -292,7 +338,9 @@ extern "C" {
             if (size == 0) { \
                 return empty; \
             } \
-            new_stack.buffer = (TEMPLATE_STACK_REALLOC)(stack->buffer, size * sizeof(T)); \
+            new_stack.buffer = \
+                (TEMPLATE_STACK_REALLOC)(stack->buffer, size * sizeof(T)); \
+            \
             if (stackBufferIsNull(T)(&new_stack)) return empty; \
             \
             new_stack.size = size; \
@@ -331,12 +379,18 @@ extern "C" {
             new_stack.size = size; \
             if (stack->index >= size) \
             { \
-                memcpy(new_stack.buffer, stack->buffer, size * sizeof(T)); \
+                memcpy( \
+                    new_stack.buffer, stack->buffer, \
+                    size * sizeof(T) \
+                ); \
                 new_stack.index = size; \
             } \
             else \
             { \
-                memcpy(new_stack.buffer, stack->buffer, stack->index * sizeof(T)); \
+                memcpy( \
+                    new_stack.buffer, stack->buffer, \
+                    stack->index * sizeof(T) \
+                ); \
                 new_stack.index = stack->index; \
             } \
             \
@@ -720,7 +774,7 @@ extern "C" {
     _templatestack_newStack_impl(T) \
     _templatestack_deleteStack_impl(T)
 
-/* ---- Template Stack with Static Implementation (for source inline part) ---- */
+/* ---- Template Stack with Static Implement. (for source inline part) ---- */
 #define TemplateStack_static_impl(T) \
     static _templatestack_stackIsEmpty_impl(T) \
     static _templatestack_stackIsFull_impl(T) \
