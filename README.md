@@ -123,10 +123,10 @@ TemplateStack_inline(long)
 TemplateStack_inline(size_t)
 ```
 
-> [!NOTE]
-> Type T must be a single preprocessing token (no spaces or special characters)
+> [!IMPORTANT]
+> _Type T_ must be a single preprocessing token (no spaces or special characters)
 >
-> For pointers or struct/union/enum types, use a typedef first
+> For pointers or `struct`/`union`/`enum` types, use a typedef first
 >
 > For example:
 >
@@ -148,8 +148,8 @@ TemplateStack_inline(size_t)
 >
 > Always use this defined type in stack API functions
 
-> [!NOTE]
-> If type T is structure or union,
+> [!WARNING]
+> If _type T_ is structure or union,
 > it also must not contain any `const` data members (recursively)
 >
 > This means that this example will **not** work:
@@ -170,9 +170,9 @@ TemplateStack_inline(size_t)
 
 The version is stored in the following 3 macros:
 
-+ `TEMPLATE_STACK_MAJOR` (X.0.0)
-+ `TEMPLATE_STACK_MINOR` (0.X.0)
-+ `TEMPLATE_STACK_PATCH` (0.0.X)
++ `TEMPLATE_STACK_MAJOR` (**X**.0.0)
++ `TEMPLATE_STACK_MINOR` (0.**X**.0)
++ `TEMPLATE_STACK_PATCH` (0.0.**X**)
 
 You can check the version like this:
 
@@ -200,7 +200,7 @@ Use the stack type and functions by replacing `T` with your own type
 The syntax is similar to C++ templates, but uses `()` instead of `<>`
 and it always requires to add your `T` type
 
-All functions that take a stack as a parameter require a _pointer_ to the stack.
+All functions that take a stack as a parameter require a _pointer_ to the stack
 
 Every function provides a code-block example after it's explanation
 
@@ -511,9 +511,9 @@ Add one of these lines outside of any function:
 
 ```c
 /* Replace:
- *  name - with your stack name (e.g. INT10)
- *  T    - with your type (e.g. int)
- *  size - with buffer size (e.g. 10)
+ *  name — with your stack name (e.g. INT10)
+ *  T    — with your type (e.g. int)
+ *  size — with buffer size (e.g. 10)
  */
 
 /* Creates stack type and function prototypes *
@@ -542,13 +542,13 @@ except for functions related to memory allocation
 
 ##### Not available:
 
-+ [`newStack(T)`](#stackt-newstacktsize_t-size) - no dynamic allocation
-+ [`deleteStack(T)`](#int-deletestacktstackt-stack) - no manual deallocation required
-+ [`stackDup(T)`](#stackt-stackduptconst-stackt-stack) - can be done via assignment
-+ [`stackBufferSize(T)`](#size_t-stackbuffersizetconst-stackt-stack) - known at compile time
-+ [`stackBufferIsNull(T)`](#int-stackbufferisnulltconst-stackt-stack) - static buffer cannot be `NULL`
-+ [`stackRealloc(T)`](#stackt-stackrealloctconst-stackt-stack-size_t-size) - no reallocation
-+ [`stackPushGrow(T)`](#int-stackpushgrowtstackt-stack-t-value) - no dynamic growth
++ [`newStack(T)`](#stackt-newstacktsize_t-size) — no dynamic allocation
++ [`deleteStack(T)`](#int-deletestacktstackt-stack) — no manual deallocation required
++ [`stackDup(T)`](#stackt-stackduptconst-stackt-stack) — can be done via assignment
++ [`stackBufferSize(T)`](#size_t-stackbuffersizetconst-stackt-stack) — known at compile time
++ [`stackBufferIsNull(T)`](#int-stackbufferisnulltconst-stackt-stack) — static buffer cannot be `NULL`
++ [`stackRealloc(T)`](#stackt-stackrealloctconst-stackt-stack-size_t-size) — no reallocation
++ [`stackPushGrow(T)`](#int-stackpushgrowtstackt-stack-t-value) — no dynamic growth
 
 #### Stack Creation
 
@@ -558,7 +558,7 @@ To create a stack, use standard C initialization:
 Stack(INT10) st = {0};
 ```
 
-No deletion is required - memory is managed automatically
+No deletion is required — memory is managed automatically
 
 #### Copying
 
