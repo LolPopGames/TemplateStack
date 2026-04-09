@@ -9,6 +9,7 @@
  *
  * @author LolPopGames
  * @date 2026
+ * @version v0.5.0-dev
  * @copyright
  * Copyright © 2026 LolPopGames
  *
