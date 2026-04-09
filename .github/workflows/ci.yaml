@@ -8,12 +8,13 @@ on:
     types: [opened, synchronize]
 
 jobs:
+  # --- Building Tests ---
   build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Deps
         run: |
@@ -29,3 +30,32 @@ jobs:
 
       - name: Test
         run: meson test -C build
+
+  # --- Building Icons ---
+  icon-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: tools/nodejs/package-lock.json
+
+      - name: Install Deps
+        run: |
+          sudo apt-get update &&
+          sudo apt-get install -y --no-install-recommends \
+            meson ninja-build inkscape &&
+          npm ci
+        working-directory: tools/nodejs
+
+      - name: Configure
+        run: meson setup --reconfigure assets/icons/build assets/icons
+
+      - name: Build
+        run: meson compile -C assets/icons/build
