@@ -1,6 +1,6 @@
 project(
   'Template Stack', 'c',
-  version : '0.5.0',
+  version : '1.0.0-dev',
   default_options : [ 'c_args=[\'-std=c89\', \'-pedantic\']' ]
 )
 

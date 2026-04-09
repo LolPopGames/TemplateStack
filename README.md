@@ -3,7 +3,7 @@
 ![Template Stack](assets/icons/build/logo-white@1.5.png)
 
 [![Release](https://img.shields.io/github/v/release/LolPopGames/TemplateStack?label=Release&color=green)](https://github.com/LolPopGames/TemplateStack/releases/latest)
-[![Commit v0.5.0](https://img.shields.io/badge/Commit-v0.5.0-green)](#version)
+[![Commit v1.0.0-dev](https://img.shields.io/badge/Commit-v1.0.0--dev-red)](#version)
 [![License MIT](https://img.shields.io/badge/License-MIT-orange)](LICENSE.md)
 
 > [!NOTE]
@@ -653,4 +653,4 @@ The library is distributed under [the MIT license](LICENSE.md)
 
 ## Version
 
-0.5.0 stable
+1.0.0 dev

@@ -9,7 +9,7 @@
  *
  * @author LolPopGames
  * @date 2026
- * @version v0.5.0
+ * @version v1.0.0-dev
  * @copyright
  * Copyright © 2026 LolPopGames
  *
@@ -37,8 +37,8 @@ extern "C" {
 #endif
 
 /* --- Version --- */
-#define TEMPLATE_STACK_MAJOR 0
-#define TEMPLATE_STACK_MINOR 5
+#define TEMPLATE_STACK_MAJOR 1
+#define TEMPLATE_STACK_MINOR 0
 #define TEMPLATE_STACK_PATCH 0
 #define TEMPLATE_STACK_ATLEAST(major,minor,patch) ( \
     (TEMPLATE_STACK_MAJOR > (major)) || \
