@@ -314,8 +314,8 @@ Returns the element `index` positions from the top of the stack
 without removing it
 
 `index` is zero-based:
-+ `0` - top element
-+ `1` - next element
++ `0` — top element
++ `1` — next element
 + etc.
 
 Returns zero-value if:
