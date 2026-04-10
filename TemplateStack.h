@@ -157,22 +157,22 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
  * (e.g. typedef struct some some_t; typedef char * cstr;)
  */
 #define Stack(T) struct _templatestack_##T
-#define stackIsEmpty(T) _templatestack_stackIsEmpty_##T
-#define stackIsFull(T) _templatestack_stackIsFull_##T
-#define stackBufferIsNull(T) _templatestack_stackBufferIsNull_##T
-#define stackSize(T) _templatestack_stackSize_##T
-#define stackBufferSize(T) _templatestack_stackBufferSize_##T
-#define stackDup(T) _templatestack_stackDup_##T
-#define stackRealloc(T) _templatestack_stackRealloc_##T
-#define stackClear(T) _templatestack_stackClear_##T
-#define stackReverse(T) _templatestack_stackReverse_##T
-#define stackPush(T) _templatestack_stackPush_##T
-#define stackPushGrow(T) _templatestack_stackPushGrow_##T
-#define stackPop(T) _templatestack_stackPop_##T
-#define stackPeek(T) _templatestack_stackPeek_##T
-#define stackPeekAt(T) _templatestack_stackPeekAt_##T
-#define newStack(T) _templatestack_newStack_##T
-#define deleteStack(T) _templatestack_deleteStack_##T
+#define stackIsEmpty(T) _templatestack_stackIsEmpty_type_##T
+#define stackIsFull(T) _templatestack_stackIsFull_type_##T
+#define stackBufferIsNull(T) _templatestack_stackBufferIsNull_type_##T
+#define stackSize(T) _templatestack_stackSize_type_##T
+#define stackBufferSize(T) _templatestack_stackBufferSize_type_##T
+#define stackDup(T) _templatestack_stackDup_type_##T
+#define stackRealloc(T) _templatestack_stackRealloc_type_##T
+#define stackClear(T) _templatestack_stackClear_type_##T
+#define stackReverse(T) _templatestack_stackReverse_type_##T
+#define stackPush(T) _templatestack_stackPush_type_##T
+#define stackPushGrow(T) _templatestack_stackPushGrow_type_##T
+#define stackPop(T) _templatestack_stackPop_type_##T
+#define stackPeek(T) _templatestack_stackPeek_type_##T
+#define stackPeekAt(T) _templatestack_stackPeekAt_type_##T
+#define newStack(T) _templatestack_newStack_type_##T
+#define deleteStack(T) _templatestack_deleteStack_type_##T
 
 /* ---- Implementation Macros --- */
 
