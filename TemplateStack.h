@@ -167,7 +167,6 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 #define stackClear(T) _templatestack_stackClear_type_##T
 #define stackReverse(T) _templatestack_stackReverse_type_##T
 #define stackPush(T) _templatestack_stackPush_type_##T
-#define stackPushGrow(T) _templatestack_stackPushGrow_type_##T
 #define stackPop(T) _templatestack_stackPop_type_##T
 #define stackPeek(T) _templatestack_stackPeek_type_##T
 #define stackPeekAt(T) _templatestack_stackPeekAt_type_##T
@@ -494,9 +493,16 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
     { \
         if ( \
             stack == NULL || \
-            stackBufferIsNull(T)(stack) || \
-            stackIsFull(T)(stack) \
+            stackBufferIsNull(T)(stack) \
         ) return 1; \
+        \
+        if (stackIsFull(T)(stack)) \
+        { \
+            Stack(T) new_stack = stackRealloc(T)(stack, stack->size * 2); \
+            if (stackBufferIsNull(T)(&new_stack)) return 1; \
+            \
+            *stack = new_stack; \
+        } \
         \
         stack->buffer[stack->index++] = value; \
         \
@@ -516,33 +522,6 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
             stack == NULL || \
             stackIsFull(name)(stack) \
         ) return 1; \
-        \
-        stack->buffer[stack->index++] = value; \
-        \
-        return 0; \
-    }
-
-/* --- stackPushGrow() --- */
-#define _templatestack_stackPushGrow_proto(T) \
-    int \
-    stackPushGrow(T)(Stack(T) *stack, T value);
-
-#define _templatestack_stackPushGrow_impl(T) \
-    int \
-    stackPushGrow(T)(Stack(T) *stack, T value) \
-    { \
-        if ( \
-            stack == NULL || \
-            stackBufferIsNull(T)(stack) \
-        ) return 1; \
-        \
-        if (stackIsFull(T)(stack)) \
-        { \
-            Stack(T) new_stack = stackRealloc(T)(stack, stack->size * 2); \
-            if (stackBufferIsNull(T)(&new_stack)) return 1; \
-            \
-            *stack = new_stack; \
-        } \
         \
         stack->buffer[stack->index++] = value; \
         \
@@ -729,7 +708,6 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
     _templatestack_stackClear_proto(T) \
     _templatestack_stackReverse_proto(T) \
     _templatestack_stackPush_proto(T) \
-    _templatestack_stackPushGrow_proto(T) \
     _templatestack_stackPop_proto(T) \
     _templatestack_stackPeek_proto(T) \
     _templatestack_stackPeekAt_proto(T) \
@@ -749,7 +727,6 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
     static _templatestack_stackClear_proto(T) \
     static _templatestack_stackReverse_proto(T) \
     static _templatestack_stackPush_proto(T) \
-    static _templatestack_stackPushGrow_proto(T) \
     static _templatestack_stackPop_proto(T) \
     static _templatestack_stackPeek_proto(T) \
     static _templatestack_stackPeekAt_proto(T) \
@@ -768,7 +745,6 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
     _templatestack_stackClear_impl(T) \
     _templatestack_stackReverse_impl(T) \
     _templatestack_stackPush_impl(T) \
-    _templatestack_stackPushGrow_impl(T) \
     _templatestack_stackPop_impl(T) \
     _templatestack_stackPeek_impl(T) \
     _templatestack_stackPeekAt_impl(T) \
@@ -787,7 +763,6 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
     static _templatestack_stackClear_impl(T) \
     static _templatestack_stackReverse_impl(T) \
     static _templatestack_stackPush_impl(T) \
-    static _templatestack_stackPushGrow_impl(T) \
     static _templatestack_stackPop_impl(T) \
     static _templatestack_stackPeek_impl(T) \
     static _templatestack_stackPeekAt_impl(T) \
