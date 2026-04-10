@@ -23,7 +23,6 @@ Table Of Contents:
         + [`Stack(T) newStack(T)(size_t size)`](#stackt-newstacktsize_t-size)
         + [`int deleteStack(T)(Stack(T) *stack)`](#int-deletestacktstackt-stack)
         + [`int stackPush(T)(Stack(T) *stack, T value)`](#int-stackpushtstackt-stack-t-value)
-        + [`int stackPushGrow(T)(Stack(T) *stack, T value)`](#int-stackpushgrowtstackt-stack-t-value)
         + [`T stackPop(T)(Stack(T) *stack)`](#t-stackpoptstackt-stack)
         + [`T stackPeek(T)(const Stack(T) *stack)`](#t-stackpeektconst-stackt-stack)
         + [`T stackPeekAt(T)(const Stack(T) *stack, size_t index)`](#t-stackpeekattconst-stackt-stack-size_t-index)
@@ -244,36 +243,17 @@ deleteStack(int)(&st);
 
 Pushes an element to stack
 
+Doubles buffer size (capacity),
+if the stack is full
+
 Returns exit code
 + `0` if success
 + non-zero if fail
-    + if the stack is full
+    + if growing failed
     + if stack buffer is `NULL`
 
 ```c
 stackPush(int)(&st, 107);
-```
-
-### `int stackPushGrow(T)(Stack(T) *stack, T value)`
-
-Pushes an element to stack with doubling buffer size (capacity),
-if the stack is full
-
-Returns exit code:
-+ `0` if success
-+ non-zero if fail:
-    + if reallocation failed
-    + if stack buffer is `NULL`
-
-```c
-int i;
-
-for (i = 0; i < 100; i++)
-{
-    stackPushGrow(int)(&st, i+100);
-}
-
-printf("Buffer size is %lu\n", stackBufferSize(int)(&st));
 ```
 
 ### `T stackPop(T)(Stack(T) *stack)`
