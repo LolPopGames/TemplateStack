@@ -18,7 +18,6 @@ main(void)
     stackClear(int)(&stack);
     stackReverse(int)(&stack);
     stackPush(int)(&stack, 0);
-    stackPushGrow(int)(&stack, 0);
     stackPop(int)(&stack);
     stackPeek(int)(&stack);
     stackPeekAt(int)(&stack, 0);

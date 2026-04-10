@@ -16,7 +16,6 @@ main(void)
     stackClear(int)(NULL);
     stackReverse(int)(NULL);
     stackPush(int)(NULL, 0);
-    stackPushGrow(int)(NULL, 0);
     stackPop(int)(NULL);
     stackPeek(int)(NULL);
     stackPeekAt(int)(NULL, 0);
