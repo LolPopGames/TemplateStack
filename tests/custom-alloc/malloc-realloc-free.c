@@ -55,7 +55,7 @@ main(void)
         deleteStack(unsigned)(&stack);
     }
 
-    stackPushGrow(unsigned)(&stack, 400);
+    stackPush(unsigned)(&stack, 400);
     if (stackBufferIsNull(unsigned)(&stack))
         goto memory_alloc_error;
 
@@ -66,7 +66,7 @@ main(void)
     )
     {
         deleteStack(unsigned)(&stack);
-        goto stackPushGrow_error;
+        goto stackPush_error;
     }
 
     temp_stack = stackDup(unsigned)(&stack);
@@ -111,8 +111,8 @@ stackRealloc_error:
     fprintf(stderr, "stackRealloc does not work\n");
     return 1;
 
-stackPushGrow_error:
-    fprintf(stderr, "stackPushGrow does not work\n");
+stackPush_error:
+    fprintf(stderr, "stackPush does not work\n");
     return 1;
 
 stackDup_error:
