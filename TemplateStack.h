@@ -187,7 +187,7 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 
     #define _templatestack_newStack_countArgs_(_1, _2, N, ...) N
     #define _templatestack_newStack_countArgs(...) \
-        _templatestack_newStack_countArgs_(__VA_ARGS__, 2arg, 1arg)
+        _templatestack_newStack_countArgs_(__VA_ARGS__, 2arg, 1arg, 0)
 
     #define _templatestack_concat_(a, b) a##b
     #define _templatestack_concat(a, b) _templatestack_concat_(a, b)
