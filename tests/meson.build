@@ -53,6 +53,14 @@ tests = [
       ['Custom Malloc, Realloc & Free Replacement', 'custom-malloc-realloc-free'],
     ]
   },
+  {
+    'name': 'default-new-size',
+    'cases': [
+      ['Default Definition Of Default New Size', 'default-default'],
+      ['Custom Default New Size', 'custom-default'],
+      ['VA newStack Call', 'va'],
+    ]
+  },
 ]
 
 foreach suite : tests
