@@ -157,21 +157,21 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
  * (e.g. typedef struct some some_t; typedef char * cstr;)
  */
 #define Stack(T) struct _templatestack_##T
-#define stackIsEmpty(T) _templatestack_stackIsEmpty_type_##T
-#define stackIsFull(T) _templatestack_stackIsFull_type_##T
-#define stackBufferIsNull(T) _templatestack_stackBufferIsNull_type_##T
-#define stackSize(T) _templatestack_stackSize_type_##T
-#define stackBufferSize(T) _templatestack_stackBufferSize_type_##T
-#define stackDup(T) _templatestack_stackDup_type_##T
-#define stackRealloc(T) _templatestack_stackRealloc_type_##T
-#define stackClear(T) _templatestack_stackClear_type_##T
-#define stackReverse(T) _templatestack_stackReverse_type_##T
-#define stackPush(T) _templatestack_stackPush_type_##T
-#define stackPop(T) _templatestack_stackPop_type_##T
-#define stackPeek(T) _templatestack_stackPeek_type_##T
-#define stackPeekAt(T) _templatestack_stackPeekAt_type_##T
-#define newStack(T) _templatestack_newStack_type_##T
-#define deleteStack(T) _templatestack_deleteStack_type_##T
+#define stackIsEmpty(T, stack) _templatestack_stackIsEmpty_type_##T(stack)
+#define stackIsFull(T, stack) _templatestack_stackIsFull_type_##T(stack)
+#define stackBufferIsNull(T, stack) _templatestack_stackBufferIsNull_type_##T(stack)
+#define stackSize(T, stack) _templatestack_stackSize_type_##T(stack)
+#define stackBufferSize(T, stack) _templatestack_stackBufferSize_type_##T(stack)
+#define stackDup(T, stack) _templatestack_stackDup_type_##T(stack)
+#define stackRealloc(T, stack, size) _templatestack_stackRealloc_type_##T((stack), (size))
+#define stackClear(T, stack) _templatestack_stackClear_type_##T(stack)
+#define stackReverse(T, stack) _templatestack_stackReverse_type_##T(stack)
+#define stackPush(T, stack, value) _templatestack_stackPush_type_##T((stack), (value))
+#define stackPop(T, stack) _templatestack_stackPop_type_##T(stack)
+#define stackPeek(T, stack) _templatestack_stackPeek_type_##T(stack)
+#define stackPeekAt(T, stack, index) _templatestack_stackPeekAt_type_##T((stack), (index))
+#define newStack(T, size) _templatestack_newStack_type_##T(size)
+#define deleteStack(T, stack) _templatestack_deleteStack_type_##T(stack)
 
 /* ---- Implementation Macros --- */
 
@@ -195,11 +195,11 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* --- stackIsEmpty() --- */
 #define _templatestack_stackIsEmpty_proto(T) \
     int \
-    stackIsEmpty(T)(const Stack(T) *stack);
+    _templatestack_stackIsEmpty_type_##T(const Stack(T) *stack);
 
 #define _templatestack_stackIsEmpty_impl(T) \
     int \
-    stackIsEmpty(T)(const Stack(T) *stack) \
+    _templatestack_stackIsEmpty_type_##T(const Stack(T) *stack) \
     { \
         if (stack == NULL) return 1; \
         return (stack->index == 0) ? 1 : 0; \
@@ -217,11 +217,11 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* --- stackIsFull() --- */
 #define _templatestack_stackIsFull_proto(T) \
     int \
-    stackIsFull(T)(const Stack(T) *stack);
+    _templatestack_stackIsFull_type_##T(const Stack(T) *stack);
 
 #define _templatestack_stackIsFull_impl(T) \
     int \
-    stackIsFull(T)(const Stack(T) *stack) \
+    _templatestack_stackIsFull_type_##T(const Stack(T) *stack) \
     { \
         if (stack == NULL) return 0; \
         return (stack->index >= stack->size) ? 1 : 0; \
@@ -230,11 +230,11 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* --- [static] stackIsFull() --- */
 #define _templatestack_staticstack_stackIsFull_proto(name, T) \
     int \
-    stackIsFull(name)(const Stack(name) *stack);
+    _templatestack_stackIsFull_type_##name(const Stack(name) *stack);
 
 #define _templatestack_staticstack_stackIsFull_impl(name, T) \
     int \
-    stackIsFull(name)(const Stack(name) *stack) \
+    _templatestack_stackIsFull_type_##name(const Stack(name) *stack) \
     { \
         if (stack == NULL) return 0; \
         return (stack->index >= (  \
@@ -245,11 +245,11 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* --- stackBufferIsNull() --- */
 #define _templatestack_stackBufferIsNull_proto(T) \
     int \
-    stackBufferIsNull(T)(const Stack(T) *stack);
+    _templatestack_stackBufferIsNull_type_##T(const Stack(T) *stack);
 
 #define _templatestack_stackBufferIsNull_impl(T) \
     int \
-    stackBufferIsNull(T)(const Stack(T) *stack) \
+    _templatestack_stackBufferIsNull_type_##T(const Stack(T) *stack) \
     { \
         if (stack == NULL) return 1; \
         return (stack->buffer == NULL) ? 1 : 0; \
@@ -258,11 +258,11 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* --- stackSize() --- */
 #define _templatestack_stackSize_proto(T) \
     size_t \
-    stackSize(T)(const Stack(T) *stack);
+    _templatestack_stackSize_type_##T(const Stack(T) *stack);
 
 #define _templatestack_stackSize_impl(T) \
     size_t \
-    stackSize(T)(const Stack(T) *stack) \
+    _templatestack_stackSize_type_##T(const Stack(T) *stack) \
     { \
         if (stack == NULL) return 0; \
         return stack->index; \
@@ -280,11 +280,11 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* --- stackBufferSize() --- */
 #define _templatestack_stackBufferSize_proto(T) \
     size_t \
-    stackBufferSize(T)(const Stack(T) *stack);
+    _templatestack_stackBufferSize_type_##T(const Stack(T) *stack);
 
 #define _templatestack_stackBufferSize_impl(T) \
     size_t \
-    stackBufferSize(T)(const Stack(T) *stack) \
+    _templatestack_stackBufferSize_type_##T(const Stack(T) *stack) \
     { \
         if (stack == NULL) return 0; \
         return stack->size; \
@@ -293,11 +293,11 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* --- stackDup() --- */
 #define _templatestack_stackDup_proto(T) \
     Stack(T) \
-    stackDup(T)(const Stack(T) *stack);
+    _templatestack_stackDup_type_##T(const Stack(T) *stack);
 
 #define _templatestack_stackDup_impl(T) \
     Stack(T) \
-    stackDup(T)(const Stack(T) *stack) \
+    _templatestack_stackDup_type_##T(const Stack(T) *stack) \
     { \
         static const Stack(T) empty = {0}; \
         Stack(T) dup; \
@@ -306,11 +306,11 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
         \
         dup = *stack; \
         \
-        if (!stackBufferIsNull(T)(stack)) \
+        if (!stackBufferIsNull(T, stack)) \
         { \
             dup.buffer = (TEMPLATE_STACK_MALLOC)(dup.size * sizeof(T)); \
             \
-            if (stackBufferIsNull(T)(&dup)) return empty; \
+            if (stackBufferIsNull(T, &dup)) return empty; \
             \
             memcpy(dup.buffer, stack->buffer, dup.index * sizeof(T)); \
         } \
@@ -321,19 +321,19 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* --- stackRealloc() --- */
 #define _templatestack_stackRealloc_proto(T) \
     Stack(T) \
-    stackRealloc(T)(Stack(T) *stack, size_t size);
+    _templatestack_stackRealloc_type_##T(Stack(T) *stack, size_t size);
 
 #ifdef TEMPLATE_STACK_REALLOC
     #define _templatestack_stackRealloc_impl(T) \
         Stack(T) \
-        stackRealloc(T)(Stack(T) *stack, size_t size) \
+        _templatestack_stackRealloc_type_##T(Stack(T) *stack, size_t size) \
         { \
             static const Stack(T) empty = {0}; \
             Stack(T) new_stack = {0}; \
             \
             if (stack == NULL) return empty; \
             \
-            if (stackBufferIsNull(T)(stack)) return *stack; \
+            if (stackBufferIsNull(T, stack)) return *stack; \
             \
             if (size == 0) { \
                 return empty; \
@@ -341,7 +341,7 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
             new_stack.buffer = \
                 (TEMPLATE_STACK_REALLOC)(stack->buffer, size * sizeof(T)); \
             \
-            if (stackBufferIsNull(T)(&new_stack)) return empty; \
+            if (stackBufferIsNull(T, &new_stack)) return empty; \
             \
             new_stack.size = size; \
             if (stack->index >= size) \
@@ -360,21 +360,21 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 #else /* TEMPLATE_STACK_REALLOC */
     #define _templatestack_stackRealloc_impl(T) \
         Stack(T) \
-        stackRealloc(T)(Stack(T) *stack, size_t size) \
+        _templatestack_stackRealloc_type_##T(Stack(T) *stack, size_t size) \
         { \
             static const Stack(T) empty = {0}; \
             Stack(T) new_stack = {0}; \
             \
             if (stack == NULL) return empty; \
             \
-            if (stackBufferIsNull(T)(stack)) return *stack; \
+            if (stackBufferIsNull(T, stack)) return *stack; \
             \
             if (size == 0) { \
                 return empty; \
             } \
             \
             new_stack.buffer = (TEMPLATE_STACK_MALLOC)(size * sizeof(T)); \
-            if (stackBufferIsNull(T)(&new_stack)) return empty; \
+            if (stackBufferIsNull(T, &new_stack)) return empty; \
             \
             new_stack.size = size; \
             if (stack->index >= size) \
@@ -404,11 +404,11 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* --- stackClear() --- */
 #define _templatestack_stackClear_proto(T) \
     int \
-    stackClear(T)(Stack(T) *stack);
+    _templatestack_stackClear_type_##T(Stack(T) *stack);
 
 #define _templatestack_stackClear_impl(T) \
     int \
-    stackClear(T)(Stack(T) *stack) \
+    _templatestack_stackClear_type_##T(Stack(T) *stack) \
     { \
         if (stack == NULL) return 1; \
         \
@@ -420,11 +420,11 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* --- [static] stackClear() --- */
 #define _templatestack_staticstack_stackClear_proto(name, T) \
     int \
-    stackClear(name)(Stack(name) *stack);
+    _templatestack_stackClear_type_##name(Stack(name) *stack);
 
 #define _templatestack_staticstack_stackClear_impl(name, T) \
     int \
-    stackClear(name)(Stack(name) *stack) \
+    _templatestack_stackClear_type_##name(Stack(name) *stack) \
     { \
         if (stack == NULL) return 1; \
         \
@@ -436,17 +436,17 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* --- stackReverse() --- */
 #define _templatestack_stackReverse_proto(T) \
     int \
-    stackReverse(T)(Stack(T) *stack);
+    _templatestack_stackReverse_type_##T(Stack(T) *stack);
 
 #define _templatestack_stackReverse_impl(T) \
     int \
-    stackReverse(T)(Stack(T) *stack) \
+    _templatestack_stackReverse_type_##T(Stack(T) *stack) \
     { \
         size_t i; \
         \
         if ( \
             stack == NULL || \
-            stackBufferIsNull(T)(stack) \
+            stackBufferIsNull(T, stack) \
         ) return 1; \
         \
         for (i=0; i < (stack->index / 2); i++) \
@@ -462,11 +462,11 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* --- [static] stackReverse() --- */
 #define _templatestack_staticstack_stackReverse_proto(name, T) \
     int \
-    stackReverse(name)(Stack(name) *stack);
+    _templatestack_stackReverse_type_##name(Stack(name) *stack);
 
 #define _templatestack_staticstack_stackReverse_impl(name, T) \
     int \
-    stackReverse(name)(Stack(name) *stack) \
+    _templatestack_stackReverse_type_##name(Stack(name) *stack) \
     { \
         int i; \
         \
@@ -485,21 +485,21 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* --- stackPush() --- */
 #define _templatestack_stackPush_proto(T) \
     int \
-    stackPush(T)(Stack(T) *stack, T value);
+    _templatestack_stackPush_type_##T(Stack(T) *stack, T value);
 
 #define _templatestack_stackPush_impl(T) \
     int \
-    stackPush(T)(Stack(T) *stack, T value) \
+    _templatestack_stackPush_type_##T(Stack(T) *stack, T value) \
     { \
         if ( \
             stack == NULL || \
-            stackBufferIsNull(T)(stack) \
+            stackBufferIsNull(T, stack) \
         ) return 1; \
         \
-        if (stackIsFull(T)(stack)) \
+        if (stackIsFull(T, stack)) \
         { \
-            Stack(T) new_stack = stackRealloc(T)(stack, stack->size * 2); \
-            if (stackBufferIsNull(T)(&new_stack)) return 1; \
+            Stack(T) new_stack = stackRealloc(T, stack, stack->size * 2); \
+            if (stackBufferIsNull(T, &new_stack)) return 1; \
             \
             *stack = new_stack; \
         } \
@@ -512,15 +512,15 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* --- [static] stackPush() --- */
 #define _templatestack_staticstack_stackPush_proto(name, T) \
     int \
-    stackPush(name)(Stack(name) *stack, T value);
+    _templatestack_stackPush_type_##name(Stack(name) *stack, T value);
 
 #define _templatestack_staticstack_stackPush_impl(name, T) \
     int \
-    stackPush(name)(Stack(name) *stack, T value) \
+    _templatestack_stackPush_type_##name(Stack(name) *stack, T value) \
     { \
         if ( \
             stack == NULL || \
-            stackIsFull(name)(stack) \
+            stackIsFull(name, stack) \
         ) return 1; \
         \
         stack->buffer[stack->index++] = value; \
@@ -531,19 +531,19 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* --- stackPop() --- */
 #define _templatestack_stackPop_proto(T) \
     T \
-    stackPop(T)(Stack(T) *stack);
+    _templatestack_stackPop_type_##T(Stack(T) *stack);
 
 #define _templatestack_stackPop_impl(T) \
     T \
-    stackPop(T)(Stack(T) *stack) \
+    _templatestack_stackPop_type_##T(Stack(T) *stack) \
     { \
         static const T empty = {0}; \
         T result; \
         \
         if ( \
             stack == NULL || \
-            stackBufferIsNull(T)(stack) || \
-            stackIsEmpty(T)(stack) \
+            stackBufferIsNull(T, stack) || \
+            stackIsEmpty(T, stack) \
         ) return empty; \
         \
         result = stack->buffer[--(stack->index)]; \
@@ -554,18 +554,18 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* --- [static] stackPop() --- */
 #define _templatestack_staticstack_stackPop_proto(name, T) \
     T \
-    stackPop(name)(Stack(name) *stack);
+    _templatestack_stackPop_type_##name(Stack(name) *stack);
 
 #define _templatestack_staticstack_stackPop_impl(name, T) \
     T \
-    stackPop(name)(Stack(name) *stack) \
+    _templatestack_stackPop_type_##name(Stack(name) *stack) \
     { \
         static const T empty = {0}; \
         T result; \
         \
         if ( \
             stack == NULL || \
-            stackIsEmpty(name)(stack) \
+            stackIsEmpty(name, stack) \
         ) return empty; \
         \
         result = stack->buffer[--(stack->index)]; \
@@ -576,18 +576,18 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* --- stackPeek() --- */
 #define _templatestack_stackPeek_proto(T) \
     T \
-    stackPeek(T)(const Stack(T) *stack);
+    _templatestack_stackPeek_type_##T(const Stack(T) *stack);
 
 #define _templatestack_stackPeek_impl(T) \
     T \
-    stackPeek(T)(const Stack(T) *stack) \
+    _templatestack_stackPeek_type_##T(const Stack(T) *stack) \
     { \
         static const T empty = {0}; \
         \
         if ( \
             stack == NULL || \
-            stackBufferIsNull(T)(stack) || \
-            stackIsEmpty(T)(stack) \
+            stackBufferIsNull(T, stack) || \
+            stackIsEmpty(T, stack) \
         ) return empty; \
         \
         return stack->buffer[stack->index-1]; \
@@ -596,17 +596,17 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* --- [static] stackPeek() --- */
 #define _templatestack_staticstack_stackPeek_proto(name, T) \
     T \
-    stackPeek(name)(const Stack(name) *stack);
+    _templatestack_stackPeek_type_##name(const Stack(name) *stack);
 
 #define _templatestack_staticstack_stackPeek_impl(name, T) \
     T \
-    stackPeek(name)(const Stack(name) *stack) \
+    _templatestack_stackPeek_type_##name(const Stack(name) *stack) \
     { \
         static const T empty = {0}; \
         \
         if ( \
             stack == NULL || \
-            stackIsEmpty(name)(stack) \
+            stackIsEmpty(name, stack) \
         ) return empty; \
         \
         return stack->buffer[stack->index-1]; \
@@ -615,18 +615,18 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* --- stackPeekAt() --- */
 #define _templatestack_stackPeekAt_proto(T) \
     T \
-    stackPeekAt(T)(const Stack(T) *stack, size_t index);
+    _templatestack_stackPeekAt_type_##T(const Stack(T) *stack, size_t index);
 
 #define _templatestack_stackPeekAt_impl(T) \
     T \
-    stackPeekAt(T)(const Stack(T) *stack, size_t index) \
+    _templatestack_stackPeekAt_type_##T(const Stack(T) *stack, size_t index) \
     { \
         static const T empty = {0}; \
         \
         if ( \
             stack == NULL || \
-            stackBufferIsNull(T)(stack) || \
-            stackIsEmpty(T)(stack) || \
+            stackBufferIsNull(T, stack) || \
+            stackIsEmpty(T, stack) || \
             index >= stack->index \
         ) return empty; \
         \
@@ -636,17 +636,17 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* --- [static] stackPeekAt() --- */
 #define _templatestack_staticstack_stackPeekAt_proto(name, T) \
     T \
-    stackPeekAt(name)(const Stack(name) *stack, size_t index);
+    _templatestack_stackPeekAt_type_##name(const Stack(name) *stack, size_t index);
 
 #define _templatestack_staticstack_stackPeekAt_impl(name, T) \
     T \
-    stackPeekAt(name)(const Stack(name) *stack, size_t index) \
+    _templatestack_stackPeekAt_type_##name(const Stack(name) *stack, size_t index) \
     { \
         static const T empty = {0}; \
         \
         if ( \
             stack == NULL || \
-            stackIsEmpty(name)(stack) || \
+            stackIsEmpty(name, stack) || \
             index >= stack->index \
         ) return empty; \
         \
@@ -656,18 +656,18 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* --- newStack() --- */
 #define _templatestack_newStack_proto(T) \
     Stack(T) \
-    newStack(T)(size_t size);
+    _templatestack_newStack_type_##T(size_t size);
 
 #define _templatestack_newStack_impl(T) \
     Stack(T) \
-    newStack(T)(size_t size) \
+    _templatestack_newStack_type_##T(size_t size) \
     { \
         Stack(T) stack = {0}; \
         \
         if (size == 0) return stack; \
         \
         stack.buffer = (TEMPLATE_STACK_MALLOC)(size * sizeof(T)); \
-        if (stackBufferIsNull(T)(&stack)) return stack; \
+        if (stackBufferIsNull(T, &stack)) return stack; \
         \
         stack.size = size; \
         return stack; \
@@ -676,15 +676,15 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* --- deleteStack() --- */
 #define _templatestack_deleteStack_proto(T) \
     int \
-    deleteStack(T)(Stack(T) *stack);
+    _templatestack_deleteStack_type_##T(Stack(T) *stack);
 
 #define _templatestack_deleteStack_impl(T) \
     int \
-    deleteStack(T)(Stack(T) *stack) \
+    _templatestack_deleteStack_type_##T(Stack(T) *stack) \
     { \
         if ( \
             stack == NULL || \
-            stackBufferIsNull(T)(stack) \
+            stackBufferIsNull(T, stack) \
         ) return 1; \
         \
         (TEMPLATE_STACK_FREE)(stack->buffer); \

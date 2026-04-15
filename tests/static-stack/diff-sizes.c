@@ -14,16 +14,16 @@ main(void)
 
     for (i=0; i<5; i++)
     {
-        stackPush(INT5)(&st5, i*10);
-        stackPush(INT10)(&st10, i*10);
+        stackPush(INT5, &st5, i*10);
+        stackPush(INT10, &st10, i*10);
     }
 
-    if (!stackIsFull(INT5)(&st5) || stackIsFull(INT10)(&st10))
+    if (!stackIsFull(INT5, &st5) || stackIsFull(INT10, &st10))
         return 1;
 
     st10_copy = st10;
 
-    if (stackIsFull(INT10)(&st10_copy))
+    if (stackIsFull(INT10, &st10_copy))
         return 1;
 
     return 0;

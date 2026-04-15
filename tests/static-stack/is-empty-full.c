@@ -9,24 +9,24 @@ main(void)
 {
     Stack(LONG3) stack = {0};
 
-    if (!stackIsEmpty(LONG3)(&stack))
+    if (!stackIsEmpty(LONG3, &stack))
         goto stackIsEmpty_error;
-    if (stackIsFull(LONG3)(&stack))
+    if (stackIsFull(LONG3, &stack))
         goto stackIsFull_error;
 
-    stackPush(LONG3)(&stack, 703888L);
-    stackPush(LONG3)(&stack, 333444L);
+    stackPush(LONG3, &stack, 703888L);
+    stackPush(LONG3, &stack, 333444L);
 
-    if (stackIsEmpty(LONG3)(&stack))
+    if (stackIsEmpty(LONG3, &stack))
         goto stackIsEmpty_error;
-    if (stackIsFull(LONG3)(&stack))
+    if (stackIsFull(LONG3, &stack))
         goto stackIsFull_error;
 
-    stackPush(LONG3)(&stack, 888333L);
+    stackPush(LONG3, &stack, 888333L);
 
-    if (stackIsEmpty(LONG3)(&stack))
+    if (stackIsEmpty(LONG3, &stack))
         goto stackIsEmpty_error;
-    if (!stackIsFull(LONG3)(&stack))
+    if (!stackIsFull(LONG3, &stack))
         goto stackIsFull_error;
 
     return 0;

@@ -11,22 +11,22 @@ main(void)
 {
     int i, stack_buffer_is_null, temp_buffer_is_null;
     unsigned j;
-    Stack(unsigned) stack = newStack(unsigned)(5), temp_stack;
-    if (stackBufferIsNull(unsigned)(&stack))
+    Stack(unsigned) stack = newStack(unsigned, 5), temp_stack;
+    if (stackBufferIsNull(unsigned, &stack))
         goto memory_alloc_error;
 
     for (i=1; i<=5; i++)
-        stackPush(unsigned)(&stack, 10*i);
+        stackPush(unsigned, &stack, 10*i);
 
-    temp_stack = stackRealloc(unsigned)(&stack, 10);
+    temp_stack = stackRealloc(unsigned, &stack, 10);
 
-    stack_buffer_is_null = stackBufferIsNull(unsigned)(&stack);
-     temp_buffer_is_null = stackBufferIsNull(unsigned)(&temp_stack);
+    stack_buffer_is_null = stackBufferIsNull(unsigned, &stack);
+     temp_buffer_is_null = stackBufferIsNull(unsigned, &temp_stack);
 
     /* if reallocation failed */
     if (temp_buffer_is_null && !stack_buffer_is_null)
     {
-        deleteStack(unsigned)(&stack);
+        deleteStack(unsigned, &stack);
         goto memory_alloc_error;
     }
     /* if invalid stackRealloc */
@@ -36,49 +36,49 @@ main(void)
     stack = temp_stack;
 
     if (
-        stackPeek(unsigned)(&stack) != 50 ||
-        stackSize(unsigned)(&stack) != 5 ||
-        stackBufferSize(unsigned)(&stack) != 10
+        stackPeek(unsigned, &stack) != 50 ||
+        stackSize(unsigned, &stack) != 5 ||
+        stackBufferSize(unsigned, &stack) != 10
     )
     {
-        deleteStack(unsigned)(&stack);
+        deleteStack(unsigned, &stack);
         goto stackRealloc_error;
     }
 
-    stack = stackRealloc(unsigned)(&stack, 3);
+    stack = stackRealloc(unsigned, &stack, 3);
     if (
-        stackPeek(unsigned)(&stack) != 30 ||
-        stackSize(unsigned)(&stack) != 3 ||
-        stackBufferSize(unsigned)(&stack) != 3
+        stackPeek(unsigned, &stack) != 30 ||
+        stackSize(unsigned, &stack) != 3 ||
+        stackBufferSize(unsigned, &stack) != 3
     )
     {
-        deleteStack(unsigned)(&stack);
+        deleteStack(unsigned, &stack);
     }
 
-    stackPush(unsigned)(&stack, 400);
-    if (stackBufferIsNull(unsigned)(&stack))
+    stackPush(unsigned, &stack, 400);
+    if (stackBufferIsNull(unsigned, &stack))
         goto memory_alloc_error;
 
     if (
-        stackPeek(unsigned)(&stack) != 400 ||
-        stackSize(unsigned)(&stack) != 4 ||
-        stackBufferSize(unsigned)(&stack) != 6
+        stackPeek(unsigned, &stack) != 400 ||
+        stackSize(unsigned, &stack) != 4 ||
+        stackBufferSize(unsigned, &stack) != 6
     )
     {
-        deleteStack(unsigned)(&stack);
+        deleteStack(unsigned, &stack);
         goto stackPush_error;
     }
 
-    temp_stack = stackDup(unsigned)(&stack);
-    if (stackBufferIsNull(unsigned)(&temp_stack))
+    temp_stack = stackDup(unsigned, &stack);
+    if (stackBufferIsNull(unsigned, &temp_stack))
     {
-        deleteStack(unsigned)(&stack);
+        deleteStack(unsigned, &stack);
         goto memory_alloc_error;
     }
 
-    if (stackBufferIsNull(unsigned)(&stack))
+    if (stackBufferIsNull(unsigned, &stack))
     {
-        deleteStack(unsigned)(&temp_stack);
+        deleteStack(unsigned, &temp_stack);
         goto stackDup_error;
     }
 
@@ -86,24 +86,24 @@ main(void)
     {
         if (j != 4)
         {
-            if (stackPeekAt(unsigned)(&temp_stack, i) != j*10)
+            if (stackPeekAt(unsigned, &temp_stack, i) != j*10)
             {
-                deleteStack(unsigned)(&temp_stack);
-                deleteStack(unsigned)(&stack);
+                deleteStack(unsigned, &temp_stack);
+                deleteStack(unsigned, &stack);
                 goto stackDup_error;
             }
         }
         /* when j==4 */
-        else if (stackPeekAt(unsigned)(&temp_stack, i) != j*100)
+        else if (stackPeekAt(unsigned, &temp_stack, i) != j*100)
         {
-            deleteStack(unsigned)(&temp_stack);
-            deleteStack(unsigned)(&stack);
+            deleteStack(unsigned, &temp_stack);
+            deleteStack(unsigned, &stack);
             goto stackDup_error;
         }
     }
 
-    deleteStack(unsigned)(&temp_stack);
-    deleteStack(unsigned)(&stack);
+    deleteStack(unsigned, &temp_stack);
+    deleteStack(unsigned, &stack);
 
     return 0;
 
