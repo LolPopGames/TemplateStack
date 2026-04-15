@@ -20,21 +20,21 @@ Table Of Contents:
         + [Version Information](#version-information)
         + [How To Use API](#how-to-use-api)
         + [`Stack(T)`](#stackt)
-        + [`Stack(T) newStack(T)(size_t size)`](#stackt-newstacktsize_t-size)
-        + [`int deleteStack(T)(Stack(T) *stack)`](#int-deletestacktstackt-stack)
-        + [`int stackPush(T)(Stack(T) *stack, T value)`](#int-stackpushtstackt-stack-t-value)
-        + [`T stackPop(T)(Stack(T) *stack)`](#t-stackpoptstackt-stack)
-        + [`T stackPeek(T)(const Stack(T) *stack)`](#t-stackpeektconst-stackt-stack)
-        + [`T stackPeekAt(T)(const Stack(T) *stack, size_t index)`](#t-stackpeekattconst-stackt-stack-size_t-index)
-        + [`int stackClear(T)(Stack(T) *stack)`](#int-stackcleartstackt-stack)
-        + [`int stackReverse(T)(Stack(T) *stack)`](#int-stackreversetstackt-stack)
-        + [`int stackIsEmpty(T)(const Stack(T) *stack)`](#int-stackisemptytconst-stackt-stack)
-        + [`int stackIsFull(T)(const Stack(T) *stack)`](#int-stackisfulltconst-stackt-stack)
-        + [`int stackBufferIsNull(T)(const Stack(T) *stack)`](#int-stackbufferisnulltconst-stackt-stack)
-        + [`size_t stackSize(T)(const Stack(T) *stack)`](#size_t-stacksizetconst-stackt-stack)
-        + [`size_t stackBufferSize(T)(const Stack(T) *stack)`](#size_t-stackbuffersizetconst-stackt-stack)
-        + [`Stack(T) stackDup(T)(const Stack(T) *stack)`](#stackt-stackduptconst-stackt-stack)
-        + [`Stack(T) stackRealloc(T)(const Stack(T) *stack, size_t size)`](#stackt-stackrealloctconst-stackt-stack-size_t-size)
+        + [`Stack(T) newStack(T, size_t size)`](#stackt-newstackt-size_t-size)
+        + [`int deleteStack(T, Stack(T) *stack)`](#int-deletestackt-stackt-stack)
+        + [`int stackPush(T, Stack(T) *stack, T value)`](#int-stackpusht-stackt-stack-t-value)
+        + [`T stackPop(T, Stack(T) *stack)`](#t-stackpopt-stackt-stack)
+        + [`T stackPeek(T, const Stack(T) *stack)`](#t-stackpeekt-const-stackt-stack)
+        + [`T stackPeekAt(T const Stack(T) *stack, size_t index)`](#t-stackpeekatt-const-stackt-stack-size_t-index)
+        + [`int stackClear(T, Stack(T) *stack)`](#int-stackcleart-stackt-stack)
+        + [`int stackReverse(T, Stack(T) *stack)`](#int-stackreverset-stackt-stack)
+        + [`int stackIsEmpty(T, const Stack(T) *stack)`](#int-stackisemptyt-const-stackt-stack)
+        + [`int stackIsFull(T, const Stack(T) *stack)`](#int-stackisfullt-const-stackt-stack)
+        + [`int stackBufferIsNull(T, const Stack(T) *stack)`](#int-stackbufferisnullt-const-stackt-stack)
+        + [`size_t stackSize(T, const Stack(T) *stack)`](#size_t-stacksizet-const-stackt-stack)
+        + [`size_t stackBufferSize(T, const Stack(T) *stack)`](#size_t-stackbuffersizet-const-stackt-stack)
+        + [`Stack(T) stackDup(T, const Stack(T) *stack)`](#stackt-stackdupt-const-stackt-stack)
+        + [`Stack(T) stackRealloc(T, const Stack(T) *stack, size_t size)`](#stackt-stackrealloct-const-stackt-stack-size_t-size)
         + [Custom Allocators](#custom-allocators)
         + [Static Stack](#static-stack)
             + [Adding A Type](#adding-a-type-1)
@@ -196,9 +196,6 @@ Or use `TEMPLATE_STACK_ATLEAST` to check the version more conveniently:
 
 Use the stack type and functions by replacing `T` with your own type
 
-The syntax is similar to C++ templates, but uses `()` instead of `<>`
-and it always requires to add your `T` type
-
 All functions that take a stack as a parameter require a _pointer_ to the stack
 
 Every function provides a code-block example after it's explanation
@@ -211,21 +208,21 @@ Stack type
 Stack(int) st;
 ```
 
-### `Stack(T) newStack(T)(size_t size)`
+### `Stack(T) newStack(T, size_t size)`
 
 Creates a new stack with the specified count of elements
 
-Don't forget to delete this stack with [`deleteStack(T)`](#int-deletestacktstackt-stack)
+Don't forget to delete this stack with [`deleteStack()`](#int-deletestacktstackt-stack)
 
 Returns a stack with `NULL` buffer if allocation failed,
-check this with [`stackBufferIsNull(T)`](#int-stackbufferisnulltconst-stackt-stack)
+check this with [`stackBufferIsNull()`](#int-stackbufferisnulltconst-stackt-stack)
 
 ```c
 /* A stack with 10 int elements */
-Stack(int) st = newStack(int)(10);
+Stack(int) st = newStack(int, 10);
 ```
 
-### `int deleteStack(T)(Stack(T) *stack)`
+### `int deleteStack(T, Stack(T) *stack)`
 
 Deletes specified stack
 
@@ -236,10 +233,10 @@ Returns exit code:
     + if stack buffer is `NULL`
 
 ```c
-deleteStack(int)(&st);
+deleteStack(int, &st);
 ```
 
-### `int stackPush(T)(Stack(T) *stack, T value)`
+### `int stackPush(T, Stack(T) *stack, T value)`
 
 Pushes an element to stack
 
@@ -253,10 +250,10 @@ Returns exit code
     + if stack buffer is `NULL`
 
 ```c
-stackPush(int)(&st, 107);
+stackPush(int, &st, 107);
 ```
 
-### `T stackPop(T)(Stack(T) *stack)`
+### `T stackPop(T, Stack(T) *stack)`
 
 Pops top element from stack and returns it
 
@@ -265,14 +262,14 @@ Returns zero-value if:
 + stack buffer is `NULL`
 
 It is recommended to check
-for empty stack (with [`stackIsEmpty(T)`](#int-stackisemptytconst-stackt-stack)) first,
+for empty stack (with [`stackIsEmpty()`](#int-stackisemptytconst-stackt-stack)) first,
 because a zero-value element cannot be distinguished from an empty stack
 
 ```c
-int val = stackPop(int)(&st);
+int val = stackPop(int, &st);
 ```
 
-### `T stackPeek(T)(const Stack(T) *stack)`
+### `T stackPeek(T, const Stack(T) *stack)`
 
 Gives top element from the stack (without removing it)
 
@@ -281,14 +278,14 @@ Returns zero-value if:
 + stack buffer is `NULL`
 
 It is recommended to check
-for empty stack (with [`stackIsEmpty(T)`](#int-stackisemptytconst-stackt-stack)) first,
+for empty stack (with [`stackIsEmpty()`](#int-stackisemptytconst-stackt-stack)) first,
 because a zero-value element cannot be distinguished from an empty stack
 
 ```c
-int val = stackPeek(int)(&st);
+int val = stackPeek(int, &st);
 ```
 
-### `T stackPeekAt(T)(const Stack(T) *stack, size_t index)`
+### `T stackPeekAt(T const Stack(T) *stack, size_t index)`
 
 Returns the element `index` positions from the top of the stack
 without removing it
@@ -304,15 +301,15 @@ Returns zero-value if:
 + `index` is out of range
 
 It is recommended to check for enough elements (using
-`index` ≥ [`stackSize(T)`](#size_t-stacksizetconst-stackt-stack))
+`index` ≥ [`stackSize()`](#size_t-stacksizetconst-stackt-stack))
 first, because a zero-value element cannot be distinguished from an error
 
 ```c
 /* pre-top element */
-int val = stackPeekAt(int)(&st, 1);
+int val = stackPeekAt(int, &st, 1);
 ```
 
-### `int stackClear(T)(Stack(T) *stack)`
+### `int stackClear(T, Stack(T) *stack)`
 
 Removes all elements from the stack without freeing its buffer
 
@@ -322,14 +319,14 @@ Returns exit code:
     + if the stack is `NULL`
 
 ```c
-stackPush(int)(&st, 10);
-stackPush(int)(&st, 20);
-stackClear(int)(&st);
+stackPush(int, &st, 10);
+stackPush(int, &st, 20);
+stackClear(int, &st);
 
 /* the stack is empty now */
 ```
 
-### `int stackReverse(T)(Stack(T) *stack)`
+### `int stackReverse(T, Stack(T) *stack)`
 
 Reverses the stack upside down
 
@@ -339,11 +336,11 @@ Returns exit code:
     + if stack buffer is `NULL`
 
 ```c
-stackPush(int)(&st, 10);
-stackPush(int)(&st, 20);
-stackPush(int)(&st, 30);
+stackPush(int, &st, 10);
+stackPush(int, &st, 20);
+stackPush(int, &st, 30);
 
-stackReverse(int)(&st);
+stackReverse(int, &st);
 
 /* the stack looks now as:
  * >> [10] <<
@@ -352,38 +349,38 @@ stackReverse(int)(&st);
  */
 
 /* 10, 20, 30 */
-printf("%d, ", stackPop(int)(&st));
-printf("%d, ", stackPop(int)(&st));
-printf("%d\n",   stackPop(int)(&st));
+printf("%d, ", stackPop(int, &st));
+printf("%d, ", stackPop(int, &st));
+printf("%d\n",   stackPop(int, &st));
 ```
 
-### `int stackIsEmpty(T)(const Stack(T) *stack)`
+### `int stackIsEmpty(T, const Stack(T) *stack)`
 
 Checks if the stack is empty (no elements are now in the stack)
 
 Returns a boolean value `0` (`false`) or `1` (`true`)
 
 ```c
-if (stackIsEmpty(int)(&st))
+if (stackIsEmpty(int, &st))
 {
     printf("Stack is empty\n");
 }
 ```
 
-### `int stackIsFull(T)(const Stack(T) *stack)`
+### `int stackIsFull(T, const Stack(T) *stack)`
 
 Checks if the stack is full
 
 Returns a boolean value `0` (`false`) or `1` (`true`)
 
 ```c
-if (stackIsFull(int)(&st))
+if (stackIsFull(int, &st))
 {
     printf("Stack is full\n");
 }
 ```
 
-### `int stackBufferIsNull(T)(const Stack(T) *stack)`
+### `int stackBufferIsNull(T, const Stack(T) *stack)`
 
 Checks if the stack buffer is null
 (e.g. because memory allocation was failed)
@@ -391,37 +388,37 @@ Checks if the stack buffer is null
 Returns a boolean value `0` (`false`) or `1` (`true`)
 
 ```c
-if (stackBufferIsNull(int)(&st))
+if (stackBufferIsNull(int, &st))
 {
     printf("Stack is invalid\n");
 }
 ```
 
-### `size_t stackSize(T)(const Stack(T) *stack)`
+### `size_t stackSize(T, const Stack(T) *stack)`
 
 Returns number of elements currently in the stack
 
 ```c
-printf("Stack contains %lu elements right now\n", stackSize(int)(&st));
+printf("Stack contains %lu elements right now\n", stackSize(int, &st));
 ```
 
-### `size_t stackBufferSize(T)(const Stack(T) *stack)`
+### `size_t stackBufferSize(T, const Stack(T) *stack)`
 
 Returns stack buffer size (count of allocated `T` elements, capacity)
 
 ```c
-printf("Program allocated %lu elements", stackBufferSize(int)(&st));
+printf("Program allocated %lu elements", stackBufferSize(int, &st));
 ```
 
-### `Stack(T) stackDup(T)(const Stack(T) *stack)`
+### `Stack(T) stackDup(T, const Stack(T) *stack)`
 
 Returns a copy of the stack, or `NULL` buffer if allocation failed
 
 ```c
-Stack(int) st_copy = stackDup(int)(&st);
+Stack(int) st_copy = stackDup(int, &st);
 ```
 
-### `Stack(T) stackRealloc(T)(const Stack(T) *stack, size_t size)`
+### `Stack(T) stackRealloc(T, const Stack(T) *stack, size_t size)`
 
 Reallocates stack with new size (count of `T` elements)
 
@@ -440,7 +437,7 @@ and **does not free the original stack**
 > + **Success**: the original stack is _always deleted_, and the new stack is returned
 
 ```c
-Stack(int) st_new = stackRealloc(int)(&st, 20);
+Stack(int) st_new = stackRealloc(int, &st, 20);
 ```
 
 ### Custom Allocators
@@ -462,7 +459,7 @@ To change them, define the following macros **before including the header**:
 #define TEMPLATE_STACK_REALLOC my_realloc
 ```
 
-The behavior of [`stackRealloc(T)`](#stackt-stackrealloctconst-stackt-stack-size_t-size)
+The behavior of [`stackRealloc()`](#stackt-stackrealloctconst-stackt-stack-size_t-size)
 can be modified by providing your own
 
 See the [**note**](#stackt-stackrealloctconst-stackt-stack-size_t-size)
@@ -522,13 +519,13 @@ except for functions related to memory allocation
 
 ##### Not available:
 
-+ [`newStack(T)`](#stackt-newstacktsize_t-size) — no dynamic allocation
-+ [`deleteStack(T)`](#int-deletestacktstackt-stack) — no manual deallocation required
-+ [`stackDup(T)`](#stackt-stackduptconst-stackt-stack) — can be done via assignment
-+ [`stackBufferSize(T)`](#size_t-stackbuffersizetconst-stackt-stack) — known at compile time
-+ [`stackBufferIsNull(T)`](#int-stackbufferisnulltconst-stackt-stack) — static buffer cannot be `NULL`
-+ [`stackRealloc(T)`](#stackt-stackrealloctconst-stackt-stack-size_t-size) — no reallocation
-+ [`stackPushGrow(T)`](#int-stackpushgrowtstackt-stack-t-value) — no dynamic growth
++ [`newStack()`](#stackt-newstacktsize_t-size) — no dynamic allocation
++ [`deleteStack()`](#int-deletestacktstackt-stack) — no manual deallocation required
++ [`stackDup()`](#stackt-stackduptconst-stackt-stack) — can be done via assignment
++ [`stackBufferSize()`](#size_t-stackbuffersizetconst-stackt-stack) — known at compile time
++ [`stackBufferIsNull()`](#int-stackbufferisnulltconst-stackt-stack) — static buffer cannot be `NULL`
++ [`stackRealloc()`](#stackt-stackrealloctconst-stackt-stack-size_t-size) — no reallocation
++ [`stackPushGrow()`](#int-stackpushgrowtstackt-stack-t-value) — no dynamic growth
 
 #### Stack Creation
 
@@ -542,7 +539,7 @@ No deletion is required — memory is managed automatically
 
 #### Copying
 
-There is no [`stackDup(T)`](#stackt-stackduptconst-stackt-stack) function,
+There is no [`stackDup()`](#stackt-stackduptconst-stackt-stack) function,
 because copying can be done directly:
 
 ```c
@@ -552,15 +549,15 @@ Stack(INT10) st_copy = st;
 #### Supported Functions
 
 The following functions are available:
-+ [`stackPush(T)`](#int-stackpushtstackt-stack-t-value)
-+ [`stackPop(T)`](#t-stackpoptstackt-stack)
-+ [`stackPeek(T)`](#t-stackpeektconst-stackt-stack)
-+ [`stackPeekAt(T)`](#t-stackpeekattconst-stackt-stack-size_t-index)
-+ [`stackClear(T)`](#int-stackcleartstackt-stack)
-+ [`stackReverse(T)`](#int-stackreversetstackt-stack)
-+ [`stackIsEmpty(T)`](#int-stackisemptytconst-stackt-stack)
-+ [`stackIsFull(T)`](#int-stackisfulltconst-stackt-stack)
-+ [`stackSize(T)`](#size_t-stacksizetconst-stackt-stack)
++ [`stackPush()`](#int-stackpushtstackt-stack-t-value)
++ [`stackPop()`](#t-stackpoptstackt-stack)
++ [`stackPeek()`](#t-stackpeektconst-stackt-stack)
++ [`stackPeekAt()`](#t-stackpeekattconst-stackt-stack-size_t-index)
++ [`stackClear()`](#int-stackcleartstackt-stack)
++ [`stackReverse()`](#int-stackreversetstackt-stack)
++ [`stackIsEmpty()`](#int-stackisemptytconst-stackt-stack)
++ [`stackIsFull()`](#int-stackisfulltconst-stackt-stack)
++ [`stackSize()`](#size_t-stacksizetconst-stackt-stack)
 
 ## Tests
 
