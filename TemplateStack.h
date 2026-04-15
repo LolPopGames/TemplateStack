@@ -178,8 +178,27 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 #define stackPop(T, stack) _templatestack_stackPop_type_##T(stack)
 #define stackPeek(T, stack) _templatestack_stackPeek_type_##T(stack)
 #define stackPeekAt(T, stack, index) _templatestack_stackPeekAt_type_##T((stack), (index))
-#define newStack(T, size) _templatestack_newStack_type_##T(size)
 #define deleteStack(T, stack) _templatestack_deleteStack_type_##T(stack)
+
+/* only C99+ supports VA macros */
+#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
+    #define _templatestack_newStack_1arg(T) _templatestack_newStack_type_##T(0)
+    #define _templatestack_newStack_2arg(T, size) _templatestack_newStack_type_##T(size)
+
+    #define _templatestack_newStack_countArgs_(_1, _2, N, ...) N
+    #define _templatestack_newStack_countArgs(...) \
+        _templatestack_newStack_countArgs_(__VA_ARGS__, 2arg, 1arg)
+
+    #define _templatestack_concat_(a, b) a##b
+    #define _templatestack_concat(a, b) _templatestack_concat_(a, b)
+
+    #define newStack(...) _templatestack_concat( \
+        _templatestack_newStack_, \
+        _templatestack_newStack_countArgs(__VA_ARGS__) \
+    )(__VA_ARGS__)
+#else
+    #define newStack(T, size) _templatestack_newStack_type_##T(size)
+#endif
 
 /* ---- Implementation Macros --- */
 
