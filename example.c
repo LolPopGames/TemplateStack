@@ -44,8 +44,8 @@ main(void)
         printf("Invalid stack size, exiting program...\n");
         return 0;
     }
-    stack = newStack(int)(start_size);
-    if (stackBufferIsNull(int)(&stack))
+    stack = newStack(int, start_size);
+    if (stackBufferIsNull(int, &stack))
     {
         printf("Failed memory allocation, exiting program...\n");
         return 0;
@@ -64,16 +64,16 @@ main(void)
         /* --- Searching Command --- */
         if (strncmp(buffer, "push", 4) == 0)
         {
-            int value = atoi(buffer+8);
-            size_t buf_size = stackBufferSize(int)(&stack);
+            int value = atoi(buffer+4);
+            size_t buf_size = stackBufferSize(int, &stack);
 
             /* 0 - success, other codes - fail */
-            if (stackPush(int)(&stack, value) != 0)
+            if (stackPush(int, &stack, value) != 0)
             {
                 printf("Push failed\n");
             }
 
-            if (stackBufferSize(int)(&stack) != buf_size)
+            if (stackBufferSize(int, &stack) != buf_size)
             {
                 printf("Doubling stack buffer size...\n");
             }
@@ -82,13 +82,13 @@ main(void)
 
         if (strncmp(buffer, "pop", 3) == 0)
         {
-            if (stackIsEmpty(int)(&stack))
+            if (stackIsEmpty(int, &stack))
             {
                 printf("Stack is empty\n");
                 continue;
             }
 
-            printf("%d\n", stackPop(int)(&stack));
+            printf("%d\n", stackPop(int, &stack));
             continue;
         }
 
@@ -98,13 +98,13 @@ main(void)
             strncmp(buffer, "top", 3) == 0
         )
         {
-            if (stackIsEmpty(int)(&stack))
+            if (stackIsEmpty(int, &stack))
             {
                 printf("Stack is empty\n");
                 continue;
             }
 
-            printf("%d\n", stackPeek(int)(&stack));
+            printf("%d\n", stackPeek(int, &stack));
             continue;
         }
 
@@ -120,14 +120,14 @@ main(void)
                 continue;
             }
 
-            new_stack = stackRealloc(int)(&stack, size);
-            if (stackBufferIsNull(int)(&new_stack))
+            new_stack = stackRealloc(int, &stack, size);
+            if (stackBufferIsNull(int, &new_stack))
             {
                 printf("Failed memory allocation, exiting program...\n");
 
                 /* deleting original stack, because if realloction failed, *
                  * the original stack will not be freed                    */
-                deleteStack(int)(&stack);
+                deleteStack(int, &stack);
                 return 0;
             }
 
@@ -138,25 +138,25 @@ main(void)
 
         if (strncmp(buffer, "clear", 5) == 0)
         {
-            stackClear(int)(&stack);
+            stackClear(int, &stack);
             continue;
         }
 
         if (strncmp(buffer, "reverse", 7) == 0)
         {
-            stackReverse(int)(&stack);
+            stackReverse(int, &stack);
             continue;
         }
 
         if (strncmp(buffer, "size", 4) == 0)
         {
-            printf("%lu\n", stackSize(int)(&stack));
+            printf("%lu\n", stackSize(int, &stack));
             continue;
         }
 
         if (strncmp(buffer, "bufsize", 7) == 0)
         {
-            printf("%lu\n", stackBufferSize(int)(&stack));
+            printf("%lu\n", stackBufferSize(int, &stack));
             continue;
         }
 
@@ -181,7 +181,7 @@ main(void)
         if (strncmp(buffer, "exit", 4) == 0)
         {
             /* It is needed to delete stack before exit */
-            deleteStack(int)(&stack);
+            deleteStack(int, &stack);
             return 0;
         }
 
