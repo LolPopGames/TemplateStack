@@ -10,44 +10,44 @@ main(void)
     int value;
     Stack(INT5) stack = {0};
 
-    stackPush(INT5)(&stack, 555);
-    stackPush(INT5)(&stack, 777);
-    stackPush(INT5)(&stack, -99);
+    stackPush(INT5, &stack, 555);
+    stackPush(INT5, &stack, 777);
+    stackPush(INT5, &stack, -99);
 
-    value = stackPeek(INT5)(&stack);
+    value = stackPeek(INT5, &stack);
     if (value != -99)
         goto stackPeek_error;
 
     /* testing stackPeek again */
-    value = stackPeek(INT5)(&stack);
+    value = stackPeek(INT5, &stack);
     if (value != -99)
         goto stackPeek_error;
 
     printf("value == %d\n", value);
 
-    if (stackPop(INT5)(&stack) != -99)
+    if (stackPop(INT5, &stack) != -99)
         goto stackPop_error;
 
-    value = stackPeek(INT5)(&stack);
+    value = stackPeek(INT5, &stack);
 
     if (value != 777)
         goto stackPeek_error;
 
-    if (stackPop(INT5)(&stack) != 777)
+    if (stackPop(INT5, &stack) != 777)
         goto stackPop_error;
 
-    if (stackPop(INT5)(&stack) != 555)
+    if (stackPop(INT5, &stack) != 555)
         goto stackPop_error;
 
     /* check for zero-value */
-    if (stackPop(INT5)(&stack) != 0)
+    if (stackPop(INT5, &stack) != 0)
         goto stackPop_error;
 
     /* another zero-value check */
-    if (stackPeek(INT5)(&stack) != 0)
+    if (stackPeek(INT5, &stack) != 0)
         goto stackPeek_error;
 
-    stackPush(INT5)(&stack, 389388);
+    stackPush(INT5, &stack, 389388);
 
     return 0;
 
