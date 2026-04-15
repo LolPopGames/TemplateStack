@@ -25,23 +25,23 @@ int
 main(void)
 {
     /* testing for stackPush_int type */
-    Stack(stackPush_int) st = newStack(stackPush_int)(10);
-    if (stackBufferIsNull(stackPush_int)(&st))
+    Stack(stackPush_int) st = newStack(stackPush_int, 10);
+    if (stackBufferIsNull(stackPush_int, &st))
         goto memory_alloc_error;
 
-    stackPush(stackPush_int)(&st, 33);
+    stackPush(stackPush_int, &st, 33);
     
-    deleteStack(stackPush_int)(&st);
+    deleteStack(stackPush_int, &st);
 
     /* testing for stackPush type */
     #if defined(__STDC__) && defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
-        Stack(stackPush) st2 = newStack(stackPush)(10);
-        if (stackBufferIsNull(stackPush)(&st2))
+        Stack(stackPush) st2 = newStack(stackPush, 10);
+        if (stackBufferIsNull(stackPush, &st2))
             goto memory_alloc_error;
 
-        stackPush(stackPush)(&st2, 77);
+        stackPush(stackPush, &st2, 77);
         
-        deleteStack(stackPush)(&st2);
+        deleteStack(stackPush, &st2);
     #endif
 
     return 0;

@@ -8,48 +8,48 @@ int
 main(void)
 {
     int i;
-    Stack(double) stack = newStack(double)(30);
+    Stack(double) stack = newStack(double, 30);
 
-    if (stackBufferIsNull(double)(&stack))
+    if (stackBufferIsNull(double, &stack))
     {
         fprintf(stderr, "Failed Memory Allocation");
         return 1;
     }
 
-    if (stackBufferSize(double)(&stack) != 30)
+    if (stackBufferSize(double, &stack) != 30)
         goto stackBufferSize_error;
 
-    if (stackSize(double)(&stack) != 0)
+    if (stackSize(double, &stack) != 0)
         goto stackSize_error;
 
-    stackPush(double)(&stack, 43.22);
+    stackPush(double, &stack, 43.22);
 
-    if (stackBufferSize(double)(&stack) != 30)
+    if (stackBufferSize(double, &stack) != 30)
         goto stackBufferSize_error;
 
-    if (stackSize(double)(&stack) != 1)
+    if (stackSize(double, &stack) != 1)
         goto stackSize_error;
 
-    stackPop(double)(&stack);
+    stackPop(double, &stack);
 
-    if (stackBufferSize(double)(&stack) != 30)
+    if (stackBufferSize(double, &stack) != 30)
         goto stackBufferSize_error;
 
-    if (stackSize(double)(&stack) != 0)
+    if (stackSize(double, &stack) != 0)
         goto stackSize_error;
 
     for (i=0; i<30; i++)
     {
-        stackPush(double)(&stack, i * 2.4582);
+        stackPush(double, &stack, i * 2.4582);
     }
 
-    if (stackBufferSize(double)(&stack) != 30)
+    if (stackBufferSize(double, &stack) != 30)
         goto stackBufferSize_error;
 
-    if (stackSize(double)(&stack) != 30)
+    if (stackSize(double, &stack) != 30)
         goto stackSize_error;
 
-    deleteStack(double)(&stack);
+    deleteStack(double, &stack);
 
     return 0;
 
@@ -62,6 +62,6 @@ stackBufferSize_error:
     goto error_exit;
 
 error_exit:
-    deleteStack(double)(&stack);
+    deleteStack(double, &stack);
     return 1;
 }

@@ -5,8 +5,8 @@
 int
 main(void)
 {
-    Stack(int) stack = newStack(int)(1);
-    deleteStack(int)(&stack);
+    Stack(int) stack = newStack(int, 1);
+    deleteStack(int, &stack);
 
     return 0;
 }

@@ -50,54 +50,54 @@ main(void)
     /* basic types has been already tested by other tests */
     /* testing pointers */
     {
-        Stack(cstr) st1 = newStack(cstr)(2);
-        if (stackBufferIsNull(cstr)(&st1))
+        Stack(cstr) st1 = newStack(cstr, 2);
+        if (stackBufferIsNull(cstr, &st1))
             goto memory_alloc_error;
 
-        stackPush(cstr)(&st1, "String");
-        stackPush(cstr)(&st1, "OOO");
+        stackPush(cstr, &st1, "String");
+        stackPush(cstr, &st1, "OOO");
 
-        printf("%s\n", stackPop(cstr)(&st1));
-        printf("%s\n", stackPop(cstr)(&st1));
+        printf("%s\n", stackPop(cstr, &st1));
+        printf("%s\n", stackPop(cstr, &st1));
 
-        deleteStack(cstr)(&st1);
+        deleteStack(cstr, &st1);
     }
 
     /* testing struct/union/enum */
     {
-        Stack(multi_size_t) st2 = newStack(multi_size_t)(2);
+        Stack(multi_size_t) st2 = newStack(multi_size_t, 2);
         multi_size_t temp = {0};
 
-        if (stackBufferIsNull(multi_size_t)(&st2))
+        if (stackBufferIsNull(multi_size_t, &st2))
             goto memory_alloc_error;
 
         temp.s_ch = 'a';
-        stackPush(multi_size_t)(&st2, temp);
+        stackPush(multi_size_t, &st2, temp);
 
         temp.s_long = 99999L;
-        stackPush(multi_size_t)(&st2, temp);
+        stackPush(multi_size_t, &st2, temp);
 
-        printf("%lu\n", stackPop(multi_size_t)(&st2).s_long);
-        printf("%c\n", stackPop(multi_size_t)(&st2).s_ch);
+        printf("%lu\n", stackPop(multi_size_t, &st2).s_long);
+        printf("%c\n", stackPop(multi_size_t, &st2).s_ch);
         
-        deleteStack(multi_size_t)(&st2);
+        deleteStack(multi_size_t, &st2);
     }
 
     /* testing function pointers */
     {
-        Stack(print_func_t) st3 = newStack(print_func_t)(2);
+        Stack(print_func_t) st3 = newStack(print_func_t, 2);
         print_func_t temp_func = NULL;
 
-        if (stackBufferIsNull(print_func_t)(&st3))
+        if (stackBufferIsNull(print_func_t, &st3))
             goto memory_alloc_error;
 
-        stackPush(print_func_t)(&st3, &bye_world);
-        stackPush(print_func_t)(&st3, &hello_world);
+        stackPush(print_func_t, &st3, &bye_world);
+        stackPush(print_func_t, &st3, &hello_world);
 
-        stackPop(print_func_t)(&st3)(); /* hello */
-        stackPop(print_func_t)(&st3)(); /* bye */
+        stackPop(print_func_t, &st3)(); /* hello */
+        stackPop(print_func_t, &st3)(); /* bye */
         
-        deleteStack(print_func_t)(&st3);
+        deleteStack(print_func_t, &st3);
     }
 
     return 0;
