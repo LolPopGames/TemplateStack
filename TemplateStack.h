@@ -61,6 +61,8 @@ extern "C" {
 
 /* --- Memory Allocators --- */
 
+/* -- Showing Warnings -- */
+
 /* MALLOC && !FREE */
 #if     defined(TEMPLATE_STACK_MALLOC)  && !defined(TEMPLATE_STACK_FREE)
     #if defined(__STDC_VERSION__)       &&  (__STDC_VERSION__ >= 202311L)
@@ -133,6 +135,7 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
     #endif
 #endif
 
+/* -- Configuring -- */
 #ifndef TEMPLATE_STACK_MALLOC
     #ifndef TEMPLATE_STACK_REALLOC
         #define TEMPLATE_STACK_REALLOC realloc
@@ -142,6 +145,11 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 #endif
 #ifndef TEMPLATE_STACK_FREE
     #define TEMPLATE_STACK_FREE free
+#endif
+
+/* --- Default New Stack Size --- */
+#ifndef TEMPLATE_STACK_DEFAULT_NEW_SIZE
+    #define TEMPLATE_STACK_DEFAULT_NEW_SIZE 256
 #endif
 
 /* ---- Includes ---- */
@@ -664,7 +672,7 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
     { \
         Stack(T) stack = {0}; \
         \
-        if (size == 0) return stack; \
+        if (size == 0) size = (TEMPLATE_STACK_DEFAULT_NEW_SIZE); \
         \
         stack.buffer = (TEMPLATE_STACK_MALLOC)(size * sizeof(T)); \
         if (stackBufferIsNull(T, &stack)) return stack; \
