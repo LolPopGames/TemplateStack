@@ -515,11 +515,11 @@ StaticStack_proto(name, T, size)
 
 /* Creates full implementation of all stack functions *
  * (Use in source file)                               */
-StaticStack_impl(name, T)
+StaticStack_impl(name, T, size)
 
 /* Static versions (all functions have `static` keyword) */
 StaticStack_static_proto(name, T, size)
-StaticStack_static_impl(name, T)
+StaticStack_static_impl(name, T, size)
 
 /* Inline version:                              *
  * Creates stack type and static implementation */

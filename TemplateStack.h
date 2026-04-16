@@ -830,7 +830,7 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 
 /* ---- Static Stack Implementation
  * (with static memory, for source file) ---- */
-#define StaticStack_impl(name, T) \
+#define StaticStack_impl(name, T, size) \
     _templatestack_staticstack_stackIsEmpty_impl(name, T) \
     _templatestack_staticstack_stackIsFull_impl(name, T) \
     _templatestack_staticstack_stackSize_impl(name, T) \
@@ -843,7 +843,7 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 
 /* ---- Static Stack with Static Implementation
  * (with static memory, for source inline part) ---- */
-#define StaticStack_static_impl(name, T) \
+#define StaticStack_static_impl(name, T, size) \
     static _templatestack_staticstack_stackIsEmpty_impl(name, T) \
     static _templatestack_staticstack_stackIsFull_impl(name, T) \
     static _templatestack_staticstack_stackSize_impl(name, T) \
@@ -857,7 +857,7 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 /* ---- Static Stack Inline (with static memory, all in one) ---- */
 #define StaticStack_inline(name, T, size) \
     _templatestack_staticstack_Stack(name, T, size) \
-    StaticStack_static_impl(name, T)
+    StaticStack_static_impl(name, T, size)
 
 /* ---- Closing extern if C++ --- */
 #ifdef __cplusplus
