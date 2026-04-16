@@ -495,7 +495,7 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
     int \
     _templatestack_stackReverse_type_##name(Stack(name) *stack) \
     { \
-        int i; \
+        size_t i; \
         \
         if (stack == NULL) return 1; \
         \
