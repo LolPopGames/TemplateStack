@@ -21,11 +21,13 @@ Table Of Contents:
         + [How To Use API](#how-to-use-api)
         + [`Stack(T)`](#stackt)
         + [`Stack(T) newStack(T, size_t size)`](#stackt-newstackt-size_t-size)
+            + [Default New Stack Size](#default-new-stack-size)
+            + [Custom Allocators](#custom-allocators)
         + [`int deleteStack(T, Stack(T) *stack)`](#int-deletestackt-stackt-stack)
         + [`int stackPush(T, Stack(T) *stack, T value)`](#int-stackpusht-stackt-stack-t-value)
         + [`T stackPop(T, Stack(T) *stack)`](#t-stackpopt-stackt-stack)
         + [`T stackPeek(T, const Stack(T) *stack)`](#t-stackpeekt-const-stackt-stack)
-        + [`T stackPeekAt(T const Stack(T) *stack, size_t index)`](#t-stackpeekatt-const-stackt-stack-size_t-index)
+        + [`T stackPeekAt(T, const Stack(T) *stack, size_t index)`](#t-stackpeekatt-const-stackt-stack-size_t-index)
         + [`int stackClear(T, Stack(T) *stack)`](#int-stackcleart-stackt-stack)
         + [`int stackReverse(T, Stack(T) *stack)`](#int-stackreverset-stackt-stack)
         + [`int stackIsEmpty(T, const Stack(T) *stack)`](#int-stackisemptyt-const-stackt-stack)
@@ -35,8 +37,6 @@ Table Of Contents:
         + [`size_t stackBufferSize(T, const Stack(T) *stack)`](#size_t-stackbuffersizet-const-stackt-stack)
         + [`Stack(T) stackDup(T, const Stack(T) *stack)`](#stackt-stackdupt-const-stackt-stack)
         + [`Stack(T) stackRealloc(T, const Stack(T) *stack, size_t size)`](#stackt-stackrealloct-const-stackt-stack-size_t-size)
-        + [Default New Stack Size](#default-new-stack-size)
-        + [Custom Allocators](#custom-allocators)
         + [Static Stack](#static-stack)
             + [Adding A Type](#adding-a-type-1)
             + [Functions](#functions)
@@ -200,7 +200,7 @@ Use the stack type and functions by replacing `T` with your own type
 
 All functions that take a stack as a parameter require a _pointer_ to the stack
 
-Every function provides a code-block example after it's explanation
+Every function provides a code-block example after its explanation
 
 ### `Stack(T)`
 
@@ -216,24 +216,53 @@ Creates a new stack with the specified count of elements
 
 Don't forget to delete this stack with [`deleteStack()`](#int-deletestacktstackt-stack)
 
-Returns a stack with `NULL` buffer if allocation failed,
+Returns a stack with `NULL` buffer if allocation fails,
 check this with [`stackBufferIsNull()`](#int-stackbufferisnulltconst-stackt-stack)
 
----
+#### Default New Stack Size
 
-You can use the default value, set by
-[`TEMPLATE_STACK_DEFAULT_NEW_SIZE`](#default-new-stack-size)
+You can use the default value, set by `TEMPLATE_STACK_DEFAULT_NEW_SIZE`
 
-If it is not defined manualy, the default value will be `255`
+If it is not defined manually, the default value will be `255`
 
-When you make a stack, you need to specify `0` as size to use default value
+When you create a stack, you need to specify `0` as size to use default value
 
 > **C99+**: You may not specify the second argument at all and it will default to `0`
 
 ```c
-/* A stack with 10 int elements */
-Stack(int) st = newStack(int, 10);
+#define TEMPLATE_STACK_DEFAULT_NEW_SIZE 100
+#include "TemplateStack.h"
+
+/* ... in code */
+Stack(int) st = newStack(int, 0);
+/* or */
+Stack(int) st = newStack(int);
 ```
+
+#### Custom Allocators
+
+If you want, you can use a **custom memory allocator**
+instead of _C standard library_ functions
+
+To change them, define the following macros **before including the header**:
+
+```c
+/* Custom malloc */
+#define TEMPLATE_STACK_MALLOC my_malloc
+
+/* Custom free */
+#define TEMPLATE_STACK_FREE my_free
+
+/* Optional: Custom realloc                                *
+ * The library will still work even if you don't define it */
+#define TEMPLATE_STACK_REALLOC my_realloc
+```
+
+The behavior of [`stackRealloc()`](#stackt-stackrealloctconst-stackt-stack-size_t-size)
+can be modified by providing your own implementation
+
+See the [**note**](#stackt-stackrealloctconst-stackt-stack-size_t-size)
+for details
 
 ### `int deleteStack(T, Stack(T) *stack)`
 
@@ -253,8 +282,7 @@ deleteStack(int, &st);
 
 Pushes an element to stack
 
-Doubles buffer size (capacity),
-if the stack is full
+Doubles buffer size (capacity) if the stack is full
 
 Returns exit code
 + `0` if success
@@ -272,7 +300,7 @@ Pops top element from stack and returns it
 
 Returns zero-value if:
 + the stack is empty,
-+ stack buffer is `NULL`
++ the stack buffer is `NULL`
 
 It is recommended to check
 for empty stack (with [`stackIsEmpty()`](#int-stackisemptytconst-stackt-stack)) first,
@@ -284,11 +312,11 @@ int val = stackPop(int, &st);
 
 ### `T stackPeek(T, const Stack(T) *stack)`
 
-Gives top element from the stack (without removing it)
+Returns top element from the stack (without removing it)
 
 Returns zero-value if:
 + the stack is empty,
-+ stack buffer is `NULL`
++ the stack buffer is `NULL`
 
 It is recommended to check
 for empty stack (with [`stackIsEmpty()`](#int-stackisemptytconst-stackt-stack)) first,
@@ -298,7 +326,7 @@ because a zero-value element cannot be distinguished from an empty stack
 int val = stackPeek(int, &st);
 ```
 
-### `T stackPeekAt(T const Stack(T) *stack, size_t index)`
+### `T stackPeekAt(T, const Stack(T) *stack, size_t index)`
 
 Returns the element `index` positions from the top of the stack
 without removing it
@@ -346,7 +374,7 @@ Reverses the stack upside down
 Returns exit code:
 + `0` if success
 + non-zero if fail:
-    + if stack buffer is `NULL`
+    + if the stack buffer is `NULL`
 
 ```c
 stackPush(int, &st, 10);
@@ -396,7 +424,7 @@ if (stackIsFull(int, &st))
 ### `int stackBufferIsNull(T, const Stack(T) *stack)`
 
 Checks if the stack buffer is null
-(e.g. because memory allocation was failed)
+(e.g. because memory allocation failed)
 
 Returns a boolean value `0` (`false`) or `1` (`true`)
 
@@ -409,7 +437,7 @@ if (stackBufferIsNull(int, &st))
 
 ### `size_t stackSize(T, const Stack(T) *stack)`
 
-Returns number of elements currently in the stack
+Returns the number of elements currently in the stack
 
 ```c
 printf("Stack contains %lu elements right now\n", stackSize(int, &st));
@@ -417,7 +445,7 @@ printf("Stack contains %lu elements right now\n", stackSize(int, &st));
 
 ### `size_t stackBufferSize(T, const Stack(T) *stack)`
 
-Returns stack buffer size (count of allocated `T` elements, capacity)
+Returns the stack buffer size (count of allocated `T` elements, capacity)
 
 ```c
 printf("Program allocated %lu elements", stackBufferSize(int, &st));
@@ -425,7 +453,7 @@ printf("Program allocated %lu elements", stackBufferSize(int, &st));
 
 ### `Stack(T) stackDup(T, const Stack(T) *stack)`
 
-Returns a copy of the stack, or `NULL` buffer if allocation failed
+Returns a copy of the stack, or `NULL` buffer if allocation fails
 
 ```c
 Stack(int) st_copy = stackDup(int, &st);
@@ -452,50 +480,6 @@ and **does not free the original stack**
 ```c
 Stack(int) st_new = stackRealloc(int, &st, 20);
 ```
-
-### Default New Stack Size
-
-Define `TEMPLATE_STACK_DEFAULT_NEW_SIZE` macro to set a custom
-default size then the `0` is entered as size in [`newStack()`](#stackt-newstackt-size_t-size)
-
-The default macro value, if you don't set it manualy is `255`
-
-Define this macro before including **Template Stack**
-
-```c
-#define TEMPLATE_STACK_DEFAULT_NEW_SIZE 100
-#include "TemplateStack.h"
-
-/* ... in code */
-Stack(int) st = newStack(int, 0);
-/* or */
-Stack(int) st = newStack(int);
-```
-
-### Custom Allocators
-
-If you want, you can use a **custom memory allocator**
-instead of _C standard library_ functions
-
-To change them, define the following macros **before including the header**:
-
-```c
-/* Custom malloc */
-#define TEMPLATE_STACK_MALLOC my_malloc
-
-/* Custom free */
-#define TEMPLATE_STACK_FREE my_free
-
-/* Optional: Custom realloc                                *
- * The library will still work even if you don't define it */
-#define TEMPLATE_STACK_REALLOC my_realloc
-```
-
-The behavior of [`stackRealloc()`](#stackt-stackrealloctconst-stackt-stack-size_t-size)
-can be modified by providing your own
-
-See the [**note**](#stackt-stackrealloctconst-stackt-stack-size_t-size)
-for details
 
 ### Static Stack
 
@@ -557,7 +541,10 @@ except for functions related to memory allocation
 + [`stackBufferSize()`](#size_t-stackbuffersizetconst-stackt-stack) — known at compile time
 + [`stackBufferIsNull()`](#int-stackbufferisnulltconst-stackt-stack) — static buffer cannot be `NULL`
 + [`stackRealloc()`](#stackt-stackrealloctconst-stackt-stack-size_t-size) — no reallocation
-+ [`stackPushGrow()`](#int-stackpushgrowtstackt-stack-t-value) — no dynamic growth
+
+> [!NOTE]
+> [`stackPush()`](#int-stackpusht-stackt-stack-t-value) cannot grow buffer
+> size and will return `1` if the stack is full
 
 #### Stack Creation
 
@@ -595,7 +582,7 @@ The following functions are available:
 
 **Template Stack** has various tests
 
-To compile they, you need **Meson** and **Ninja** Installed
+To compile them, you need **Meson** and **Ninja** installed
 
 ```bash
 $ meson setup build
