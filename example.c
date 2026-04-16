@@ -24,7 +24,6 @@ int
 main(void)
 {
     /* --- Variables --- */
-    size_t start_size = 0;
     char buffer[256] = {0};
     Stack(int) stack;
 
@@ -32,19 +31,10 @@ main(void)
     printf(
         "Hello, This is a stack command line!\n"
         "Type \"help\" to see commands\n"
-        "Please, input start size:\n"
-        "--> "
     );
-    fflush(stdout);
-    scanf("%lu", &start_size);
 
     /* Initializing Stack */
-    if (start_size <= 0)
-    {
-        printf("Invalid stack size, exiting program...\n");
-        return 0;
-    }
-    stack = newStack(int, start_size);
+    stack = newStack(int);
     if (stackBufferIsNull(int, &stack))
     {
         printf("Failed memory allocation, exiting program...\n");
@@ -52,8 +42,6 @@ main(void)
     }
     
     /* --- Main Loop --- */
-    /* first fgets idle */
-    fgets(buffer, sizeof(buffer), stdin);
     while (1)
     {
         /* --- Getting Command --- */
