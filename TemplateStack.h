@@ -26,8 +26,8 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
  */
-#ifndef _TEMPLATE_STACK_H_
-#define _TEMPLATE_STACK_H_
+#ifndef _TEMPLATE_STACK_H
+#define _TEMPLATE_STACK_H
 
 /* ---- Macros ---- */
 
@@ -864,4 +864,4 @@ but TEMPLATE_STACK_MALLOC and TEMPLATE_STACK_FREE are not"
 }
 #endif
 
-#endif /* _TEMPLATE_STACK_H_ */
+#endif /* _TEMPLATE_STACK_H */
