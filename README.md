@@ -35,6 +35,7 @@ Table Of Contents:
         + [`size_t stackBufferSize(T, const Stack(T) *stack)`](#size_t-stackbuffersizet-const-stackt-stack)
         + [`Stack(T) stackDup(T, const Stack(T) *stack)`](#stackt-stackdupt-const-stackt-stack)
         + [`Stack(T) stackRealloc(T, const Stack(T) *stack, size_t size)`](#stackt-stackrealloct-const-stackt-stack-size_t-size)
+        + [Default New Stack Size](#default-new-stack-size)
         + [Custom Allocators](#custom-allocators)
         + [Static Stack](#static-stack)
             + [Adding A Type](#adding-a-type-1)
@@ -62,7 +63,8 @@ writing separate stack implementations
 
 ## Requirements
 
-**Template Stack** works with **ANSI C** and later standards
+**Template Stack** works with **ANSI C** and later standards,
+but some features are only supported in **C99+**
 
 ## Installation
 
@@ -216,6 +218,17 @@ Don't forget to delete this stack with [`deleteStack()`](#int-deletestacktstackt
 
 Returns a stack with `NULL` buffer if allocation failed,
 check this with [`stackBufferIsNull()`](#int-stackbufferisnulltconst-stackt-stack)
+
+---
+
+You can use the default value, set by
+[`TEMPLATE_STACK_DEFAULT_NEW_SIZE`](#default-new-stack-size)
+
+If it is not defined manualy, the default value will be `255`
+
+When you make a stack, you need to specify `0` as size to use default value
+
+> **C99+**: You may not specify the second argument at all and it will default to `0`
 
 ```c
 /* A stack with 10 int elements */
@@ -438,6 +451,25 @@ and **does not free the original stack**
 
 ```c
 Stack(int) st_new = stackRealloc(int, &st, 20);
+```
+
+### Default New Stack Size
+
+Define `TEMPLATE_STACK_DEFAULT_NEW_SIZE` macro to set a custom
+default size then the `0` is entered as size in [`newStack()`](#stackt-newstackt-size_t-size)
+
+The default macro value, if you don't set it manualy is `255`
+
+Define this macro before including **Template Stack**
+
+```c
+#define TEMPLATE_STACK_DEFAULT_NEW_SIZE 100
+#include "TemplateStack.h"
+
+/* ... in code */
+Stack(int) st = newStack(int, 0);
+/* or */
+Stack(int) st = newStack(int);
 ```
 
 ### Custom Allocators
