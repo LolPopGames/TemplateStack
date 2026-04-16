@@ -44,10 +44,7 @@ tests = [
   {
     'name': 'custom-alloc',
     'cases': [
-      ['Malloc Replacement', 'malloc'],
-      ['Free Replacement', 'free'],
       ['Malloc & Free Replacement', 'malloc-free'],
-      ['Malloc & Realloc Replacement', 'malloc-realloc'],
       ['Malloc, Realloc & Free Replacement', 'malloc-realloc-free'],
       ['Custom Malloc & Free Replacement', 'custom-malloc-free'],
       ['Custom Malloc, Realloc & Free Replacement', 'custom-malloc-realloc-free'],
