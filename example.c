@@ -50,49 +50,15 @@ main(void)
         fgets(buffer, sizeof(buffer), stdin);
 
         /* --- Searching Command --- */
-        if (strncmp(buffer, "push", 4) == 0)
+        if (strncmp(buffer, "reverse", 7) == 0)
         {
-            int value = atoi(buffer+4);
-            size_t buf_size = stackBufferSize(int, &stack);
-
-            /* 0 - success, other codes - fail */
-            if (stackPush(int, &stack, value) != 0)
-            {
-                printf("Push failed\n");
-            }
-
-            if (stackBufferSize(int, &stack) != buf_size)
-            {
-                printf("Doubling stack buffer size...\n");
-            }
+            stackReverse(int, &stack);
             continue;
         }
 
-        if (strncmp(buffer, "pop", 3) == 0)
+        if (strncmp(buffer, "bufsize", 7) == 0)
         {
-            if (stackIsEmpty(int, &stack))
-            {
-                printf("Stack is empty\n");
-                continue;
-            }
-
-            printf("%d\n", stackPop(int, &stack));
-            continue;
-        }
-
-        if (
-            /* peek or top */
-            strncmp(buffer, "peek", 4) == 0 ||
-            strncmp(buffer, "top", 3) == 0
-        )
-        {
-            if (stackIsEmpty(int, &stack))
-            {
-                printf("Stack is empty\n");
-                continue;
-            }
-
-            printf("%d\n", stackPeek(int, &stack));
+            printf("%lu\n", stackBufferSize(int, &stack));
             continue;
         }
 
@@ -130,21 +96,27 @@ main(void)
             continue;
         }
 
-        if (strncmp(buffer, "reverse", 7) == 0)
-        {
-            stackReverse(int, &stack);
-            continue;
-        }
-
         if (strncmp(buffer, "size", 4) == 0)
         {
             printf("%lu\n", stackSize(int, &stack));
             continue;
         }
 
-        if (strncmp(buffer, "bufsize", 7) == 0)
+        if (strncmp(buffer, "push", 4) == 0)
         {
-            printf("%lu\n", stackBufferSize(int, &stack));
+            int value = atoi(buffer+4);
+            size_t buf_size = stackBufferSize(int, &stack);
+
+            /* 0 - success, other codes - fail */
+            if (stackPush(int, &stack, value) != 0)
+            {
+                printf("Push failed\n");
+            }
+
+            if (stackBufferSize(int, &stack) != buf_size)
+            {
+                printf("Doubling stack buffer size...\n");
+            }
             continue;
         }
 
@@ -155,6 +127,7 @@ main(void)
                 "push NUM - push to stack\n"
                 "pop - pop from stack\n"
                 "peek - get top element\n"
+                "peek NUM - get NUM position from the top\n"
                 "top - same as peek\n"
                 "resize NUM - resize stack buffer\n"
                 "clear - removes all elements from the stack\n"
@@ -166,11 +139,64 @@ main(void)
             continue;
         }
 
+        if (strncmp(buffer, "peek", 4) == 0)
+        {
+            size_t value = atol(buffer+4);
+
+            if (stackIsEmpty(int, &stack))
+            {
+                printf("Stack is empty\n");
+                continue;
+            }
+
+            if (value >= stackSize(int, &stack))
+            {
+                printf("Out of bounds\n");
+                continue;
+            }
+
+            printf("%d\n", stackPeekAt(int, &stack, value));
+            continue;
+        }
+
         if (strncmp(buffer, "exit", 4) == 0)
         {
             /* It is needed to delete stack before exit */
             deleteStack(int, &stack);
             return 0;
+        }
+
+        if (strncmp(buffer, "pop", 3) == 0)
+        {
+            if (stackIsEmpty(int, &stack))
+            {
+                printf("Stack is empty\n");
+                continue;
+            }
+
+            printf("%d\n", stackPop(int, &stack));
+            continue;
+        }
+
+        /* same as peek, but 3 letters */
+        if (strncmp(buffer, "top", 3) == 0)
+        {
+            size_t value = atol(buffer+3);
+
+            if (stackIsEmpty(int, &stack))
+            {
+                printf("Stack is empty\n");
+                continue;
+            }
+
+            if (value >= stackSize(int, &stack))
+            {
+                printf("Out of bounds\n");
+                continue;
+            }
+
+            printf("%d\n", stackPeekAt(int, &stack, value));
+            continue;
         }
 
         /* if other (not empty) command */
